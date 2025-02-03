@@ -51,40 +51,17 @@ export function AppSidebar({ user }: { user: any }) {
   let blogGroup: NavGroup;
   let artGroup: NavGroup;
   if (!user) {
-    storyGroup = {
-      title: "Stories",
-      items: [{ title: "Read Stories", url: "/stories" }],
-    };
     blogGroup = {
       title: "Blogs",
       items: [{ title: "Read Blog", url: "/blogs" }],
     };
-    artGroup = {
-      title: "Art",
-      items: [{ title: "Art", url: "/art" }],
-    };
   } else {
-    storyGroup = {
-      title: "Stories",
-      items: [
-        { title: "Read Stories", url: "/stories" },
-        { title: "My Stories", url: `/stories/${user.username}` },
-        { title: "Write Story", url: `/stories/${user.username}/new` },
-      ],
-    };
     blogGroup = {
       title: "Blogs",
       items: [
         { title: "Read Blog", url: "/blogs" },
         { title: "My Blogs", url: `/blogs/${user.username}` },
         { title: "Write Blog", url: `/blogs/${user.username}/new` },
-      ],
-    };
-    artGroup = {
-      title: "Art",
-      items: [
-        { title: "Art", url: "/art" },
-        { title: "upload Art", url: "/art/new" },
       ],
     };
   }
@@ -117,31 +94,6 @@ export function AppSidebar({ user }: { user: any }) {
           <SidebarGroup>
             <SidebarGroupLabel asChild>
               <CollapsibleTrigger>
-                {storyGroup.title}
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {storyGroup.items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.url}>
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
                 {blogGroup.title}
                 <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
               </CollapsibleTrigger>
@@ -150,31 +102,6 @@ export function AppSidebar({ user }: { user: any }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {blogGroup.items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link to={item.url}>
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
-                {artGroup.title}
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {artGroup.items.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <Link to={item.url}>
