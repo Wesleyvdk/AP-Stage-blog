@@ -13,16 +13,9 @@ const baseRoutes = [
 
 export default [
   ...dashboardRoutes,
-  ...audienceRoutes,
   ...authRoutes,
-  ...channelsRoutes,
-  ...helpRoutes,
-  ...integrationsRoutes,
-  ...journeysRoutes,
-  ...mediaRoutes,
-  ...performanceRoutes,
-  ...settingsRoutes,
-  ...unsubscribeRoutes,
-  ...productRoutes,
+  ...blogRoutes,
+  ...homeRoutes,
+  ...aboutRoutes,
   ...baseRoutes,
 ]
