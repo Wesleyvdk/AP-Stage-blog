@@ -1,47 +1,37 @@
 <template>
-  <div class="bg-white shadow rounded-lg p-6">
-    <h2 class="text-2xl font-semibold mb-2">
-      <router-link :to="`/blog/${post.id}`" class="text-blue-600 hover:underline">
-        {{ post.title }}
-      </router-link>
-    </h2>
-    <p class="text-gray-600 mb-4">{{ formatDate(post.date) }}</p>
-    <p class="mb-4">{{ post.excerpt }}</p>
-    <div class="flex flex-wrap gap-2 mb-4">
-      <span
-        v-for="category in post.categories"
-        :key="category"
-        class="bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm"
-      >
-        {{ category }}
-      </span>
+  <article
+    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105"
+  >
+    <img :src="post.coverImage" :alt="post.title" class="w-full h-48 object-cover" />
+    <div class="p-6">
+      <div class="flex items-center mb-3">
+        <span class="text-sm text-gray-500">{{ formatDate(post.createdAt) }}</span>
+      </div>
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">
+        <router-link :to="`/blog/${post.id}`" class="hover:text-indigo-600">
+          {{ post.title }}
+        </router-link>
+      </h2>
+      <p class="text-gray-600 mb-4">{{ post.excerpt }}</p>
+      <div class="flex items-center justify-between">
+        <router-link
+          :to="`/blog/${post.id}`"
+          class="text-indigo-600 hover:text-indigo-800 font-medium"
+        >
+          Read more →
+        </router-link>
+      </div>
     </div>
-    <router-link :to="`/blog/${post.id}`" class="text-blue-500 hover:underline">
-      Read more
-    </router-link>
-  </div>
+  </article>
 </template>
 
-<script>
-export default {
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup() {
-    const formatDate = (date) => {
-      return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })
-    }
+<script setup>
+import { formatDate } from '@/helpers/date'
 
-    return {
-      formatDate,
-    }
+defineProps({
+  post: {
+    type: Object,
+    required: true,
   },
-}
+})
 </script>

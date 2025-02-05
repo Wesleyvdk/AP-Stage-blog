@@ -1,6 +1,10 @@
 export default {
   darkMode: ['class'],
-  content: ['./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './index.html',
+    './app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       fontFamily: {

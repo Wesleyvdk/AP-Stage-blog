@@ -1,76 +1,75 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-      </div>
-    </header>
-    <main>
-      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="px-4 py-6 sm:px-0">
-          <div class="border-4 border-dashed border-gray-200 rounded-lg p-4">
-            <div class="mb-6">
-              <h2 class="text-2xl font-bold mb-4">Create New Blog Post</h2>
-              <router-link
-                to="/blog/new"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                <PlusIcon class="h-5 w-5 mr-2" />
-                New Post
-              </router-link>
-            </div>
+  <div class="space-y-8">
+    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
 
-            <div>
-              <h2 class="text-2xl font-bold mb-4">Recent Posts</h2>
-              <div v-if="isLoading">Loading...</div>
-              <div v-else-if="error">{{ error }}</div>
-              <div v-else class="space-y-4">
-                <div
-                  v-for="post in recentPosts"
-                  :key="post.id"
-                  class="bg-white shadow rounded-lg p-4"
-                >
-                  <h3 class="text-lg font-semibold">{{ post.title }}</h3>
-                  <p class="text-gray-500 text-sm">{{ formatDate(post.date) }}</p>
-                  <div class="mt-2 flex gap-2">
-                    <span
-                      v-for="category in post.categories"
-                      :key="category"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-                    >
-                      {{ category }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h2>
+        <p class="text-3xl font-bold text-indigo-600">{{ userPosts.length }}</p>
+        <router-link to="/blog" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800">
+          View all posts →
+        </router-link>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Total Views</h2>
+        <p class="text-3xl font-bold text-indigo-600">{{ totalViews }}</p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Latest Comments</h2>
+        <ul class="space-y-2">
+          <li v-for="comment in latestComments" :key="comment.id" class="text-gray-600">
+            {{ comment.text.substring(0, 50) }}...
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Recent Posts</h2>
+      <div class="space-y-4">
+        <div
+          v-for="post in recentPosts"
+          :key="post.id"
+          class="flex items-center justify-between border-b border-gray-200 pb-4 last:border-b-0"
+        >
+          <div>
+            <h3 class="text-lg font-medium text-gray-800">{{ post.title }}</h3>
+            <p class="text-sm text-gray-500">{{ formatDate(post.createdAt) }}</p>
           </div>
+          <router-link :to="`/blog/${post.id}`" class="text-indigo-600 hover:text-indigo-800">
+            View
+          </router-link>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { PlusIcon } from '@heroicons/vue/solid'
-import { useBlogPosts } from '@/composables/useBlogPosts'
+import { useBlog } from '@/composables/useBlog'
+import { formatDate } from '@/helpers/date'
 
-const { posts, isLoading, error, fetchPosts } = useBlogPosts()
+const { fetchUserPosts } = useBlog()
 
-const recentPosts = computed(() => {
-  return posts.value.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5)
-})
+const userPosts = ref([])
+const totalViews = ref(0)
+const latestComments = ref([])
+const recentPosts = ref([])
 
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
+onMounted(async () => {
+  userPosts.value = await fetchUserPosts()
+  totalViews.value = userPosts.value.reduce((sum, post) => sum + post.views, 0)
 
-onMounted(() => {
-  fetchPosts()
+  // Simulated data for latest comments and recent posts
+  latestComments.value = [
+    { id: 1, text: 'Great post! Very informative.' },
+    { id: 2, text: 'I learned a lot from this. Thanks!' },
+    { id: 3, text: 'Looking forward to more content like this.' },
+  ]
+
+  recentPosts.value = userPosts.value.slice(0, 5)
 })
 </script>

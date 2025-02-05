@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <nav-bar />
+  <div class="min-h-screen bg-gray-50">
+    <NavBar />
     <main class="container mx-auto px-4 py-8">
-      <slot />
+      <router-view></router-view>
     </main>
-    <app-footer />
+    <AppFooter />
   </div>
 </template>
 

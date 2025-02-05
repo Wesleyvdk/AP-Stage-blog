@@ -1,72 +1,87 @@
 <template>
-  <div class="max-w-2xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Create New Blog Post</h1>
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Create New Post</h1>
+
+    <form @submit.prevent="handleSubmit" class="space-y-6">
       <div>
-        <label for="title" class="block mb-1">Title</label>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
         <input
-          type="text"
           id="title"
-          v-model="title"
+          v-model="form.title"
+          type="text"
           required
-          class="w-full px-3 py-2 border rounded"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
+
       <div>
-        <label for="content" class="block mb-1">Content (Markdown)</label>
+        <label for="coverImage" class="block text-sm font-medium text-gray-700"
+          >Cover Image URL</label
+        >
+        <input
+          id="coverImage"
+          v-model="form.coverImage"
+          type="url"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="content" class="block text-sm font-medium text-gray-700"
+          >Content (Markdown)</label
+        >
         <textarea
           id="content"
-          v-model="content"
-          required
+          v-model="form.content"
           rows="10"
-          class="w-full px-3 py-2 border rounded"
+          required
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         ></textarea>
       </div>
-      <div>
-        <label for="categories" class="block mb-1">Categories (comma-separated)</label>
-        <input
-          type="text"
-          id="categories"
-          v-model="categoriesInput"
-          class="w-full px-3 py-2 border rounded"
-        />
+
+      <div class="flex justify-end space-x-4">
+        <router-link
+          to="/blog"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        >
+          Cancel
+        </router-link>
+        <button
+          type="submit"
+          :disabled="loading"
+          class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
+        >
+          {{ loading ? 'Creating...' : 'Create Post' }}
+        </button>
       </div>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Create Post
-      </button>
     </form>
-    <div v-if="error" class="mt-4 text-red-500">{{ error }}</div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useBlogPosts } from '@/composables/useBlogPosts'
+import { useBlog } from '@/composables/useBlog'
 
 const router = useRouter()
-const { createPost } = useBlogPosts()
+const { createPost } = useBlog()
 
-const title = ref('')
-const content = ref('')
-const categoriesInput = ref('')
-const error = ref('')
+const loading = ref(false)
+const form = ref({
+  title: '',
+  content: '',
+  coverImage: '',
+})
 
 const handleSubmit = async () => {
+  loading.value = true
   try {
-    const categories = categoriesInput.value
-      .split(',')
-      .map((cat) => cat.trim())
-      .filter(Boolean)
-    await createPost({
-      title: title.value,
-      content: content.value,
-      categories,
-      date: new Date().toISOString(),
-    })
+    await createPost(form.value)
     router.push('/blog')
-  } catch (err) {
-    error.value = 'Failed to create post'
+  } catch (error) {
+    console.error('Failed to create post:', error)
+  } finally {
+    loading.value = false
   }
 }
 </script>

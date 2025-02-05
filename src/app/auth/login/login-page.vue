@@ -1,50 +1,72 @@
 <template>
-  <div class="max-w-md mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Login</h1>
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+  <div class="min-h-[80vh] flex items-center justify-center">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
       <div>
-        <label for="email" class="block mb-1">Email</label>
-        <input
-          type="email"
-          id="email"
-          v-model="email"
-          required
-          class="w-full px-3 py-2 border rounded"
-        />
+        <h2 class="text-center text-3xl font-bold text-gray-900">Sign in to your account</h2>
       </div>
-      <div>
-        <label for="password" class="block mb-1">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          required
-          class="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-        Login
-      </button>
-    </form>
-    <p v-if="error" class="mt-4 text-red-500">{{ error }}</p>
+
+      <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
+        <div class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              id="email"
+              v-model="form.email"
+              type="email"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input
+              id="password"
+              v-model="form.password"
+              type="password"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            :disabled="loading"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            {{ loading ? 'Signing in...' : 'Sign in' }}
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 
-const email = ref('')
-const password = ref('')
-const error = ref('')
-
+const router = useRouter()
 const { login } = useAuth()
 
+const loading = ref(false)
+const form = ref({
+  email: '',
+  password: '',
+})
+
 const handleSubmit = async () => {
+  loading.value = true
   try {
-    await login(email.value, password.value)
-  } catch (err) {
-    error.value = 'Invalid email or password'
+    await login(form.value)
+    router.push('/')
+  } catch (error) {
+    console.error('Login failed:', error)
+  } finally {
+    loading.value = false
   }
 }
 </script>

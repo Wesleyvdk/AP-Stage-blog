@@ -1,6 +1,6 @@
 export const authRoutes = [
   {
-    path: '/login',
+    path: '/auth/login',
     component: () => import('./login/login-page.vue'),
   },
 ]

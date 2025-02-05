@@ -1,92 +1,62 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div v-if="isLoading" class="flex justify-center py-8">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-    </div>
+  <div v-if="post" class="max-w-4xl mx-auto">
+    <img
+      :src="post.coverImage"
+      :alt="post.title"
+      class="w-full h-64 object-cover rounded-lg shadow-lg mb-8"
+    />
 
-    <article v-else-if="post" class="bg-white shadow-lg rounded-lg overflow-hidden">
-      <!-- Post Header -->
-      <div class="p-6 border-b">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ post.title }}</h1>
-        <div class="flex items-center justify-between text-gray-600">
-          <time :datetime="post.date">{{ formatDate(post.date) }}</time>
-          <div class="flex gap-2">
-            <span
-              v-for="category in post.categories"
-              :key="category"
-              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-            >
-              {{ category }}
-            </span>
-          </div>
+    <div class="bg-white rounded-lg shadow-md p-8">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-4xl font-bold text-gray-900">{{ post.title }}</h1>
+        <div v-if="isAuthor" class="flex space-x-4">
+          <router-link :to="`/blog/edit/${post.id}`" class="text-indigo-600 hover:text-indigo-800">
+            Edit
+          </router-link>
+          <button @click="handleDelete" class="text-red-600 hover:text-red-800">Delete</button>
         </div>
       </div>
 
-      <!-- Post Content -->
-      <div class="prose prose-lg max-w-none p-6" v-html="sanitizedContent"></div>
-
-      <!-- Post Footer -->
-      <div class="p-6 border-t bg-gray-50">
-        <router-link to="/blog" class="inline-flex items-center text-blue-600 hover:text-blue-800">
-          <ArrowLeftIcon class="h-4 w-4 mr-2" />
-          Back to all posts
-        </router-link>
+      <div class="flex items-center text-gray-600 mb-8">
+        <span>{{ formatDate(post.createdAt) }}</span>
+        <span class="mx-2">•</span>
+        <span>{{ post.author }}</span>
       </div>
-    </article>
 
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
-      <p class="text-red-800">{{ error }}</p>
+      <div class="prose prose-indigo max-w-none">
+        <div v-html="markdownToHtml(post.content)"></div>
+      </div>
     </div>
+  </div>
+
+  <div v-else-if="loading" class="flex justify-center py-12">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { ArrowLeftIcon } from '@heroicons/vue/solid'
-import { getPostById } from '@/services/api/blog'
+import { onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useBlog } from '@/composables/useBlog'
+import { useAuth } from '@/composables/useAuth'
 import { formatDate } from '@/helpers/date'
-import { parseMarkdown, sanitizeHtml } from '@/helpers/markdown'
+import { markdownToHtml } from '@/helpers/markdown'
 
 const route = useRoute()
-const post = ref(null)
-const isLoading = ref(true)
-const error = ref(null)
+const router = useRouter()
+const { post, loading, fetchPost, deletePost } = useBlog()
+const { user } = useAuth()
 
-const sanitizedContent = computed(() => {
-  if (!post.value?.content) return ''
-  const parsedContent = parseMarkdown(post.value.content)
-  return sanitizeHtml(parsedContent)
-})
+const isAuthor = computed(() => user.value?.id === post.value?.authorId)
 
 onMounted(async () => {
-  try {
-    const postId = route.params.id
-    post.value = await getPostById(postId)
-  } catch (err) {
-    error.value = 'Failed to load blog post'
-    console.error('Error loading post:', err)
-  } finally {
-    isLoading.value = false
-  }
+  await fetchPost(route.params.id)
 })
+
+const handleDelete = async () => {
+  if (confirm('Are you sure you want to delete this post?')) {
+    await deletePost(post.value.id)
+    router.push('/blog')
+  }
+}
 </script>
-
-<style>
-/* Add any additional styling for markdown content here */
-.prose img {
-  @apply rounded-lg shadow-md;
-}
-
-.prose pre {
-  @apply bg-gray-800 text-white p-4 rounded-lg overflow-x-auto;
-}
-
-.prose code {
-  @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
-}
-
-.prose blockquote {
-  @apply border-l-4 border-gray-200 pl-4 italic;
-}
-</style>
