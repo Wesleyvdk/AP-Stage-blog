@@ -50,7 +50,6 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 
 const router = useRouter()
-const { login } = useAuth()
 
 const loading = ref(false)
 const form = ref({
@@ -59,9 +58,13 @@ const form = ref({
 })
 
 const handleSubmit = async () => {
+  const { login } = await useAuth()
   loading.value = true
+  const email = form.value.email;
+  const password = form.value.password;
+  console.log(email, password);
   try {
-    await login(form.value)
+    await login(email, password)
     router.push('/')
   } catch (error) {
     console.error('Login failed:', error)

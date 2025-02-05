@@ -24,7 +24,7 @@ export function useBlogPosts() {
   const createPost = async (postData) => {
     const token = localStorage.getItem('token')
     try {
-      const response = await fetch('/api/posts', {
+      const response = await fetch('http://localhost:3001/api/post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

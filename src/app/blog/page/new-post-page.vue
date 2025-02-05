@@ -64,7 +64,6 @@ import { useRouter } from 'vue-router'
 import { useBlog } from '@/composables/useBlog'
 
 const router = useRouter()
-const { createPost } = useBlog()
 
 const loading = ref(false)
 const form = ref({
@@ -74,6 +73,7 @@ const form = ref({
 })
 
 const handleSubmit = async () => {
+  const { createPost } = await useBlog()
   loading.value = true
   try {
     await createPost(form.value)

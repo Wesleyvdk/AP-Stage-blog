@@ -1,7 +1,9 @@
 import { client } from '../client'
 
 export const loginUser = async (email, password) => {
-  const response = await client.post('/api/login', { email, password })
+  console.log('Sending request with:', email, password)
+  const response = await client.post('http://localhost:3001/api/login', { email, password })
+
   return response.data
 }
 

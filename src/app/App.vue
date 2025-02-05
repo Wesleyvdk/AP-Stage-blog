@@ -14,14 +14,14 @@ import { useAuth } from '@/composables/useAuth'
 import NavBar from '@/components/NavBar.vue'
 import AppFooter from '@/components/AppFooter.vue'
 
-const { isAuthenticated } = useAuth()
+/* const { isAuthenticated } = await useAuth()
 
 onMounted(() => {
   // Check if the user is already authenticated (e.g., from a previous session)
   if (localStorage.getItem('token')) {
     isAuthenticated.value = true
   }
-})
+}) */
 </script>
 
 <style>

@@ -27,8 +27,8 @@ import BlogPostPreview from '@/components/BlogPostPreview.vue'
 import { useBlog } from '@/composables/useBlog'
 import { useAuth } from '@/composables/useAuth'
 
-const { posts, loading, fetchPosts } = useBlog()
-const { isAuthenticated } = useAuth()
+const { posts, loading, fetchPosts } = await useBlog()
+const { isAuthenticated } = await useAuth()
 
 onMounted(async () => {
   await fetchPosts()

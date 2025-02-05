@@ -10,6 +10,6 @@ export function useBlog() {
     isLoading,
     error,
     getPosts: store.getPosts,
-    addPost: store.addPost,
+    createPost: store.addPost,
   }
 }

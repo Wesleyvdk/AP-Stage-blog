@@ -5,11 +5,13 @@ import { loginUser } from '@/services/api/auth'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const isAuthenticated = ref(false)
-
+  console.log('starting auth store')
   const login = async (email, password) => {
     try {
+      console.log('Logging in with:', email, password)
       const response = await loginUser(email, password)
-      localStorage.setItem('token', response.token)
+      console.log('Login response:', response)
+      await localStorage.setItem('token', response.token)
       user.value = response.user
       isAuthenticated.value = true
       return response
