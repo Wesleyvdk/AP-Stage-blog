@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center h-16">
         <router-link to="/" class="flex items-center">
-          <span class="ml-2 text-xl font-semibold">Blog AP</span>
+          <span class="ml-2 text-xl font-semibold">Wesley van der Kraan</span>
         </router-link>
 
         <div class="hidden md:flex items-center space-x-4">

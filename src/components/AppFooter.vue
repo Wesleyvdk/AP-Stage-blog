@@ -5,8 +5,7 @@
         <div>
           <h3 class="text-lg font-semibold mb-4">About Us</h3>
           <p class="text-gray-400">
-            Blog AP is a platform for sharing knowledge and insights about web development and
-            technology.
+            Deze website is om de stage portfolio van Wesley van der Kraan bij te houden.
           </p>
         </div>
         <div>
@@ -23,9 +22,6 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="mt-8 border-t border-gray-700 pt-8 text-center text-gray-400">
-        <p>&copy; {{ new Date().getFullYear() }} Blog AP. All rights reserved.</p>
       </div>
     </div>
   </footer>
