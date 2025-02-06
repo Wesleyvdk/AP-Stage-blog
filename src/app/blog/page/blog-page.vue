@@ -26,11 +26,17 @@ import { onMounted } from 'vue'
 import BlogPostPreview from '@/components/BlogPostPreview.vue'
 import { useBlog } from '@/composables/useBlog'
 import { useAuth } from '@/composables/useAuth'
+const { posts, loading, getPosts } = await useBlog()
+const handleFetch = async () => {
+  const { posts, loading, getPosts } = await useBlog()
+  const { isAuthenticated } = await useAuth()
 
-const { posts, loading, fetchPosts } = await useBlog()
-const { isAuthenticated } = await useAuth()
+  await getPosts
+}
+
+
 
 onMounted(async () => {
-  await fetchPosts()
+  await handleFetch()
 })
 </script>

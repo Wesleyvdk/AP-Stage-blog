@@ -1,11 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchPosts, createPost } from '@/services/api/blog'
+import { fetchPosts, createPost, getPostById } from '@/services/api/blog'
 
 export const useBlogStore = defineStore('blog', () => {
   const posts = ref([])
   const isLoading = ref(false)
   const error = ref(null)
+
+  const getPost = async (id) => {
+    isLoading.value = true
+    try {
+      posts.value = await getPostById(id)
+    } catch (err) {
+      error.value = err.message
+    } finally {
+      isLoading.value = false
+    }
+  }
 
   const getPosts = async () => {
     isLoading.value = true

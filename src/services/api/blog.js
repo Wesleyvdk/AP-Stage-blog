@@ -1,7 +1,7 @@
 import { client } from '../client'
 
 export const fetchPosts = async () => {
-  const response = await client.get('http://localhost:3001/api/feed')
+  const response = await client.get('http://localhost:3001/api/posts')
   return response.data
 }
 
@@ -11,6 +11,6 @@ export const createPost = async (postData) => {
 }
 
 export const getPostById = async (id) => {
-  const response = await client.get(`http://localhost:3001/api/posts/${id}`)
+  const response = await client.get(`http://localhost:3001/api/post/${id}`)
   return response.data
 }
