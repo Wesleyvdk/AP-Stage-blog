@@ -1,5 +1,5 @@
 <template>
-  <article
+  <article v-for="post in posts" :key="post.id"
     class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105"
   >
     <img :src="post.coverImage" :alt="post.title" class="w-full h-48 object-cover" />
@@ -27,11 +27,18 @@
 
 <script setup>
 import { formatDate } from '@/helpers/date'
-
-defineProps({
+import { ref, watchEffect } from 'vue';
+const posts = ref(null)
+const props = defineProps({
   post: {
     type: Object,
     required: true,
   },
 })
+console.log(props.post);
+watchEffect(() => {
+  posts.value = props.post
+})
+
+
 </script>

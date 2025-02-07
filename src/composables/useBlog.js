@@ -1,16 +1,17 @@
 import { useBlogStore } from '@/store/blog'
 import { storeToRefs } from 'pinia'
 
-export async function useBlog() {
+export const useBlog = async () => {
   const store = await useBlogStore()
   const { posts, isLoading, error } = storeToRefs(store)
+
+  console.log('useBlog called', store, posts, isLoading, error, store.getPosts, store.addPost)
 
   return {
     posts,
     isLoading,
     error,
-    getPosts: store.getPosts,
-    getPost: store.getPost,
+    getPost: store.getPosts,
     createPost: store.addPost,
   }
 }

@@ -2,6 +2,7 @@ import { client } from '../client'
 
 export const fetchPosts = async () => {
   const response = await client.get('http://localhost:3001/api/posts')
+  console.log('response in api/blog/fetchPosts', response)
   return response.data
 }
 

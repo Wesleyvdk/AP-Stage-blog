@@ -12,31 +12,31 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <BlogPostPreview v-for="post in posts" :key="post.id" :post="post" />
-    </div>
+        <BlogPostPreview v-for="post in latestPosts" :key="post.id" :post="post" />
+      </div>
 
     <div v-if="loading" class="flex justify-center">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, watchEffect } from 'vue'
 import BlogPostPreview from '@/components/BlogPostPreview.vue'
-import { useBlog } from '@/composables/useBlog'
-import { useAuth } from '@/composables/useAuth'
-const { posts, loading, getPosts } = await useBlog()
-const handleFetch = async () => {
-  const { posts, loading, getPosts } = await useBlog()
-  const { isAuthenticated } = await useAuth()
 
-  await getPosts
-}
+import { fetchPosts } from '@/services/api/blog'
 
 
+const isAuthenticated = ref(!!localStorage.getItem('token'))
 
-onMounted(async () => {
-  await handleFetch()
+const loading = ref(true)
+
+const latestPosts = ref([])
+
+watchEffect( async () => {
+  const posts = await fetchPosts()
+  latestPosts.value = posts
+  loading.value = false
 })
 </script>

@@ -12,7 +12,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('token')
 
   if (requiresAuth && !isAuthenticated) {
-    next('/login')
+    next('/auth/login')
   } else {
     next()
   }

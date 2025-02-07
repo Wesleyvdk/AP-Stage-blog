@@ -1,8 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <NavBar />
+    <Suspense>
+      <NavBar />
+      <template #fallback>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        </template>
+    </Suspense>
+
     <main class="container mx-auto px-4 py-8">
-      <router-view></router-view>
+      <Suspense>
+        <router-view />
+      </Suspense>
     </main>
     <AppFooter />
   </div>

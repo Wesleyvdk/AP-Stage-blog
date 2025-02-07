@@ -21,7 +21,9 @@ export const useBlogStore = defineStore('blog', () => {
   const getPosts = async () => {
     isLoading.value = true
     try {
-      posts.value = await fetchPosts()
+      const response = await fetchPosts()
+      posts.value = response
+      return response
     } catch (err) {
       error.value = err.message
     } finally {

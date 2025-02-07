@@ -48,13 +48,19 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from "@/store/auth"
 import { useAuth } from '@/composables/useAuth'
+
+
 
 const route = useRoute()
 const router = useRouter()
-const { isAuthenticated, logout } = useAuth()
+
+const store = await useAuthStore()
+
+const isAuthenticated = ref(!!localStorage.getItem('token'))
 
 const navItems = [
   { name: 'Home', path: '/' },
@@ -65,7 +71,7 @@ const navItems = [
 const isCurrentRoute = (path) => route.path === path
 
 const handleLogout = async () => {
-  await logout()
+  await store.logout()
   router.push('/auth/login')
 }
 </script>

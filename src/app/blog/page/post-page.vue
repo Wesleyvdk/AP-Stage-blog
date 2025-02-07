@@ -18,13 +18,13 @@
       </div>
 
       <div class="flex items-center text-gray-600 mb-8">
-        <span>{{ formatDate(posts.createdAt) }}</span>
+        <span>{{ formatDate(post.createdAt) }}</span>
         <span class="mx-2">•</span>
         <span>{{ post.author }}</span>
       </div>
 
       <div class="prose prose-indigo max-w-none">
-        <div v-html="parseMarkdown(posts.content)"></div>
+        <div v-html="parseMarkdown(post.content)"></div>
       </div>
     </div>
   </div>
@@ -35,23 +35,23 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useBlog } from '@/composables/useBlog'
 import { useAuth } from '@/composables/useAuth'
 import { formatDate } from '@/helpers/date'
 import { parseMarkdown } from '@/helpers/markdown'
+import { getPostById } from '@/services/api/blog'
 
 const route = useRoute()
 const router = useRouter()
-const { posts, loading, getPost, deletePost } = await useBlog()
-const { user } = useAuth()
+const post = ref(await getPostById(route.params.id))
+const { user } = await useAuth()
+
+console.log(user);
 
 const isAuthor = computed(() => user.value?.id === post.value?.authorId)
+console.log("post", post.value)
 
-onMounted(async () => {
-  await getPost(route.params.id)
-})
 
 const handleDelete = async () => {
   if (confirm('Are you sure you want to delete this post?')) {

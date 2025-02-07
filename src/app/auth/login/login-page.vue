@@ -60,9 +60,8 @@ const form = ref({
 const handleSubmit = async () => {
   const { login } = await useAuth()
   loading.value = true
-  const email = form.value.email;
-  const password = form.value.password;
-  console.log(email, password);
+  const email = form.value.email
+  const password = form.value.password
   try {
     await login(email, password)
     router.push('/')

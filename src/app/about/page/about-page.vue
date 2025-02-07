@@ -4,16 +4,17 @@
 
     <div class="bg-white rounded-lg shadow-md p-8 space-y-6">
       <p class="text-lg text-gray-700">
-        Hallo! Mijn naam is Wesley van der Kraan. Ik ben een softwareontwikkelaar met een passie voor het bouwen van innovatieve en efficiënte oplossingen. Hieronder vindt u een overzicht van mijn opleiding en werkervaring.
+        Hallo! Mijn naam is Wesley van der Kraan. Ik ben een softwareontwikkelaar met een passie
+        voor het bouwen van innovatieve en efficiënte oplossingen. Hieronder vindt u een overzicht
+        van mijn opleiding en werkervaring.
       </p>
 
       <div>
         <h2 class="text-2xl font-semibold text-gray-800">Opleiding</h2>
         <ul class="list-disc list-inside text-lg text-gray-700">
-          <li>Graduaat in Programmeren AP Hogeschool (2023 - 2025) </li>
+          <li>Graduaat in Programmeren AP Hogeschool (2023 - 2025)</li>
         </ul>
       </div>
-
 
       <div>
         <h2 class="text-2xl font-semibold text-gray-800">Mijn Vaardigheden</h2>
@@ -33,7 +34,6 @@
         </ul>
       </div>
 
-
       <div class="mt-8">
         <a
           href="https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/"
@@ -44,7 +44,8 @@
         <a
           href="https://github.com/Wesleyvdk"
           class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition-colors ml-2"
-          >Github</a>
+          >Github</a
+        >
       </div>
     </div>
   </div>
