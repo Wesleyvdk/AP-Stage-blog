@@ -5,8 +5,6 @@ export const useBlog = async () => {
   const store = await useBlogStore()
   const { posts, isLoading, error } = storeToRefs(store)
 
-  console.log('useBlog called', store, posts, isLoading, error, store.getPosts, store.addPost)
-
   return {
     posts,
     isLoading,
