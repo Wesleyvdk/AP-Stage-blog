@@ -2,7 +2,7 @@
   <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Create New Post</h1>
 
-    <form @submit.prevent="handleSubmit" class="space-y-6">
+    <form @submit.prevent="showModal = true" class="space-y-6">
       <div>
         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
         <input
@@ -13,23 +13,10 @@
           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
-
-      <div>
-        <label for="coverImage" class="block text-sm font-medium text-gray-700"
-          >Cover Image URL</label
-        >
-        <input
-          id="coverImage"
-          v-model="form.coverImage"
-          type="url"
-          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        />
-      </div>
       <label for="content" class="block text-sm font-medium text-gray-700"
-          >Content (Markdown)</label
-        >
+        >Content (Markdown)</label
+      >
       <div class="space-y-4">
-
         <textarea
           id="content"
           v-model="form.content"
@@ -57,6 +44,7 @@
         </button>
       </div>
     </form>
+    <Modal :visible="showModal" :post="form" @cancel="showModal = false" @confirm="handleSubmit" />
   </div>
 </template>
 
@@ -65,8 +53,8 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBlog } from '@/composables/useBlog'
 import { debounce } from 'lodash-es'
-import { marked } from 'marked'
 import createMarkdown from '@/compiler/markdown'
+import Modal from '@/components/modal.vue'
 
 const router = useRouter()
 
@@ -75,7 +63,10 @@ const form = ref({
   title: '',
   content: '',
   coverImage: '',
+  tags: [],
 })
+const showModal = ref(false)
+
 const input = ref('')
 const output = computed(() => createMarkdown(form.value.content))
 
@@ -87,6 +78,10 @@ const handleSubmit = async () => {
   const { createPost } = await useBlog()
   loading.value = true
   try {
+    if (!form.value.tags.length) {
+      alert('Tags are required')
+      return
+    }
     await createPost(form.value)
     router.push('/blog')
   } catch (error) {
@@ -118,4 +113,3 @@ const handleSubmit = async () => {
   padding: 20px;
 }
 </style>
-

@@ -4,7 +4,9 @@
     <main class="container mx-auto px-4 py-8">
       <router-view></router-view>
     </main>
-    <AppFooter />
+    <div class="inset-x-0 bottom-0">
+      <AppFooter />
+    </div>
   </div>
 </template>
 

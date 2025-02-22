@@ -26,9 +26,8 @@ import { fetchPosts } from '@/services/api/blog'
 
 const latestPosts = ref([])
 
-watchEffect( async () => {
+watchEffect(async () => {
   const posts = await fetchPosts()
   latestPosts.value = posts
 })
-
 </script>
