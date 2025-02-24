@@ -1,7 +1,7 @@
 import { client } from '../client'
 
 export const fetchPosts = async () => {
-  const response = await client.get(`${process.env.API_URL}/api/posts`)
+  const response = await client.get(`${import.meta.env.VITE_API_URL}/api/posts`)
   console.log('response in api/blog/fetchPosts', response)
   return response.data
 }
