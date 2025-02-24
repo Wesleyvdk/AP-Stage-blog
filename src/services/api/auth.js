@@ -1,7 +1,7 @@
 import { client } from '../client'
 
 export const loginUser = async (email, password) => {
-  const response = await client.post(`${API_URL}/api/login`, { email, password })
+  const response = await client.post(`${import.meta.env.API_URL}/api/login`, { email, password })
   return response.data
 }
 
