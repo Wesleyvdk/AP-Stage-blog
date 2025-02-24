@@ -7,11 +7,11 @@ export const fetchPosts = async () => {
 }
 
 export const createPost = async (postData) => {
-  const response = await client.post(`${process.env.API_URL}/api/post`, postData)
+  const response = await client.post(`${import.meta.env.VITE_API_URL}/api/post`, postData)
   return response.data
 }
 
 export const getPostById = async (id) => {
-  const response = await client.get(`${process.env.API_URL}/api/post/${id}`)
+  const response = await client.get(`${import.meta.env.VITE_API_URL}/api/post/${id}`)
   return response.data
 }
