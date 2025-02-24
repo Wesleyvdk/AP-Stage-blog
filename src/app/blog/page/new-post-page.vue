@@ -62,7 +62,6 @@ const loading = ref(false)
 const form = ref({
   title: '',
   content: '',
-  coverImage: '',
   tags: [],
 })
 const showModal = ref(false)
