@@ -64,7 +64,6 @@ const isSubmitting = ref(false)
 const form = ref({
   title: '',
   content: '',
-  coverImage: '',
   tags: [],
 })
 const showModal = ref(false)
