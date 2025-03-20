@@ -1,5 +1,5 @@
 <template>
-  <div v-if="post" class="max-w-4xl mx-auto">
+  <div v-if="post" class="prose prose-lg max-w-4xl mx-auto">
     <div class="bg-white rounded-lg shadow-md p-8">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-4xl font-bold text-gray-900">{{ post.title }}</h1>
@@ -32,22 +32,31 @@
     </div>
   </div>
 
-  <div v-else-if="loading" class="flex justify-center py-12">
-    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+  <BlogPostSkeleton v-else-if="loading" />
+
+  <!-- Error state -->
+  <div v-else class="max-w-4xl mx-auto p-8 text-center">
+    <p class="text-red-600 text-xl">Failed to load post. Please try again later.</p>
+    <router-link to="/blog" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800">
+      Return to blog
+    </router-link>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { formatDate } from '@/helpers/date'
 import { parseMarkdown } from '@/helpers/markdown'
-import { getPostById } from '@/services/api/blog'
+import { getPostById, deletePost } from '@/services/api/blog'
+import BlogPostSkeleton from '@/components/skeletons/BlogPostSkeleton.vue'
 
 const route = useRoute()
 const router = useRouter()
-const post = ref(await getPostById(route.params.id))
+const post = ref(null)
+const loading = ref(true)
+const error = ref(null)
 const { user } = await useAuth()
 
 console.log(user)
@@ -55,9 +64,22 @@ console.log(user)
 const isAuthor = computed(() => user.value?.id === post.value?.authorId)
 console.log('post', post.value)
 
+onMounted(async () => {
+  try {
+    loading.value = true
+    post.value = await getPostById(route.params.id)
+  } catch (err) {
+    console.error('Failed to load post:', err)
+    error.value = err
+  } finally {
+    loading.value = false
+  }
+})
+
+
 const handleDelete = async () => {
   if (confirm('Are you sure you want to delete this post?')) {
-    await deletePost(posts.value.id)
+    await deletePost(route.params.id)
     router.push('/blog')
   }
 }

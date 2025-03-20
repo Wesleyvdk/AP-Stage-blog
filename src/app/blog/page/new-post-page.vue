@@ -59,6 +59,8 @@ import Modal from '@/components/modal.vue'
 const router = useRouter()
 
 const loading = ref(false)
+const isSubmitting = ref(false)
+
 const form = ref({
   title: '',
   content: '',
@@ -75,6 +77,9 @@ const update = debounce((e) => {
 }, 100)
 
 const handleSubmit = async () => {
+  if (isSubmitting.value) return; // Prevent multiple submits
+
+  isSubmitting.value = true
   const { createPost } = await useBlog()
   loading.value = true
   try {
