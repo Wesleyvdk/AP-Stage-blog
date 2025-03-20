@@ -15,3 +15,9 @@ export const getPostById = async (id) => {
   const response = await client.get(`${import.meta.env.VITE_API_URL}/api/post/${id}`)
   return response.data
 }
+
+export const deletePost = async (id) => {
+  const response = await client.delete(`${import.meta.env.VITE_API_URL}/api/post/${id}`)
+
+  return response.data
+}

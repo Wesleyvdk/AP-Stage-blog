@@ -6,15 +6,11 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const isAuthenticated = ref(false)
   const login = async (email, password) => {
-    try {
-      const response = await loginUser(email, password)
-      await localStorage.setItem('token', response.token)
-      user.value = response.user
-      isAuthenticated.value = true
-      return response
-    } catch (error) {
-      throw error
-    }
+    const response = await loginUser(email, password)
+    await localStorage.setItem('token', response.token)
+    user.value = response.user
+    isAuthenticated.value = true
+    return response
   }
 
   const isUserAuthenticated = async () => {
