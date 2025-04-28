@@ -12,7 +12,7 @@ interface BlogPostPageProps {
   }
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({ params }: {params: Promise<{id: string}>}) {
   const paramProps = await params;
   const post = await getPostById(paramProps.id)
 
