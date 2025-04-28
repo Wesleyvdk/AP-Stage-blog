@@ -1,48 +1,62 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PlusCircle, Search } from "lucide-react"
-import { useAuth } from "@/lib/auth-context"
-import { usePosts } from "@/lib/use-posts"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlusCircle, Search } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { usePosts } from "@/lib/use-posts";
+import removeMarkdown from "remove-markdown";
 
 export default function BlogPage() {
-  const { user } = useAuth()
-  const { posts, isLoading, error } = usePosts()
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const { user } = useAuth();
+  const { posts, isLoading, error } = usePosts();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // Extract all unique tags from posts
-  const allTags = [...new Set(posts.flatMap((post) => post.tags))]
+  const allTags = [...new Set(posts.flatMap((post) => post.tags))];
 
   // Filter posts based on search term and selected tags
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      false
+      false;
 
-    const matchesTags = selectedTags.length === 0 || selectedTags.some((tag) => post.tags.includes(tag))
+    const matchesTags =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) => post.tags.includes(tag));
 
-    return matchesSearch && matchesTags
-  })
+    return matchesSearch && matchesTags;
+  });
 
   // Toggle tag selection
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
-  }
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
 
   return (
     <div className="container py-12 space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">Blog Posts</h1>
-          <p className="text-muted-foreground mt-2">Documenting my journey, learnings, and experiences</p>
+          <p className="text-muted-foreground mt-2">
+            Documenting my journey, learnings, and experiences
+          </p>
         </div>
         {user && (
           <Button asChild>
@@ -94,13 +108,18 @@ export default function BlogPage() {
                   <CardHeader>
                     <CardDescription>{post.date}</CardDescription>
                     <CardTitle>
-                      <Link href={`/blog/${post.id}`} className="hover:text-primary transition-colors">
+                      <Link
+                        href={`/blog/${post.id}`}
+                        className="hover:text-primary transition-colors"
+                      >
                         {post.title}
                       </Link>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground">{post.excerpt}</p>
+                    <p className="text-muted-foreground line-clamp-3">
+                      {removeMarkdown(post.excerpt ?? "")}
+                    </p>
                   </CardContent>
                   <CardFooter className="flex flex-col items-start gap-4">
                     <div className="flex flex-wrap gap-2">
@@ -119,7 +138,9 @@ export default function BlogPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No posts found matching your criteria</p>
+              <p className="text-muted-foreground">
+                No posts found matching your criteria
+              </p>
             </div>
           )}
         </div>
@@ -136,7 +157,11 @@ export default function BlogPage() {
                   <TabsTrigger value="tags">Tags</TabsTrigger>
                 </TabsList>
                 <TabsContent value="all" className="mt-4">
-                  <Button variant="outline" className="w-full justify-start" onClick={() => setSelectedTags([])}>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => setSelectedTags([])}
+                  >
                     Show All Posts
                   </Button>
                 </TabsContent>
@@ -145,7 +170,9 @@ export default function BlogPage() {
                     {allTags.map((tag) => (
                       <Badge
                         key={tag}
-                        variant={selectedTags.includes(tag) ? "default" : "outline"}
+                        variant={
+                          selectedTags.includes(tag) ? "default" : "outline"
+                        }
                         className="cursor-pointer"
                         onClick={() => toggleTag(tag)}
                       >
@@ -160,5 +187,5 @@ export default function BlogPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

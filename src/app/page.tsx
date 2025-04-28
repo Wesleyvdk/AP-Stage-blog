@@ -1,22 +1,42 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowRight } from "lucide-react"
-import { getAllPosts } from "@/lib/api-service"
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
+import { getAllPosts } from "@/lib/api-service";
 
 export default async function Home() {
-  const posts = await getAllPosts(3) // Get 3 most recent posts
+  const posts = await getAllPosts(3); // Get 3 most recent posts
+
+  function removeMarkdown(markdownText: string): string {
+    // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)
+    // This is a basic implementation and might not cover all edge cases.
+    return markdownText
+      .replace(/([*_`#\[\]()~>+-])/g, '') // Remove common markdown symbols
+      .replace(/(\n|\r)/g, ' ') // Replace newlines with spaces
+      .replace(/\s+/g, ' ') // Collapse multiple spaces
+      .trim();
+  }
 
   return (
     <div className="container py-12 space-y-16">
       {/* Hero Section */}
       <section className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12">
         <div className="flex-1 space-y-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">Hi, I'm Wesley van der Kraan</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+            Hi, I'm Wesley van der Kraan
+          </h1>
           <p className="text-xl text-muted-foreground">
-            A passionate developer documenting my journey through work and personal projects.
+            A passionate developer documenting my journey through work and
+            personal projects.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild size="lg">
@@ -44,7 +64,10 @@ export default async function Home() {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight">My Internship</h2>
-          <Link href="/about#internship" className="text-primary hover:underline flex items-center gap-1">
+          <Link
+            href="/about#internship"
+            className="text-primary hover:underline flex items-center gap-1"
+          >
             Learn more <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -52,14 +75,20 @@ export default async function Home() {
           <CardContent className="p-6 md:p-8">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full md:w-1/3 aspect-video relative rounded-lg overflow-hidden">
-                <Image src="/taglayer-logo.webp" alt="Taglayer Logo" fill className="object-cover" />
+                <Image
+                  src="/taglayer-logo.webp"
+                  alt="Taglayer Logo"
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
                 <h3 className="text-2xl font-semibold">Taglayer</h3>
                 <p className="text-muted-foreground">
-                  Currently interning at Taglayer, where I'm working on developing and improving web applications. My
-                  main focus is on frontend development using Vue.js and learning about modern web development
-                  practices.
+                  Currently interning at Taglayer, where I'm working on
+                  developing and improving web applications. My main focus is on
+                  frontend development using Vue.js and learning about modern
+                  web development practices.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Badge>Vue.js</Badge>
@@ -77,7 +106,10 @@ export default async function Home() {
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight">Recent Posts</h2>
-          <Link href="/blog" className="text-primary hover:underline flex items-center gap-1">
+          <Link
+            href="/blog"
+            className="text-primary hover:underline flex items-center gap-1"
+          >
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -89,7 +121,9 @@ export default async function Home() {
                 <CardTitle className="line-clamp-2">{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                <p className="text-muted-foreground line-clamp-3">
+                  {removeMarkdown(post.excerpt ?? "")}
+                </p>
               </CardContent>
               <CardFooter className="mt-auto pt-6 flex flex-col items-start gap-4">
                 <div className="flex flex-wrap gap-2">
@@ -108,5 +142,5 @@ export default async function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }

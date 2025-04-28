@@ -5,12 +5,11 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Calendar } from "lucide-react"
 import { getPostById } from "@/lib/api-service"
 import { incrementViewCount } from "@/lib/actions"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import rehypeSanitize from "rehype-sanitize"
+import MarkdownRenderer from "@/components/MarkdownRenderer"
 
-interface BlogPostPageProps {
-  params: {
-    id: string
-  }
-}
 
 export default async function BlogPostPage({ params }: {params: Promise<{id: string}>}) {
   const paramProps = await params;
@@ -53,7 +52,7 @@ export default async function BlogPostPage({ params }: {params: Promise<{id: str
           ))}
         </div>
 
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <MarkdownRenderer content={post.content} />
       </article>
     </div>
   )

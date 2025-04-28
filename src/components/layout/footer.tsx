@@ -51,7 +51,7 @@ export default function Footer() {
                 <Github className="h-6 w-6" />
                 <span className="sr-only">GitHub</span>
               </Link>
-              <Link href="https://linkedin.com/" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
                 <span className="sr-only">LinkedIn</span>
               </Link>

@@ -1,46 +1,176 @@
-import Image from "next/image"
+import { Suspense } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Github, ExternalLink } from "lucide-react"
+import { ProjectPreview } from "@/components/project-preview"
+import linksData from "@/lib/links.json"
+import { getRepository, extractRepoInfo } from "@/lib/github-service"
+
+// Define types based on our JSON structure
+interface ProjectData {
+  github: string
+  demo: string
+  category: string
+  featured: boolean
+  technologies: string[]
+}
+
+interface ProjectsData {
+  [key: string]: ProjectData
+}
+
+// Component to load and display a project with GitHub data
+async function ProjectCard({ name, data }: { name: string; data: ProjectData }) {
+  // Extract owner and repo from GitHub URL
+  const { owner, repo } = extractRepoInfo(data.github)
+
+  // Fetch repository data from GitHub
+  const repository = await getRepository(owner, repo)
+
+  return (
+    <Card key={name} className={data.featured ? "overflow-hidden" : "flex flex-col h-full"}>
+      {data.featured ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="relative overflow-hidden">
+          <ProjectPreview url={data.demo} title={name} aspectRatio="video" size="large" />
+          </div>
+          <div className="flex flex-col p-6">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-2xl">{name}</CardTitle>
+            </CardHeader>
+            <CardContent className="px-0 py-4 flex-grow">
+              <p className="text-muted-foreground">{repository.description || "No description available."}</p>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {data.technologies.map((tech) => (
+                  <Badge key={tech} variant="secondary">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+                <div>⭐ {repository.stargazers_count}</div>
+                <div>🍴 {repository.forks_count}</div>
+                <div>Updated: {new Date(repository.updated_at).toLocaleDateString()}</div>
+              </div>
+            </CardContent>
+            <CardFooter className="px-0 pb-0 flex flex-wrap gap-4">
+              <Button asChild variant="outline">
+                <Link href={data.github} target="_blank" rel="noopener noreferrer">
+                  <Github className="mr-2 h-4 w-4" />
+                  View Code
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href={data.demo} target="_blank" rel="noopener noreferrer">
+                  Live Demo
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href={`/projects/${name}`}>Details</Link>
+              </Button>
+            </CardFooter>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="relative">
+          <ProjectPreview url={data.demo} title={name} aspectRatio="video" size="small" />
+          </div>
+          <CardHeader>
+            <CardTitle>{name}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p className="text-muted-foreground">{repository.description || "No description available."}</p>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {data.technologies.map((tech) => (
+                <Badge key={tech} variant="secondary">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+          <CardFooter className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" size="sm">
+              <Link href={data.github} target="_blank" rel="noopener noreferrer">
+                <Github className="mr-2 h-4 w-4" />
+                Code
+              </Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link href={data.demo} target="_blank" rel="noopener noreferrer">
+                Demo
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="secondary" size="sm">
+              <Link href={`/projects/${name}`}>Details</Link>
+            </Button>
+          </CardFooter>
+        </>
+      )}
+    </Card>
+  )
+}
+
+// Loading fallback for project cards
+function ProjectCardSkeleton({ featured = false }: { featured?: boolean }) {
+  return (
+    <Card className={featured ? "overflow-hidden" : "flex flex-col h-full"}>
+      {featured ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="relative aspect-video overflow-hidden bg-muted animate-pulse"></div>
+          <div className="flex flex-col p-6">
+            <div className="h-8 bg-muted rounded animate-pulse mb-4"></div>
+            <div className="h-20 bg-muted rounded animate-pulse mb-4"></div>
+            <div className="flex gap-2 mb-4">
+              <div className="h-6 w-16 bg-muted rounded animate-pulse"></div>
+              <div className="h-6 w-16 bg-muted rounded animate-pulse"></div>
+            </div>
+            <div className="flex gap-2 mt-auto">
+              <div className="h-10 w-28 bg-muted rounded animate-pulse"></div>
+              <div className="h-10 w-28 bg-muted rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="relative aspect-video bg-muted animate-pulse"></div>
+          <CardHeader>
+            <div className="h-6 bg-muted rounded animate-pulse"></div>
+          </CardHeader>
+          <CardContent>
+            <div className="h-16 bg-muted rounded animate-pulse mb-4"></div>
+            <div className="flex gap-2">
+              <div className="h-6 w-16 bg-muted rounded animate-pulse"></div>
+              <div className="h-6 w-16 bg-muted rounded animate-pulse"></div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <div className="flex gap-2">
+              <div className="h-8 w-20 bg-muted rounded animate-pulse"></div>
+              <div className="h-8 w-20 bg-muted rounded animate-pulse"></div>
+            </div>
+          </CardFooter>
+        </>
+      )}
+    </Card>
+  )
+}
 
 export default function ProjectsPage() {
-  const projects = [
-    {
-      id: "blog-website",
-      title: "Personal Blog & Portfolio",
-      description: "A Next.js-powered blog and portfolio website showcasing my projects and internship experiences.",
-      image: "/clean-tech-startup.png",
-      tags: ["Next.js", "React", "TypeScript", "TailwindCSS"],
-      github: "https://github.com/Wesleyvdk/AP-Stage-blog",
-      demo: "#",
-      featured: true,
-    },
-    {
-      id: "vue-blog",
-      title: "Vue.js Blog Platform",
-      description: "The original version of my blog built with Vue.js, documenting my internship journey.",
-      image: "/vue-components-abstract.png",
-      tags: ["Vue.js", "TailwindCSS", "Express.js"],
-      github: "https://github.com/Wesleyvdk/DreamyCroissan",
-      demo: "#",
-      featured: true,
-    },
-    {
-      id: "task-manager",
-      title: "Task Manager Application",
-      description: "A simple task management application with authentication and CRUD operations.",
-      image: "/placeholder.svg?height=300&width=600&query=task management app",
-      tags: ["React", "Firebase", "CSS"],
-      github: "#",
-      demo: "#",
-      featured: false,
-    },
-  ]
+  const projects = linksData.projects as ProjectsData
 
-  const featuredProjects = projects.filter((project) => project.featured)
-  const otherProjects = projects.filter((project) => !project.featured)
+  // Get featured and non-featured projects
+  const featuredProjects = Object.entries(projects)
+    .filter(([_, data]) => data.featured)
+    .map(([name, data]) => ({ name, data }))
+
+  const otherProjects = Object.entries(projects)
+    .filter(([_, data]) => !data.featured)
+    .map(([name, data]) => ({ name, data }))
 
   return (
     <div className="container py-12 space-y-16">
@@ -55,48 +185,10 @@ export default function ProjectsPage() {
         <section className="space-y-6">
           <h2 className="text-3xl font-bold tracking-tight">Featured Projects</h2>
           <div className="grid grid-cols-1 gap-8">
-            {featuredProjects.map((project) => (
-              <Card key={project.id} className="overflow-hidden">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="relative aspect-video overflow-hidden">
-                    <Image
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform hover:scale-105"
-                    />
-                  </div>
-                  <div className="flex flex-col p-6">
-                    <CardHeader className="px-0 pt-0">
-                      <CardTitle className="text-2xl">{project.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="px-0 py-4 flex-grow">
-                      <p className="text-muted-foreground">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {project.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                    <CardFooter className="px-0 pb-0 flex flex-wrap gap-4">
-                      <Button asChild variant="outline">
-                        <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="mr-2 h-4 w-4" />
-                          View Code
-                        </Link>
-                      </Button>
-                      <Button asChild>
-                        <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                          Live Demo
-                          <ExternalLink className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </CardFooter>
-                  </div>
-                </div>
-              </Card>
+            {featuredProjects.map(({ name, data }) => (
+              <Suspense key={name} fallback={<ProjectCardSkeleton featured />}>
+                <ProjectCard name={name} data={data} />
+              </Suspense>
             ))}
           </div>
         </section>
@@ -106,39 +198,10 @@ export default function ProjectsPage() {
         <section className="space-y-6">
           <h2 className="text-3xl font-bold tracking-tight">Other Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {otherProjects.map((project) => (
-              <Card key={project.id} className="flex flex-col h-full">
-                <div className="relative aspect-video">
-                  <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
-                </div>
-                <CardHeader>
-                  <CardTitle>{project.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex flex-wrap gap-2">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4" />
-                      Code
-                    </Link>
-                  </Button>
-                  <Button asChild size="sm">
-                    <Link href={project.demo} target="_blank" rel="noopener noreferrer">
-                      Demo
-                      <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+            {otherProjects.map(({ name, data }) => (
+              <Suspense key={name} fallback={<ProjectCardSkeleton />}>
+                <ProjectCard name={name} data={data} />
+              </Suspense>
             ))}
           </div>
         </section>
