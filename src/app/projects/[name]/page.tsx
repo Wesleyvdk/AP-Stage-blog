@@ -51,7 +51,7 @@ type CommitData =
 export default async function ProjectDetailPage({
   params,
 }: {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 }) {
   const { name } = await params;
   const projects = linksData.projects as ProjectsData;

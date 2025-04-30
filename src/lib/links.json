@@ -1,36 +1,42 @@
 {
-    "profiles": {
-      "github": "https://github.com/Wesleyvdk",
-      "linkedin": "https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/"
+  "profiles": {
+    "github": "https://github.com/Wesleyvdk",
+    "linkedin": "https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/"
+  },
+  "projects": {
+    "dreamycroisssan": {
+      "github": "https://github.com/Wesleyvdk/DreamyCroissan",
+      "demo": "https://dreamy.aylanibot.app/",
+      "category": "internship",
+      "featured": true,
+      "technologies": ["React", "Remix", "TailwindCSS", "Express.js", "S3"]
     },
-    "projects": {
-      "dreamycroisssan": {
-        "github": "https://github.com/Wesleyvdk/DreamyCroissan",
-        "demo": "https://dreamy.aylanibot.app/",
-        "category": "internship",
-        "featured": true,
-        "technologies": ["Vue.js", "TailwindCSS", "Express.js"]
-      },
-      "AP-Gaming": {
-        "github": "https://github.com/Wesleyvdk/AP-Gaming",
-        "demo": "https://ap-gaming.org/",
-        "category": "school",
-        "featured": false,
-        "technologies": ["React", "CSS", "Firebase"]
-      },
-      "AP-Gaming-Dashboard": {
-        "github": "https://github.com/Wesleyvdk/dashboard.APGaming",
-        "demo": "https://dashboard.ap-gaming.org/",
-        "category": "school",
-        "featured": false,
-        "technologies": ["React", "TailwindCSS", "Firebase"]
-      },
-      "Esportique": {
-        "github": "https://github.com/Wesleyvdk/Esportique",
-        "demo": "https://esportique.vercel.app/",
-        "category": "personal",
-        "featured": true,
-        "technologies": ["Next.js", "TailwindCSS", "Supabase"]
-      }
+    "AP-Gaming": {
+      "github": "https://github.com/Wesleyvdk/AP-Gaming",
+      "demo": "https://ap-gaming.org/",
+      "category": "school",
+      "featured": false,
+      "technologies": ["React", "TailwindCSS", "PostgreSQL", "Next.js"]
+    },
+    "AP-Gaming-Dashboard": {
+      "github": "https://github.com/Wesleyvdk/dashboard.APGaming",
+      "demo": "https://dashboard.ap-gaming.org/",
+      "category": "school",
+      "featured": false,
+      "technologies": [
+        "React",
+        "TailwindCSS",
+        "PostgreSQL",
+        "Next.js",
+        "Prisma"
+      ]
+    },
+    "Esportique": {
+      "github": "https://github.com/Wesleyvdk/Esportique",
+      "demo": "https://esportique.vercel.app/",
+      "category": "personal",
+      "featured": true,
+      "technologies": ["Next.js", "TailwindCSS", "PostgreSQL", "Medusa.js"]
     }
   }
+}

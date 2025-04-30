@@ -1,16 +1,17 @@
-"use client"
+"use client";
 
-import Microlink from "@microlink/react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useState } from "react"
+import mql from "@microlink/mql";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect } from "react";
 
 interface ProjectPreviewProps {
-  url: string
-  title: string
-  aspectRatio?: "video" | "square" | "auto"
-  size?: "normal" | "large" | "small"
-  className?: string
+  url: string;
+  title: string;
+  aspectRatio?: "video" | "square" | "auto";
+  size?: "normal" | "large" | "small";
+  className?: string;
 }
 
 export function ProjectPreview({
@@ -20,14 +21,66 @@ export function ProjectPreview({
   size = "large",
   className = "",
 }: ProjectPreviewProps) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [data, setData] = useState<any>(null);
 
   // Calculate aspect ratio class
-  const aspectRatioClass = aspectRatio === "video" ? "aspect-video" : aspectRatio === "square" ? "aspect-square" : ""
+  const aspectRatioClass =
+    aspectRatio === "video"
+      ? "aspect-video"
+      : aspectRatio === "square"
+      ? "aspect-square"
+      : "";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { status, data } = await mql(url, {
+          screenshot: true,
+        });
+        if (status === "error") {
+          setHasError(true);
+        } else {
+          setData(data);
+        }
+      } catch (error) {
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [url]);
+  if (isLoading) {
+    return (
+      <div className="absolute inset-0 z-10">
+        <Skeleton className="h-full w-full" />
+      </div>
+    );
+  }
+
+  if (hasError) {
+    return (
+      <Card className="h-full w-full">
+        <CardContent className="flex h-full items-center justify-center p-6">
+          <p className="text-center text-muted-foreground">
+            Unable to load preview for {title}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!data || !data.screenshot) {
+    return <div>No preview available.</div>;
+  }
 
   return (
-    <div className={`relative overflow-hidden rounded-lg ${aspectRatioClass} ${className}`}>
+    <div
+      className={`relative overflow-hidden rounded-lg ${aspectRatioClass} ${className}`}
+    >
       {isLoading && (
         <div className="absolute inset-0 z-10">
           <Skeleton className="h-full w-full" />
@@ -37,28 +90,21 @@ export function ProjectPreview({
       {hasError ? (
         <Card className="h-full w-full">
           <CardContent className="flex h-full items-center justify-center p-6">
-            <p className="text-center text-muted-foreground">Unable to load preview for {title}</p>
+            <p className="text-center text-muted-foreground">
+              Unable to load preview for {title}
+            </p>
           </CardContent>
         </Card>
       ) : (
-        <Microlink
-          url={url}
-          size={size}
-          contrast={true}
-          screenshot={true}
-          className="h-full w-full"
-          style={{
-            borderRadius: "inherit",
-            height: "100%",
-            width: "100%",
-            objectFit: "cover",
-          }}
-          onError={() => {
-            setIsLoading(false)
-            setHasError(true)
-          }}
-        />
+        <div>
+          <Image
+            src={data.screenshot?.url ?? ""}
+            alt={url}
+            width={data.screenshot?.width}
+            height={data.screenshot?.height}
+          />
+        </div>
       )}
     </div>
-  )
+  );
 }
