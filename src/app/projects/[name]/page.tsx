@@ -30,8 +30,8 @@ interface ProjectsData {
   [key: string]: ProjectData
 }
 
-export default async function ProjectDetailPage({ params }: { params: { name: string } }) {
-  const { name } = params
+export default async function ProjectDetailPage({ params }: { params: Promise<{ name: string }> }) {
+  const { name } = await params
   const projects = linksData.projects as ProjectsData
   const projectData = projects[name]
 
