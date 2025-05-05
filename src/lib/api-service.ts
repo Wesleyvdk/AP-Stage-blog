@@ -63,7 +63,11 @@ export const api = {
   // Posts
   getPosts: async (): Promise<Post[]> => {
     const response = await fetchAPI<{ posts: any[] }>("/api/posts")
-    return response.posts.map((post) => ({
+    // Sort posts by createdAt descending before mapping
+    const sortedRawPosts = response.posts.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    return sortedRawPosts.map((post) => ({
       id: post.id.toString(),
       title: post.title,
       content: post.content,

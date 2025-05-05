@@ -9,28 +9,36 @@
       "demo": "https://dreamy.aylanibot.app/",
       "category": "personal",
       "featured": false,
-      "technologies": ["React", "Remix", "TailwindCSS", "Express.js", "S3"]
+      "technologies": ["React", "Remix", "TailwindCSS", "Express.js", "S3"],
+      "isPrivate": true,
+      "projectType": "website"
     },
     "AylaniBot": {
       "github": "https://github.com/Wesleyvdk/NatureBot",
       "demo": "",
       "category": "personal",
       "featured": true,
-      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"]
+      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"],
+      "isPrivate": true,
+      "projectType": "bot"
     },
     "Rocket League Tracker": {
       "github": "https://github.com/Wesleyvdk/rl-tracker",
       "demo": "",
       "category": "personal",
       "featured": false,
-      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"]
+      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"],
+      "isPrivate": false,
+      "projectType": "bot"
     },
     "AP-Gaming": {
       "github": "https://github.com/Wesleyvdk/AP-Gaming",
       "demo": "https://ap-gaming.org/",
       "category": "school",
       "featured": true,
-      "technologies": ["React", "TailwindCSS", "PostgreSQL", "Next.js"]
+      "technologies": ["React", "TailwindCSS", "PostgreSQL", "Next.js"],
+      "isPrivate": false,
+      "projectType": "website"
     },
     "AP-Gaming-Dashboard": {
       "github": "https://github.com/Wesleyvdk/dashboard.APGaming",
@@ -43,14 +51,18 @@
         "PostgreSQL",
         "Next.js",
         "Prisma"
-      ]
+      ],
+      "isPrivate": true,
+      "projectType": "website"
     },
     "Esportique": {
       "github": "https://github.com/Wesleyvdk/Esportique",
       "demo": "https://esportique.vercel.app/",
       "category": "personal",
       "featured": false,
-      "technologies": ["Next.js", "TailwindCSS", "PostgreSQL", "Medusa.js"]
+      "technologies": ["Next.js", "TailwindCSS", "PostgreSQL", "Medusa.js"],
+      "isPrivate": false,
+      "projectType": "website"
     }
   }
 }

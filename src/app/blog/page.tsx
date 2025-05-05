@@ -29,18 +29,18 @@ export default function BlogPage() {
   const allTags = [...new Set(posts.flatMap((post) => post.tags))];
 
   // Filter posts based on search term and selected tags
-  const filteredPosts = posts.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      false;
+  const filteredPosts = posts
+    .filter((post) => {
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
 
-    const matchesTags =
-      selectedTags.length === 0 ||
-      selectedTags.some((tag) => post.tags.includes(tag));
+      const matchesTags =
+        selectedTags.length === 0 ||
+        selectedTags.some((tag) => post.tags.includes(tag));
 
-    return matchesSearch && matchesTags;
-  });
+      return matchesSearch && matchesTags;
+    });
 
   // Toggle tag selection
   const toggleTag = (tag: string) => {
@@ -124,7 +124,7 @@ export default function BlogPage() {
                   <CardFooter className="flex flex-col items-start gap-4">
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary">
+                        <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
                           {tag}
                         </Badge>
                       ))}

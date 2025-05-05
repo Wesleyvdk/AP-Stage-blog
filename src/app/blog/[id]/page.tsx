@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: {params: Promise<{id: str
 
         <div className="flex flex-wrap gap-2 mb-8">
           {post.tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
+            <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
               {tag}
             </Badge>
           ))}

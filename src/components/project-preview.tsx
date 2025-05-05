@@ -7,11 +7,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 
 interface ProjectPreviewProps {
-  url: string;
+  url?: string | null;
   title: string;
   aspectRatio?: "video" | "square" | "auto";
   size?: "normal" | "large" | "small";
   className?: string;
+  projectType?: string;
 }
 
 export function ProjectPreview({
@@ -20,6 +21,7 @@ export function ProjectPreview({
   aspectRatio = "video",
   size = "large",
   className = "",
+  projectType,
 }: ProjectPreviewProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -32,6 +34,36 @@ export function ProjectPreview({
       : aspectRatio === "square"
       ? "aspect-square"
       : "";
+
+  if (!url) {
+    return (
+      <div
+        className={`relative overflow-hidden rounded-lg ${aspectRatioClass} ${className}`}
+      >
+        <Card className="h-full w-full">
+          <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
+            {projectType === "bot" ? (
+              <>
+                <div className="mb-4 text-4xl">🤖</div>
+                <p className="text-lg font-medium">{title}</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Chat Bot / No Live Demo
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="mb-4 text-4xl">🚧</div>
+                <p className="text-lg font-medium">{title}</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  No Live Demo Available
+                </p>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +85,7 @@ export function ProjectPreview({
 
     fetchData();
   }, [url]);
+
   if (isLoading) {
     return (
       <div className="absolute inset-0 z-10">
