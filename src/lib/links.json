@@ -7,15 +7,29 @@
     "dreamycroisssan": {
       "github": "https://github.com/Wesleyvdk/DreamyCroissan",
       "demo": "https://dreamy.aylanibot.app/",
-      "category": "internship",
-      "featured": true,
+      "category": "personal",
+      "featured": false,
       "technologies": ["React", "Remix", "TailwindCSS", "Express.js", "S3"]
+    },
+    "AylaniBot": {
+      "github": "https://github.com/Wesleyvdk/NatureBot",
+      "demo": "",
+      "category": "personal",
+      "featured": true,
+      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"]
+    },
+    "Rocket League Tracker": {
+      "github": "https://github.com/Wesleyvdk/rl-tracker",
+      "demo": "",
+      "category": "personal",
+      "featured": false,
+      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"]
     },
     "AP-Gaming": {
       "github": "https://github.com/Wesleyvdk/AP-Gaming",
       "demo": "https://ap-gaming.org/",
       "category": "school",
-      "featured": false,
+      "featured": true,
       "technologies": ["React", "TailwindCSS", "PostgreSQL", "Next.js"]
     },
     "AP-Gaming-Dashboard": {
@@ -35,7 +49,7 @@
       "github": "https://github.com/Wesleyvdk/Esportique",
       "demo": "https://esportique.vercel.app/",
       "category": "personal",
-      "featured": true,
+      "featured": false,
       "technologies": ["Next.js", "TailwindCSS", "PostgreSQL", "Medusa.js"]
     }
   }

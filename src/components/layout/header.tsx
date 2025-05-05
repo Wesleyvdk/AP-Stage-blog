@@ -44,7 +44,6 @@ export default function Header() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
-          <LanguageToggle />
           <ModeToggle />
           {user ? (
             <>
