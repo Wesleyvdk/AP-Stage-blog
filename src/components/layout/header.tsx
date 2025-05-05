@@ -19,6 +19,7 @@ export default function Header() {
     { name: t("nav.blog"), href: "/blog" },
     { name: t("nav.projects"), href: "/projects" },
     { name: t("nav.about"), href: "/about" },
+    { name: t("nav.resume"), href: "/resume" },
   ]
 
   return (
@@ -50,10 +51,12 @@ export default function Header() {
               <Button variant="ghost" asChild>
                 <Link href="/dashboard">{t("nav.dashboard")}</Link>
               </Button>
-              <Button onClick={logout}>{t("nav.logout")}</Button>
+              <Button onClick={logout} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                {t("nav.logout")}
+              </Button>
             </>
           ) : (
-            <Button asChild>
+            <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
               <Link href="/auth/login">{t("nav.login")}</Link>
             </Button>
           )}

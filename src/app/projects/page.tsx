@@ -59,7 +59,7 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
               <p className="text-muted-foreground">{repository.description || "No description available."}</p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {data.technologies.map((tech) => (
-                  <Badge key={tech} variant="secondary">
+                  <Badge key={tech} className="bg-indigo-100 text-indigo-600">
                     {tech}
                   </Badge>
                 ))}
@@ -117,7 +117,7 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
             <p className="text-muted-foreground">{repository.description || "No description available."}</p>
             <div className="flex flex-wrap gap-2 mt-4">
               {data.technologies.map((tech) => (
-                <Badge key={tech} variant="secondary">
+                <Badge key={tech} className="bg-indigo-100 text-indigo-600">
                   {tech}
                 </Badge>
               ))}

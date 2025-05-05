@@ -59,7 +59,7 @@ export default function BlogPage() {
           </p>
         </div>
         {user && (
-          <Button asChild>
+          <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
             <Link href="/new-blog">
               <PlusCircle className="mr-2 h-4 w-4" /> New Post
             </Link>
@@ -129,7 +129,11 @@ export default function BlogPage() {
                         </Badge>
                       ))}
                     </div>
-                    <Button variant="outline" asChild>
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="hover:bg-indigo-50"
+                    >
                       <Link href={`/blog/${post.id}`}>Read more</Link>
                     </Button>
                   </CardFooter>
@@ -173,7 +177,9 @@ export default function BlogPage() {
                         variant={
                           selectedTags.includes(tag) ? "default" : "outline"
                         }
-                        className="cursor-pointer"
+                        className={
+                          selectedTags.includes(tag) ? "cursor-pointer bg-indigo-100 text-indigo-600" : "cursor-pointer"
+                        }
                         onClick={() => toggleTag(tag)}
                       >
                         {tag}

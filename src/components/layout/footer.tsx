@@ -39,6 +39,11 @@ export default function Footer() {
                   {t("nav.about")}
                 </Link>
               </li>
+              <li>
+                <Link href="/resume" className="text-muted-foreground hover:text-indigo-600 transition-colors">
+                  {t("nav.resume")}
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

@@ -39,10 +39,10 @@ export default async function Home() {
             personal projects.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button asChild size="lg">
+            <Button className="bg-indigo-100 text-indigo-600 hover:bg-indigo-200" asChild size="lg">
               <Link href="/about">About Me</Link>
             </Button>
-            <Button variant="outline" size="lg" asChild>
+            <Button className="bg-indigo-600 text-indigo-100 hover:bg-indigo-700" size="lg" asChild>
               <Link href="/blog">Read My Blog</Link>
             </Button>
           </div>
@@ -91,10 +91,10 @@ export default async function Home() {
                   web development practices.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge>Vue.js</Badge>
-                  <Badge>TailwindCSS</Badge>
-                  <Badge>Express.js</Badge>
-                  <Badge>Web Development</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">Vue.js</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">TailwindCSS</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">Express.js</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">Web Development</Badge>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default async function Home() {
               <CardFooter className="mt-auto pt-6 flex flex-col items-start gap-4">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
+                    <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
                       {tag}
                     </Badge>
                   ))}

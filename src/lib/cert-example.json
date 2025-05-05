@@ -1,0 +1,13 @@
+    {
+        "example-certification-key": {
+          "title": "Example Certification Title",
+          "issuer": "Example Issuer",
+          "issueDate": "Month Year",
+          "expiryDate": "Month Year",
+          "credentialId": "EXAMPLE-ID-12345", 
+          "verificationUrl": "https://example.com/verify",
+          "skills": ["Skill 1", "Skill 2", "Skill 3"],
+          "logoSrc": "/path/to/logo.png",
+          "variant": "example-variant"
+        }
+      }

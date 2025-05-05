@@ -98,7 +98,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <h1 className="text-4xl font-bold tracking-tight mb-4">{name}</h1>
             <p className="text-xl text-muted-foreground">{repository.description}</p>
             {projectData.isPrivate && (
-              <Badge variant="outline" className="mt-4 flex items-center w-fit gap-1">
+              <Badge variant="outline" className="bg-indigo-100 text-indigo-600 mt-4 flex items-center w-fit gap-1">
                 <Lock className="h-3 w-3" />
                 Private Repository
               </Badge>
@@ -118,7 +118,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <div className="flex flex-wrap gap-3">
             {projectData.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="text-sm">
+              <Badge key={tech} variant="secondary" className="bg-indigo-100 text-indigo-600 text-sm">
                 {tech}
               </Badge>
             ))}
@@ -191,12 +191,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               )}
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Category</span>
-                <Badge>{projectData.category}</Badge>
+                <Badge variant="outline" className="bg-indigo-100 text-indigo-600">{projectData.category}</Badge>
               </div>
               {projectData.projectType && (
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Type</span>
-                  <Badge variant="outline">{projectData.projectType}</Badge>
+                  <Badge variant="outline" className="bg-indigo-100 text-indigo-600">{projectData.projectType}</Badge>
                 </div>
               )}
             </CardContent>

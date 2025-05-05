@@ -44,6 +44,9 @@ export default function AboutPage() {
                 <span className="sr-only">LinkedIn</span>
               </Link>
             </Button>
+            <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+              <Link href="/resume">View Resume</Link>
+            </Button>
           </div>
         </div>
       </section>

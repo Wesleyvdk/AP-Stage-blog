@@ -6,6 +6,7 @@
     "nav.login": "Login",
     "nav.logout": "Logout",
     "nav.dashboard": "Dashboard",
+    "nav.resume": "Resume",
   
     "home.hero.title": "Hi, I'm Wesley van der Kraan",
     "home.hero.subtitle": "A passionate developer documenting my journey through internships and personal projects.",

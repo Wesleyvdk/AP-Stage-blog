@@ -81,7 +81,7 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-2">Manage your blog posts</p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
           <Link href="/new-blog">
             <PlusCircle className="mr-2 h-4 w-4" /> New Post
           </Link>
@@ -114,7 +114,7 @@ export default function DashboardPage() {
         </Card>
       ) : posts.length > 0 ? (
         <div className="grid grid-cols-1 gap-6">
-          {posts.map((post: any) => (
+          {posts.map((post) => (
             <Card key={post.id}>
               <CardHeader>
                 <CardDescription>{post.date}</CardDescription>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
               <CardContent>
                 <p className="text-muted-foreground line-clamp-2">{post.excerpt}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {post.tags.map((tag: any) => (
+                  {post.tags.map((tag) => (
                     <Badge key={tag} variant="secondary">
                       {tag}
                     </Badge>
@@ -145,7 +145,12 @@ export default function DashboardPage() {
                   </Link>
                 </Button>
                 {!post.published && (
-                  <Button size="sm" onClick={() => handlePublish(post.id)} disabled={isPublishing === post.id}>
+                  <Button
+                    size="sm"
+                    onClick={() => handlePublish(post.id)}
+                    disabled={isPublishing === post.id}
+                    className="bg-indigo-600 text-white hover:bg-indigo-700"
+                  >
                     <ArrowUpRight className="mr-2 h-4 w-4" />
                     {isPublishing === post.id ? "Publishing..." : "Publish"}
                   </Button>
@@ -179,7 +184,7 @@ export default function DashboardPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground mb-4">You haven't created any posts yet</p>
-            <Button asChild>
+            <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
               <Link href="/new-blog">
                 <PlusCircle className="mr-2 h-4 w-4" /> Create Your First Post
               </Link>
