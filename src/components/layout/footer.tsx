@@ -1,12 +1,27 @@
 "use client"
 
 import Link from "next/link"
-import { Github, Linkedin } from "lucide-react"
+import { Github, Linkedin, Mail } from "lucide-react"
 import { useLanguage } from "@/lib/language-context"
 
 export default function Footer() {
   const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
+
+  const quickLinks = [
+    { href: "/", key: "nav.home" },
+    { href: "/blog", key: "nav.blog" },
+    { href: "/projects", key: "nav.projects" },
+    { href: "/about", key: "nav.about" },
+    { href: "/resume", key: "nav.resume" },
+    { href: "/contact", key: "nav.contact" },
+  ];
+
+  const chunkSize = 4;
+  const linkChunks = [];
+  for (let i = 0; i < quickLinks.length; i += chunkSize) {
+    linkChunks.push(quickLinks.slice(i, i + chunkSize));
+  }
 
   return (
     <footer className="w-full border-t bg-background">
@@ -18,33 +33,19 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">{t("footer.quickLinks")}</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t("nav.home")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t("nav.blog")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t("nav.projects")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t("nav.about")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/resume" className="text-muted-foreground hover:text-indigo-600 transition-colors">
-                  {t("nav.resume")}
-                </Link>
-              </li>
-            </ul>
+            <div className="flex flex-row gap-8">
+              {linkChunks.map((chunk, index) => (
+                <ul key={index} className="space-y-2">
+                  {chunk.map((link) => (
+                    <li key={link.key}>
+                      <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
+                        {t(link.key)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">{t("footer.connect")}</h3>
@@ -59,6 +60,10 @@ export default function Footer() {
               <Link href="https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
                 <span className="sr-only">LinkedIn</span>
+              </Link>
+              <Link href="/contact" className="text-muted-foreground transition-colors">
+                <Mail className="h-6 w-6" />
+                <span className="sr-only">Contact</span>
               </Link>
             </div>
           </div>
