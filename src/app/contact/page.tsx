@@ -22,8 +22,8 @@ export default function ContactPage() {
     // Simuleer een API call
     await new Promise(resolve => setTimeout(resolve, 1000))
     
-    toast.success("Bericht verzonden!", {
-      description: "Bedankt voor je bericht. Ik neem zo snel mogelijk contact met je op."
+    toast.success("Message sent!", {
+      description: "Thank you for your message. I will get back to you as soon as possible."
     })
     
     // Reset form
@@ -37,9 +37,9 @@ export default function ContactPage() {
     <div className="container py-12">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight">Neem Contact Op</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Contact me</h1>
           <p className="text-xl text-muted-foreground mt-4">
-            Heb je een vraag of wil je samenwerken? Stuur me een bericht!
+            Have a question or want to collaborate? Send me a message!
           </p>
         </div>
         
@@ -51,23 +51,23 @@ export default function ContactPage() {
                   <Mail className="h-6 w-6 text-primary" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-muted-foreground">wesley@example.com</p>
+                    <p className="text-muted-foreground">wesleyvanderkraan0@gmail.com</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
                   <Phone className="h-6 w-6 text-primary" />
                   <div>
-                    <h3 className="font-medium">Telefoon</h3>
-                    <p className="text-muted-foreground">+31 6 12345678</p>
+                    <h3 className="font-medium">Phone</h3>
+                    <p className="text-muted-foreground">+31 6 30244341</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
                   <MapPin className="h-6 w-6 text-primary" />
                   <div>
-                    <h3 className="font-medium">Locatie</h3>
-                    <p className="text-muted-foreground">Amsterdam, Nederland</p>
+                    <h3 className="font-medium">Location</h3>
+                    <p className="text-muted-foreground">Ossendrecht, Netherlands</p>
                   </div>
                 </div>
               </CardContent>
@@ -76,13 +76,13 @@ export default function ContactPage() {
           
           <Card className="md:col-span-2">
             <CardHeader>
-              <CardTitle>Stuur een bericht</CardTitle>
-              <CardDescription>Vul het formulier in en ik neem zo snel mogelijk contact met je op.</CardDescription>
+              <CardTitle>Send a mesage</CardTitle>
+              <CardDescription>Fill in the form and I will get back to you as soon as possible.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Naam</Label>
+                  <Label htmlFor="name">Name</Label>
                   <Input 
                     id="name" 
                     value={name} 
@@ -103,7 +103,7 @@ export default function ContactPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Bericht</Label>
+                  <Label htmlFor="message">Message</Label>
                   <Textarea 
                     id="message" 
                     rows={5} 
@@ -115,10 +115,10 @@ export default function ContactPage() {
                 
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
-                    <>Verzenden...</>
+                    <>Sending...</>
                   ) : (
                     <>
-                      <Send className="mr-2 h-4 w-4" /> Verstuur bericht
+                      <Send className="mr-2 h-4 w-4" /> Send Message
                     </>
                   )}
                 </Button>
