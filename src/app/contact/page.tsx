@@ -1,37 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { Mail, Phone, MapPin, Send } from 'lucide-react'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 
 export default function ContactPage() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [message, setMessage] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
+    e.preventDefault();
+    setIsSubmitting(true);
+
     // Simuleer een API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     toast.success("Message sent!", {
-      description: "Thank you for your message. I will get back to you as soon as possible."
-    })
-    
+      description:
+        "Thank you for your message. I will get back to you as soon as possible.",
+    });
+
     // Reset form
-    setName("")
-    setEmail("")
-    setMessage("")
-    setIsSubmitting(false)
-  }
+    setName("");
+    setEmail("");
+    setMessage("");
+    setIsSubmitting(false);
+  };
 
   return (
     <div className="container py-12">
@@ -42,7 +49,7 @@ export default function ContactPage() {
             Have a question or want to collaborate? Send me a message!
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1 space-y-6">
             <Card>
@@ -51,10 +58,12 @@ export default function ContactPage() {
                   <Mail className="h-6 w-6 text-primary" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-muted-foreground">wesleyvanderkraan0@gmail.com</p>
+                    <p className="text-muted-foreground">
+                      wesleyvanderkraan0@gmail.com
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <Phone className="h-6 w-6 text-primary" />
                   <div>
@@ -62,58 +71,66 @@ export default function ContactPage() {
                     <p className="text-muted-foreground">+31 6 30244341</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <MapPin className="h-6 w-6 text-primary" />
                   <div>
                     <h3 className="font-medium">Location</h3>
-                    <p className="text-muted-foreground">Ossendrecht, Netherlands</p>
+                    <p className="text-muted-foreground">
+                      Ossendrecht, Netherlands
+                    </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
-          
+
           <Card className="md:col-span-2">
             <CardHeader>
               <CardTitle>Send a mesage</CardTitle>
-              <CardDescription>Fill in the form and I will get back to you as soon as possible.</CardDescription>
+              <CardDescription>
+                Fill in the form and I will get back to you as soon as possible.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input 
-                    id="name" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    required 
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email" 
-                    type="email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
-                  <Textarea 
-                    id="message" 
-                    rows={5} 
-                    value={message} 
-                    onChange={(e) => setMessage(e.target.value)} 
-                    required 
+                  <Textarea
+                    id="message"
+                    rows={5}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
                   />
                 </div>
-                
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? (
                     <>Sending...</>
                   ) : (
@@ -128,5 +145,5 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

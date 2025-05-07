@@ -1,15 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { toast } from "sonner"
-import { useAuth } from "@/lib/auth-context"
-import { usePosts } from "@/lib/use-posts"
-import { api } from "@/lib/api-service"
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { useAuth } from "@/lib/auth-context";
+import { usePosts } from "@/lib/use-posts";
+import { api } from "@/lib/api-service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,59 +27,59 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { PlusCircle, Edit, Trash2, Eye, ArrowUpRight } from "lucide-react"
+} from "@/components/ui/alert-dialog";
+import { PlusCircle, Edit, Trash2, Eye, ArrowUpRight } from "lucide-react";
 
 export default function DashboardPage() {
-  const { user } = useAuth()
-  const router = useRouter()
-  const { posts, isLoading, error } = usePosts()
-  const [isPublishing, setIsPublishing] = useState<string | null>(null)
-  const [isDeleting, setIsDeleting] = useState<string | null>(null)
+  const { user } = useAuth();
+  const router = useRouter();
+  const { posts, isLoading, error } = usePosts();
+  const [isPublishing, setIsPublishing] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   // Redirect if not logged in
   if (!user) {
-    router.push("/auth/login")
-    return null
+    router.push("/auth/login");
+    return null;
   }
 
   const handlePublish = async (id: string) => {
-    setIsPublishing(id)
+    setIsPublishing(id);
     try {
-      await api.publishPost(id)
+      await api.publishPost(id);
       toast.success("Success", {
         description: "Post published successfully",
-      })
+      });
       // Refresh the posts
-      router.refresh()
+      router.refresh();
     } catch (error) {
-      console.error("Error publishing post:", error)
+      console.error("Error publishing post:", error);
       toast.error("Error", {
         description: "Failed to publish post",
-      })
+      });
     } finally {
-      setIsPublishing(null)
+      setIsPublishing(null);
     }
-  }
+  };
 
   const handleDelete = async (id: string) => {
-    setIsDeleting(id)
+    setIsDeleting(id);
     try {
-      await api.deletePost(id)
+      await api.deletePost(id);
       toast.success("Success", {
         description: "Post deleted successfully",
-      })
+      });
       // Refresh the posts
-      router.refresh()
+      router.refresh();
     } catch (error) {
-      console.error("Error deleting post:", error)
+      console.error("Error deleting post:", error);
       toast.error("Error", {
         description: "Failed to delete post",
-      })
+      });
     } finally {
-      setIsDeleting(null)
+      setIsDeleting(null);
     }
-  }
+  };
 
   return (
     <div className="container py-12 space-y-8">
@@ -81,7 +88,10 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-2">Manage your blog posts</p>
         </div>
-        <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button
+          asChild
+          className="bg-indigo-600 text-white hover:bg-indigo-700"
+        >
           <Link href="/new-blog">
             <PlusCircle className="mr-2 h-4 w-4" /> New Post
           </Link>
@@ -121,7 +131,9 @@ export default function DashboardPage() {
                 <CardTitle>{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                <p className="text-muted-foreground line-clamp-2">
+                  {post.excerpt}
+                </p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {post.tags.map((tag) => (
                     <Badge key={tag} variant="secondary">
@@ -129,9 +141,19 @@ export default function DashboardPage() {
                     </Badge>
                   ))}
                 </div>
-                <Badge variant={post.published ? "default" : "outline"} className="mt-4">
-                  {post.published ? "Published" : "Draft"}
-                </Badge>
+                <div className="flex gap-2 mt-4">
+                  <Badge
+                    variant={post.published ? "default" : "outline"}
+                    className="mr-2"
+                  >
+                    {post.published ? "Published" : "Draft"}
+                  </Badge>
+                  {post.category && (
+                    <Badge className="bg-indigo-100 text-indigo-600">
+                      {post.category}
+                    </Badge>
+                  )}
+                </div>
               </CardContent>
               <CardFooter className="flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" asChild>
@@ -165,12 +187,16 @@ export default function DashboardPage() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the post.
+                        This action cannot be undone. This will permanently
+                        delete the post.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleDelete(post.id)} disabled={isDeleting === post.id}>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(post.id)}
+                        disabled={isDeleting === post.id}
+                      >
                         {isDeleting === post.id ? "Deleting..." : "Delete"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
@@ -183,8 +209,13 @@ export default function DashboardPage() {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">You haven't created any posts yet</p>
-            <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+            <p className="text-muted-foreground mb-4">
+              You haven't created any posts yet
+            </p>
+            <Button
+              asChild
+              className="bg-indigo-600 text-white hover:bg-indigo-700"
+            >
               <Link href="/new-blog">
                 <PlusCircle className="mr-2 h-4 w-4" /> Create Your First Post
               </Link>
@@ -193,5 +224,5 @@ export default function DashboardPage() {
         </Card>
       )}
     </div>
-  )
+  );
 }

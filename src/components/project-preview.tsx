@@ -32,8 +32,8 @@ export function ProjectPreview({
     aspectRatio === "video"
       ? "aspect-video"
       : aspectRatio === "square"
-      ? "aspect-square"
-      : "";
+        ? "aspect-square"
+        : "";
 
   if (!url) {
     return (

@@ -1,26 +1,29 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Calendar } from "lucide-react"
-import { getPostById } from "@/lib/api-service"
-import { incrementViewCount } from "@/lib/actions"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import rehypeSanitize from "rehype-sanitize"
-import MarkdownRenderer from "@/components/MarkdownRenderer"
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Calendar } from "lucide-react";
+import { getPostById } from "@/lib/api-service";
+import { incrementViewCount } from "@/lib/actions";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
-
-export default async function BlogPostPage({ params }: {params: Promise<{id: string}>}) {
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const paramProps = await params;
-  const post = await getPostById(paramProps.id)
+  const post = await getPostById(paramProps.id);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   // Increment view count
-  await incrementViewCount(paramProps.id)
+  await incrementViewCount(paramProps.id);
 
   return (
     <div className="container py-12">
@@ -46,7 +49,11 @@ export default async function BlogPostPage({ params }: {params: Promise<{id: str
 
         <div className="flex flex-wrap gap-2 mb-8">
           {post.tags.map((tag) => (
-            <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
+            <Badge
+              key={tag}
+              className="bg-indigo-100 text-indigo-600"
+              variant="secondary"
+            >
               {tag}
             </Badge>
           ))}
@@ -55,5 +62,5 @@ export default async function BlogPostPage({ params }: {params: Promise<{id: str
         <MarkdownRenderer content={post.content} />
       </article>
     </div>
-  )
+  );
 }

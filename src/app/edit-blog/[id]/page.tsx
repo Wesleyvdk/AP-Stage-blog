@@ -2,8 +2,8 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +19,8 @@ import { toast } from "sonner";
 import { api } from "@/lib/api-service";
 import { useAuth } from "@/lib/auth-context";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -29,9 +30,11 @@ import {
 } from "@/components/ui/select";
 import linksData from "@/lib/links.json";
 
-export default function NewBlogPage() {
+export default function EditBlogPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const postId = params.id as string;
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -39,6 +42,9 @@ export default function NewBlogPage() {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [post, setPost] = useState<any>(null);
 
   const projectOptions = Object.keys(linksData.projects || {});
   const [category, setCategory] = useState<string>("");
@@ -48,6 +54,48 @@ export default function NewBlogPage() {
     router.push("/auth/login");
     return null;
   }
+
+  // Fetch post data
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchPost = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedPost = await api.getPost(postId);
+        if (isMounted) {
+          setPost(fetchedPost);
+          setTitle(fetchedPost.title);
+          setContent(fetchedPost.content);
+          setExcerpt(fetchedPost.excerpt || "");
+          setTags(fetchedPost.tags || []);
+          setCategory(fetchedPost.category || "");
+          setError(null);
+        }
+      } catch (err) {
+        console.error("Error fetching post:", err);
+        if (isMounted) {
+          setError(
+            "Failed to load post. It may have been deleted or you don't have permission to edit it.",
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    if (postId) {
+      fetchPost();
+    } else {
+      setIsLoading(false);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [postId]);
 
   const addTag = () => {
     if (tag.trim() && !tags.includes(tag.trim())) {
@@ -73,7 +121,8 @@ export default function NewBlogPage() {
     setIsSubmitting(true);
 
     try {
-      const newPost = await api.createPost({
+      // Update the post
+      await api.updatePost(postId, {
         title,
         content,
         excerpt: excerpt || content.substring(0, 150) + "...",
@@ -82,25 +131,74 @@ export default function NewBlogPage() {
       });
 
       toast.success("Success!", {
-        description: "Your blog post has been created",
+        description: "Your blog post has been updated",
       });
 
-      router.push(`/blog/${newPost.id}`);
+      router.push(`/blog/${postId}`);
     } catch (error) {
-      console.error("Error creating post:", error);
+      console.error("Error updating post:", error);
       toast.error("Error", {
-        description: "Failed to create blog post",
+        description: "Failed to update blog post",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="container py-12">
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader>
+            <Skeleton className="h-8 w-1/3" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-1/4" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-1/4" />
+              <Skeleton className="h-24 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-1/4" />
+              <Skeleton className="h-40 w-full" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Skeleton className="h-10 w-24" />
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-12">
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader>
+            <CardTitle>Error</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-destructive">{error}</p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" onClick={() => router.push("/dashboard")}>
+              Return to Dashboard
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-12">
       <Card className="max-w-3xl mx-auto">
         <CardHeader>
-          <CardTitle>Create New Blog Post</CardTitle>
+          <CardTitle>Edit Blog Post</CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
@@ -161,7 +259,6 @@ export default function NewBlogPage() {
                 Select a project or category this blog post belongs to
               </p>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="tags">Tags</Label>
               <div className="flex gap-2">
@@ -177,7 +274,11 @@ export default function NewBlogPage() {
                     }
                   }}
                 />
-                <Button type="button" onClick={addTag}>
+                <Button
+                  type="button"
+                  onClick={addTag}
+                  className="bg-indigo-600 text-white hover:bg-indigo-700"
+                >
                   Add
                 </Button>
               </div>
@@ -211,8 +312,18 @@ export default function NewBlogPage() {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Post"}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-indigo-600 text-white hover:bg-indigo-700"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Updating...
+                </>
+              ) : (
+                "Update Post"
+              )}
             </Button>
           </CardFooter>
         </form>

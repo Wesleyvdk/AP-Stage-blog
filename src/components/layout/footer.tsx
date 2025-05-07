@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Github, Linkedin, Mail } from "lucide-react"
-import { useLanguage } from "@/lib/language-context"
+import Link from "next/link";
+import { Github, Linkedin, Mail } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
 
 export default function Footer() {
-  const { t } = useLanguage()
-  const currentYear = new Date().getFullYear()
+  const { t } = useLanguage();
+  const currentYear = new Date().getFullYear();
 
   const quickLinks = [
     { href: "/", key: "nav.home" },
@@ -32,13 +32,18 @@ export default function Footer() {
             <p className="text-muted-foreground">{t("footer.aboutText")}</p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">{t("footer.quickLinks")}</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.quickLinks")}
+            </h3>
             <div className="flex flex-row gap-8">
               {linkChunks.map((chunk, index) => (
                 <ul key={index} className="space-y-2">
                   {chunk.map((link) => (
                     <li key={link.key}>
-                      <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
+                      <Link
+                        href={link.href}
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
                         {t(link.key)}
                       </Link>
                     </li>
@@ -48,7 +53,9 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4">{t("footer.connect")}</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("footer.connect")}
+            </h3>
             <div className="flex space-x-4">
               <Link
                 href="https://github.com/Wesleyvdk"
@@ -57,11 +64,17 @@ export default function Footer() {
                 <Github className="h-6 w-6" />
                 <span className="sr-only">GitHub</span>
               </Link>
-              <Link href="https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link
+                href="https://www.linkedin.com/in/wesley-van-der-kraan-782b09230/"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
                 <Linkedin className="h-6 w-6" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
-              <Link href="/contact" className="text-muted-foreground transition-colors">
+              <Link
+                href="/contact"
+                className="text-muted-foreground transition-colors"
+              >
                 <Mail className="h-6 w-6" />
                 <span className="sr-only">Contact</span>
               </Link>
@@ -75,5 +88,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

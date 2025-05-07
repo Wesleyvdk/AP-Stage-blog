@@ -20,9 +20,9 @@ export default async function Home() {
     // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)
     // This is a basic implementation and might not cover all edge cases.
     return markdownText
-      .replace(/([*_`#\[\]()~>+-])/g, '') // Remove common markdown symbols
-      .replace(/(\n|\r)/g, ' ') // Replace newlines with spaces
-      .replace(/\s+/g, ' ') // Collapse multiple spaces
+      .replace(/([*_`#\[\]()~>+-])/g, "") // Remove common markdown symbols
+      .replace(/(\n|\r)/g, " ") // Replace newlines with spaces
+      .replace(/\s+/g, " ") // Collapse multiple spaces
       .trim();
   }
 
@@ -39,10 +39,18 @@ export default async function Home() {
             personal projects.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button className="bg-indigo-100 text-indigo-600 hover:bg-indigo-200" asChild size="lg">
+            <Button
+              className="bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+              asChild
+              size="lg"
+            >
               <Link href="/about">About Me</Link>
             </Button>
-            <Button className="bg-indigo-600 text-indigo-100 hover:bg-indigo-700" size="lg" asChild>
+            <Button
+              className="bg-indigo-600 text-indigo-100 hover:bg-indigo-700"
+              size="lg"
+              asChild
+            >
               <Link href="/blog">Read My Blog</Link>
             </Button>
           </div>
@@ -91,10 +99,18 @@ export default async function Home() {
                   web development practices.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-indigo-100 text-indigo-600">Vue.js</Badge>
-                  <Badge className="bg-indigo-100 text-indigo-600">TailwindCSS</Badge>
-                  <Badge className="bg-indigo-100 text-indigo-600">Express.js</Badge>
-                  <Badge className="bg-indigo-100 text-indigo-600">Web Development</Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">
+                    Vue.js
+                  </Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">
+                    TailwindCSS
+                  </Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">
+                    Express.js
+                  </Badge>
+                  <Badge className="bg-indigo-100 text-indigo-600">
+                    Web Development
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -128,7 +144,11 @@ export default async function Home() {
               <CardFooter className="mt-auto pt-6 flex flex-col items-start gap-4">
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
-                    <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
+                    <Badge
+                      key={tag}
+                      className="bg-indigo-100 text-indigo-600"
+                      variant="secondary"
+                    >
                       {tag}
                     </Badge>
                   ))}

@@ -1,20 +1,27 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Calendar, ExternalLink } from "lucide-react"
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, ExternalLink } from "lucide-react";
 
 interface CertificationCardProps {
-  title: string
-  issuer: string
-  date: string
-  expiryDate?: string
-  credentialId: string
-  verificationUrl?: string
-  skills: string[]
-  logoSrc: string
-  variant?: "aws" | "azure" | "default"
+  title: string;
+  issuer: string;
+  date: string;
+  expiryDate?: string;
+  credentialId: string;
+  verificationUrl?: string;
+  skills: string[];
+  logoSrc: string;
+  variant?: "aws" | "azure" | "default";
 }
 
 export function CertificationCard({
@@ -48,15 +55,20 @@ export function CertificationCard({
       badgeHover: "hover:bg-indigo-200",
       accentBorder: "border-l-4 border-l-indigo-500",
     },
-  }
+  };
 
-  const style = variantStyles[variant]
+  const style = variantStyles[variant];
 
   return (
     <Card className={`overflow-hidden ${style.accentBorder}`}>
       <CardHeader className="flex flex-row items-center gap-4 pb-2">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md">
-          <Image src={logoSrc || "/placeholder.svg"} alt={`${issuer} logo`} fill className="object-contain" />
+          <Image
+            src={logoSrc || "/placeholder.svg"}
+            alt={`${issuer} logo`}
+            fill
+            className="object-contain"
+          />
         </div>
         <div>
           <CardTitle className="text-xl">{title}</CardTitle>
@@ -73,19 +85,27 @@ export function CertificationCard({
         </div>
         <div className="flex flex-wrap gap-2 mb-4">
           {skills.map((skill) => (
-            <Badge key={skill} className={`${style.badgeBg} ${style.badgeText} ${style.badgeHover}`}>
+            <Badge
+              key={skill}
+              className={`${style.badgeBg} ${style.badgeText} ${style.badgeHover}`}
+            >
               {skill}
             </Badge>
           ))}
         </div>
         <div className="text-sm">
-          <span className="text-muted-foreground">Credential ID:</span> {credentialId}
+          <span className="text-muted-foreground">Credential ID:</span>{" "}
+          {credentialId}
         </div>
       </CardContent>
       {verificationUrl && (
         <CardFooter>
           <Button variant="outline" size="sm" asChild>
-            <Link href={verificationUrl} target="_blank" rel="noopener noreferrer">
+            <Link
+              href={verificationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Verify Credential
               <ExternalLink className="ml-2 h-3 w-3" />
             </Link>
@@ -93,5 +113,5 @@ export function CertificationCard({
         </CardFooter>
       )}
     </Card>
-  )
+  );
 }

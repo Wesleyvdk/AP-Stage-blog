@@ -1,45 +1,60 @@
-import { Suspense } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Github, ExternalLink } from "lucide-react"
-import { ProjectPreview } from "@/components/project-preview"
-import linksData from "@/lib/links.json"
-import { getRepository, extractRepoInfo } from "@/lib/github-service"
+import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Github, ExternalLink } from "lucide-react";
+import { ProjectPreview } from "@/components/project-preview";
+import linksData from "@/lib/links.json";
+import { getRepository, extractRepoInfo } from "@/lib/github-service";
 
 // Define types based on our JSON structure
 interface ProjectData {
-  github: string
-  demo: string | null
-  category: string
-  featured: boolean
-  technologies: string[]
-  isPrivate?: boolean
-  projectType?: string
+  github: string;
+  demo: string | null;
+  category: string;
+  featured: boolean;
+  technologies: string[];
+  isPrivate?: boolean;
+  projectType?: string;
 }
 
 interface ProjectsData {
-  [key: string]: ProjectData
+  [key: string]: ProjectData;
 }
 
 // Component to load and display a project with GitHub data
-async function ProjectCard({ name, data }: { name: string; data: ProjectData }) {
+async function ProjectCard({
+  name,
+  data,
+}: {
+  name: string;
+  data: ProjectData;
+}) {
   // Extract owner and repo from GitHub URL
-  const { owner, repo } = extractRepoInfo(data.github)
+  const { owner, repo } = extractRepoInfo(data.github);
 
   // Fetch repository data from GitHub
-  let repository: any = { description: "No description available." }
+  let repository: any = { description: "No description available." };
 
   try {
-    repository = await getRepository(owner, repo)
+    repository = await getRepository(owner, repo);
   } catch (error) {
-    console.error(`Error fetching repository for ${name}:`, error)
+    console.error(`Error fetching repository for ${name}:`, error);
     // Continue with default repository data
   }
 
   return (
-    <Card key={name} className={data.featured ? "overflow-hidden" : "flex flex-col h-full"}>
+    <Card
+      key={name}
+      className={data.featured ? "overflow-hidden" : "flex flex-col h-full"}
+    >
       {data.featured ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="relative overflow-hidden">
@@ -56,7 +71,9 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
               <CardTitle className="text-2xl">{name}</CardTitle>
             </CardHeader>
             <CardContent className="px-0 py-4 flex-grow">
-              <p className="text-muted-foreground">{repository.description || "No description available."}</p>
+              <p className="text-muted-foreground">
+                {repository.description || "No description available."}
+              </p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {data.technologies.map((tech) => (
                   <Badge key={tech} className="bg-indigo-100 text-indigo-600">
@@ -72,14 +89,21 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
                   </>
                 )}
                 <div>
-                  Updated: {repository.updated_at ? new Date(repository.updated_at).toLocaleDateString() : "N/A"}
+                  Updated:{" "}
+                  {repository.updated_at
+                    ? new Date(repository.updated_at).toLocaleDateString()
+                    : "N/A"}
                 </div>
               </div>
             </CardContent>
             <CardFooter className="px-0 pb-0 flex flex-wrap gap-4">
               {!data.isPrivate && (
                 <Button asChild variant="outline">
-                  <Link href={data.github} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={data.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Github className="mr-2 h-4 w-4" />
                     View Code
                   </Link>
@@ -87,7 +111,11 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
               )}
               {data.demo && (
                 <Button asChild>
-                  <Link href={data.demo} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={data.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Live Demo
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Link>
@@ -114,7 +142,9 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
             <CardTitle>{name}</CardTitle>
           </CardHeader>
           <CardContent className="flex-grow">
-            <p className="text-muted-foreground">{repository.description || "No description available."}</p>
+            <p className="text-muted-foreground">
+              {repository.description || "No description available."}
+            </p>
             <div className="flex flex-wrap gap-2 mt-4">
               {data.technologies.map((tech) => (
                 <Badge key={tech} className="bg-indigo-100 text-indigo-600">
@@ -126,7 +156,11 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
           <CardFooter className="flex flex-wrap gap-2">
             {!data.isPrivate && (
               <Button asChild variant="outline" size="sm">
-                <Link href={data.github} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={data.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Github className="mr-2 h-4 w-4" />
                   Code
                 </Link>
@@ -134,7 +168,11 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
             )}
             {data.demo && (
               <Button asChild size="sm">
-                <Link href={data.demo} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={data.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Demo
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Link>
@@ -147,7 +185,7 @@ async function ProjectCard({ name, data }: { name: string; data: ProjectData }) 
         </>
       )}
     </Card>
-  )
+  );
 }
 
 // Loading fallback for project cards
@@ -192,33 +230,36 @@ function ProjectCardSkeleton({ featured = false }: { featured?: boolean }) {
         </>
       )}
     </Card>
-  )
+  );
 }
 
 export default function ProjectsPage() {
-  const projects = linksData.projects as ProjectsData
+  const projects = linksData.projects as ProjectsData;
 
   // Get featured and non-featured projects
   const featuredProjects = Object.entries(projects)
     .filter(([_, data]) => data.featured)
-    .map(([name, data]) => ({ name, data }))
+    .map(([name, data]) => ({ name, data }));
 
   const otherProjects = Object.entries(projects)
     .filter(([_, data]) => !data.featured)
-    .map(([name, data]) => ({ name, data }))
+    .map(([name, data]) => ({ name, data }));
 
   return (
     <div className="container py-12 space-y-16">
       <section className="space-y-6">
         <h1 className="text-4xl font-bold tracking-tight">My Projects</h1>
         <p className="text-xl text-muted-foreground">
-          A collection of projects I've built during my studies, internships, and personal time.
+          A collection of projects I've built during my studies, internships,
+          and personal time.
         </p>
       </section>
 
       {featuredProjects.length > 0 && (
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight">Featured Projects</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Featured Projects
+          </h2>
           <div className="grid grid-cols-1 gap-8">
             {featuredProjects.map(({ name, data }) => (
               <Suspense key={name} fallback={<ProjectCardSkeleton featured />}>
@@ -242,5 +283,5 @@ export default function ProjectsPage() {
         </section>
       )}
     </div>
-  )
+  );
 }

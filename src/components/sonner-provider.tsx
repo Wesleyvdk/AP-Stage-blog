@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Toaster } from "sonner"
-import { useTheme } from "next-themes"
+import { Toaster } from "sonner";
+import { useTheme } from "next-themes";
 
 export function SonnerProvider() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <Toaster
@@ -17,5 +17,5 @@ export function SonnerProvider() {
         },
       }}
     />
-  )
+  );
 }

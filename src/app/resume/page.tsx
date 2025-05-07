@@ -1,11 +1,17 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Download, FileText, Briefcase, GraduationCap, Award } from "lucide-react"
-import { Timeline } from "@/components/timeline"
-import { CertificationCard } from "@/components/certification-card"
-import linksData from "@/lib/links.json"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Download,
+  FileText,
+  Briefcase,
+  GraduationCap,
+  Award,
+} from "lucide-react";
+import { Timeline } from "@/components/timeline";
+import { CertificationCard } from "@/components/certification-card";
+import linksData from "@/lib/links.json";
 
 export default function ResumePage() {
   return (
@@ -13,15 +19,23 @@ export default function ResumePage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">Resume</h1>
-          <p className="text-muted-foreground mt-2">My professional experience and skills</p>
+          <p className="text-muted-foreground mt-2">
+            My professional experience and skills
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+          <Button
+            asChild
+            className="bg-indigo-600 text-white hover:bg-indigo-700"
+          >
             <Link href="/Wesley_van_der_Kraan_CV_EN.pdf" target="_blank">
               <Download className="mr-2 h-4 w-4" /> English CV
             </Link>
           </Button>
-          <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+          <Button
+            asChild
+            className="bg-indigo-600 text-white hover:bg-indigo-700"
+          >
             <Link href="/Wesley_van_der_Kraan_CV_NL.pdf" target="_blank">
               <Download className="mr-2 h-4 w-4" /> Dutch CV
             </Link>
@@ -35,25 +49,28 @@ export default function ResumePage() {
         <Card>
           <CardContent className="p-6">
             <p className="text-muted-foreground">
-              Motivated and eager to learn full-stack developer with experience in both frontend and backend web
-              development. Proficient in HTML, CSS, JavaScript and frameworks such as React and Vue 3, with knowledge of
-              user-friendly and scalable UIs. Experience with backend technologies such as Node.js, Express.js, C#, and
-              databases such as MySQL and PostgreSQL (PSQL). Worked on REST APIs, unit testing, and full web projects in
-              team and independently. Strong in self-learning, and motivated to continuously grow within a professional
-              development team.
+              Motivated and eager to learn full-stack developer with experience
+              in both frontend and backend web development. Proficient in HTML,
+              CSS, JavaScript and frameworks such as React and Vue 3, with
+              knowledge of user-friendly and scalable UIs. Experience with
+              backend technologies such as Node.js, Express.js, C#, and
+              databases such as MySQL and PostgreSQL (PSQL). Worked on REST
+              APIs, unit testing, and full web projects in team and
+              independently. Strong in self-learning, and motivated to
+              continuously grow within a professional development team.
             </p>
           </CardContent>
         </Card>
       </section>
 
-
-      
       {/* Certifications Section */}
       {Object.keys(linksData.certifications || {}).length > 0 && (
         <section className="space-y-6">
           <div className="flex items-center gap-2">
             <Award className="h-6 w-6 text-indigo-600" />
-            <h2 className="text-3xl font-bold tracking-tight">Certifications</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Certifications
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -83,7 +100,8 @@ export default function ResumePage() {
             {
               date: "2014 - 2020",
               title: "Graduate Mechanics, PITO, Stabroek",
-              description: "Completed high school education with a focus on mechanics.",
+              description:
+                "Completed high school education with a focus on mechanics.",
               icon: <GraduationCap className="h-4 w-4" />,
             },
             {
@@ -95,8 +113,10 @@ export default function ResumePage() {
             },
             {
               date: "2023 - Present",
-              title: "Associate Degree Programming, AP University of Applied Sciences",
-              description: "Currently pursuing a degree in programming with focus on web development.",
+              title:
+                "Associate Degree Programming, AP University of Applied Sciences",
+              description:
+                "Currently pursuing a degree in programming with focus on web development.",
               icon: <GraduationCap className="h-4 w-4" />,
             },
             {
@@ -118,30 +138,36 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Full Stack Developer Intern</CardTitle>
-                <div className="text-muted-foreground">February 2025 - Present</div>
+                <div className="text-muted-foreground">
+                  February 2025 - Present
+                </div>
               </div>
               <div className="text-lg">TagLayer, Antwerp</div>
             </CardHeader>
             <CardContent className="space-y-4">
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  Contributed to a large-scale Vue.js and TailwindCSS web application focusing on component development,
-                  UI consistency and implementing new features.
+                  Contributed to a large-scale Vue.js and TailwindCSS web
+                  application focusing on component development, UI consistency
+                  and implementing new features.
                 </li>
                 <li>
-                  Built a dynamic and reusable onboarding system and participated in a full-stack project to centralize
-                  templates using Express.js and a shared database.
+                  Built a dynamic and reusable onboarding system and
+                  participated in a full-stack project to centralize templates
+                  using Express.js and a shared database.
                 </li>
                 <li>
-                  Written extensive unit tests for both Vue components and core JavaScript services to ensure
-                  application stability and maintainability.
+                  Written extensive unit tests for both Vue components and core
+                  JavaScript services to ensure application stability and
+                  maintainability.
                 </li>
                 <li>
-                  Participated in code reviews, incorporated feedback and improved legacy code through refactoring and
-                  modernization.
+                  Participated in code reviews, incorporated feedback and
+                  improved legacy code through refactoring and modernization.
                 </li>
                 <li>
-                  Maintained a technical blog where I documented my progress and learning experiences on a weekly basis:{" "}
+                  Maintained a technical blog where I documented my progress and
+                  learning experiences on a weekly basis:{" "}
                   <Link href="/" className="text-primary hover:underline">
                     https://wesleyvanderkraan.vercel.app/home
                   </Link>
@@ -149,10 +175,18 @@ export default function ResumePage() {
               </ul>
               <div className="flex flex-wrap gap-2 pt-2">
                 <Badge className="bg-indigo-100 text-indigo-600">Vue.js</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">TailwindCSS</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">Express.js</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">Unit Testing</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">JavaScript</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  TailwindCSS
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Express.js
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Unit Testing
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  JavaScript
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -167,12 +201,19 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Associate Degree Programming</CardTitle>
-                <div className="text-muted-foreground">September 2023 - Present</div>
+                <div className="text-muted-foreground">
+                  September 2023 - Present
+                </div>
               </div>
-              <div className="text-lg">AP University of Applied Sciences, Antwerp</div>
+              <div className="text-lg">
+                AP University of Applied Sciences, Antwerp
+              </div>
             </CardHeader>
             <CardContent>
-              <p>Currently pursuing a degree in programming with focus on web development and software engineering.</p>
+              <p>
+                Currently pursuing a degree in programming with focus on web
+                development and software engineering.
+              </p>
             </CardContent>
           </Card>
 
@@ -180,12 +221,19 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Bachelor IT & AI</CardTitle>
-                <div className="text-muted-foreground">September 2022 - August 2023</div>
+                <div className="text-muted-foreground">
+                  September 2022 - August 2023
+                </div>
               </div>
-              <div className="text-lg">AP University of Applied Sciences, Antwerp</div>
+              <div className="text-lg">
+                AP University of Applied Sciences, Antwerp
+              </div>
             </CardHeader>
             <CardContent>
-              <p>Studied IT with a focus on artificial intelligence. (Didn't finish)</p>
+              <p>
+                Studied IT with a focus on artificial intelligence. (Didn't
+                finish)
+              </p>
             </CardContent>
           </Card>
 
@@ -193,12 +241,18 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Bachelor IT & Software</CardTitle>
-                <div className="text-muted-foreground">September 2021 - August 2022</div>
+                <div className="text-muted-foreground">
+                  September 2021 - August 2022
+                </div>
               </div>
-              <div className="text-lg">AP University of Applied Sciences, Antwerp</div>
+              <div className="text-lg">
+                AP University of Applied Sciences, Antwerp
+              </div>
             </CardHeader>
             <CardContent>
-              <p>Studied IT with a focus on software development. (Didn't finish)</p>
+              <p>
+                Studied IT with a focus on software development. (Didn't finish)
+              </p>
             </CardContent>
           </Card>
 
@@ -206,7 +260,9 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Bachelor Game Development</CardTitle>
-                <div className="text-muted-foreground">September 2020 - August 2021</div>
+                <div className="text-muted-foreground">
+                  September 2020 - August 2021
+                </div>
               </div>
               <div className="text-lg">Howest DAE, Kortrijk</div>
             </CardHeader>
@@ -219,7 +275,9 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle>Graduate Mechanics</CardTitle>
-                <div className="text-muted-foreground">September 2014 - June 2020</div>
+                <div className="text-muted-foreground">
+                  September 2014 - June 2020
+                </div>
               </div>
               <div className="text-lg">PITO, Stabroek</div>
             </CardHeader>
@@ -242,11 +300,17 @@ export default function ResumePage() {
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-indigo-100 text-indigo-600">HTML</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">CSS</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">JavaScript</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">TypeScript</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  JavaScript
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  TypeScript
+                </Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">React</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">Vue.js</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">TailwindCSS</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  TailwindCSS
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -258,9 +322,13 @@ export default function ResumePage() {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-indigo-100 text-indigo-600">Node.js</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">Express.js</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Express.js
+                </Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">C#</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">Ruby on Rails</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Ruby on Rails
+                </Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">Python</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">Java</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">C++</Badge>
@@ -276,7 +344,9 @@ export default function ResumePage() {
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-indigo-100 text-indigo-600">SQL</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">MySQL</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">PostgreSQL</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  PostgreSQL
+                </Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">NoSQL</Badge>
               </div>
             </CardContent>
@@ -291,8 +361,12 @@ export default function ResumePage() {
                 <Badge className="bg-indigo-100 text-indigo-600">Git</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">GitHub</Badge>
                 <Badge className="bg-indigo-100 text-indigo-600">VS Code</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">Unit Testing</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">REST APIs</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Unit Testing
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  REST APIs
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -303,8 +377,12 @@ export default function ResumePage() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-indigo-100 text-indigo-600">Dutch (Native)</Badge>
-                <Badge className="bg-indigo-100 text-indigo-600">English (Fluent)</Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  Dutch (Native)
+                </Badge>
+                <Badge className="bg-indigo-100 text-indigo-600">
+                  English (Fluent)
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -320,9 +398,18 @@ export default function ResumePage() {
               <CardTitle>AP Gaming</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">A gaming platform developed as part of university coursework.</p>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" asChild>
-                <Link href="https://ap-gaming.vercel.app/" target="_blank" rel="noopener noreferrer">
+              <p className="text-muted-foreground">
+                A gaming platform developed as part of university coursework.
+              </p>
+              <Button
+                className="bg-indigo-600 text-white hover:bg-indigo-700"
+                asChild
+              >
+                <Link
+                  href="https://ap-gaming.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <FileText className="mr-2 h-4 w-4" /> View Project
                 </Link>
               </Button>
@@ -334,9 +421,18 @@ export default function ResumePage() {
               <CardTitle>AP Gaming Dashboard</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">Admin dashboard for the AP Gaming platform.</p>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" asChild>
-                <Link href="https://github.com/Wesleyvdk/AP-Gaming-Dashboard" target="_blank" rel="noopener noreferrer">
+              <p className="text-muted-foreground">
+                Admin dashboard for the AP Gaming platform.
+              </p>
+              <Button
+                className="bg-indigo-600 text-white hover:bg-indigo-700"
+                asChild
+              >
+                <Link
+                  href="https://github.com/Wesleyvdk/AP-Gaming-Dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <FileText className="mr-2 h-4 w-4" /> View on GitHub
                 </Link>
               </Button>
@@ -348,8 +444,13 @@ export default function ResumePage() {
               <CardTitle>Poke3</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">A university project related to Pokemon.</p>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" asChild>
+              <p className="text-muted-foreground">
+                A university project related to Pokemon.
+              </p>
+              <Button
+                className="bg-indigo-600 text-white hover:bg-indigo-700"
+                asChild
+              >
                 <Link href="#" target="_blank" rel="noopener noreferrer">
                   <FileText className="mr-2 h-4 w-4" /> View Project
                 </Link>
@@ -364,13 +465,27 @@ export default function ResumePage() {
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">A storytelling platform.</p>
               <div className="flex gap-2">
-                <Button className="bg-indigo-600 text-white hover:bg-indigo-700" asChild>
-                  <Link href="https://dreamycroisssan.vercel.app/" target="_blank" rel="noopener noreferrer">
+                <Button
+                  className="bg-indigo-600 text-white hover:bg-indigo-700"
+                  asChild
+                >
+                  <Link
+                    href="https://dreamycroisssan.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FileText className="mr-2 h-4 w-4" /> View Project
                   </Link>
                 </Button>
-                <Button className="bg-indigo-600 text-white hover:bg-indigo-700" asChild>
-                  <Link href="https://github.com/Wesleyvdk/DreamyCroissan" target="_blank" rel="noopener noreferrer">
+                <Button
+                  className="bg-indigo-600 text-white hover:bg-indigo-700"
+                  asChild
+                >
+                  <Link
+                    href="https://github.com/Wesleyvdk/DreamyCroissan"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FileText className="mr-2 h-4 w-4" /> View on GitHub
                   </Link>
                 </Button>
@@ -380,5 +495,5 @@ export default function ResumePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }

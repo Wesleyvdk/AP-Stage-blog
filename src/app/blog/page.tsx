@@ -24,28 +24,36 @@ export default function BlogPage() {
   const { posts, isLoading, error } = usePosts();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Extract all unique tags from posts
   const allTags = [...new Set(posts.flatMap((post) => post.tags))];
 
+  // Extract all unique categories from posts
+  const allCategories = [
+    ...new Set(posts.map((post) => post.category).filter(Boolean)),
+  ];
+
   // Filter posts based on search term and selected tags
-  const filteredPosts = posts
-    .filter((post) => {
-      const matchesSearch =
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
+  const filteredPosts = posts.filter((post) => {
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
 
-      const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.some((tag) => post.tags.includes(tag));
+    const matchesTags =
+      selectedTags.length === 0 ||
+      selectedTags.some((tag) => post.tags.includes(tag));
 
-      return matchesSearch && matchesTags;
-    });
+    const matchesCategory =
+      !selectedCategory || post.category === selectedCategory;
+
+    return matchesSearch && matchesTags && matchesCategory;
+  });
 
   // Toggle tag selection
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
@@ -59,7 +67,10 @@ export default function BlogPage() {
           </p>
         </div>
         {user && (
-          <Button asChild className="bg-indigo-600 text-white hover:bg-indigo-700">
+          <Button
+            asChild
+            className="bg-indigo-600 text-white hover:bg-indigo-700"
+          >
             <Link href="/new-blog">
               <PlusCircle className="mr-2 h-4 w-4" /> New Post
             </Link>
@@ -119,12 +130,21 @@ export default function BlogPage() {
                   <CardContent>
                     <p className="text-muted-foreground line-clamp-3">
                       {removeMarkdown(post.excerpt ?? "")}
+                      {post.category && (
+                        <Badge className="mt-2 bg-indigo-100 text-indigo-600 hover:bg-indigo-200">
+                          {post.category}
+                        </Badge>
+                      )}
                     </p>
                   </CardContent>
                   <CardFooter className="flex flex-col items-start gap-4">
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
-                        <Badge key={tag} className="bg-indigo-100 text-indigo-600" variant="secondary">
+                        <Badge
+                          key={tag}
+                          className="bg-indigo-100 text-indigo-600"
+                          variant="secondary"
+                        >
                           {tag}
                         </Badge>
                       ))}
@@ -156,9 +176,10 @@ export default function BlogPage() {
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="all">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="tags">Tags</TabsTrigger>
+                  <TabsTrigger value="categories">Categories</TabsTrigger>
                 </TabsList>
                 <TabsContent value="all" className="mt-4">
                   <Button
@@ -178,12 +199,37 @@ export default function BlogPage() {
                           selectedTags.includes(tag) ? "default" : "outline"
                         }
                         className={
-                          selectedTags.includes(tag) ? "cursor-pointer bg-indigo-100 text-indigo-600" : "cursor-pointer"
+                          selectedTags.includes(tag)
+                            ? "cursor-pointer bg-indigo-100 text-indigo-600"
+                            : "cursor-pointer"
                         }
                         onClick={() => toggleTag(tag)}
                       >
                         {tag}
                       </Badge>
+                    ))}
+                  </div>
+                </TabsContent>
+                <TabsContent value="categories" className="mt-4">
+                  <div className="flex flex-col space-y-2">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start"
+                      onClick={() => setSelectedCategory(null)}
+                    >
+                      All Categories
+                    </Button>
+                    {allCategories.map((category) => (
+                      <Button
+                        key={category}
+                        variant={
+                          selectedCategory === category ? "default" : "outline"
+                        }
+                        className={`w-full justify-start ${selectedCategory === category ? "bg-indigo-600 text-white" : ""}`}
+                        onClick={() => setSelectedCategory(category || null)}
+                      >
+                        {category}
+                      </Button>
                     ))}
                   </div>
                 </TabsContent>

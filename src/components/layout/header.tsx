@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { useAuth } from "@/lib/auth-context"
-import { useLanguage } from "@/lib/language-context"
-import { cn } from "@/lib/utils"
-import { ModeToggle } from "@/components/mode-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
+import { useLanguage } from "@/lib/language-context";
+import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/mode-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 
 export default function Header() {
-  const pathname = usePathname()
-  const { user, logout } = useAuth()
-  const { t } = useLanguage()
+  const pathname = usePathname();
+  const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   const navItems = [
     { name: t("nav.home"), href: "/" },
@@ -20,7 +20,7 @@ export default function Header() {
     { name: t("nav.projects"), href: "/projects" },
     { name: t("nav.about"), href: "/about" },
     { name: t("nav.resume"), href: "/resume" },
-  ]
+  ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,7 +36,9 @@ export default function Header() {
                 href={item.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === item.href ? "text-primary" : "text-muted-foreground",
+                  pathname === item.href
+                    ? "text-primary"
+                    : "text-muted-foreground",
                 )}
               >
                 {item.name}
@@ -51,17 +53,23 @@ export default function Header() {
               <Button variant="ghost" asChild>
                 <Link href="/dashboard">{t("nav.dashboard")}</Link>
               </Button>
-              <Button onClick={logout} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button
+                onClick={logout}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
                 {t("nav.logout")}
               </Button>
             </>
           ) : (
-            <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white">
+            <Button
+              asChild
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
               <Link href="/auth/login">{t("nav.login")}</Link>
             </Button>
           )}
         </div>
       </div>
     </header>
-  )
+  );
 }

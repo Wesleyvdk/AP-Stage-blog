@@ -1,11 +1,21 @@
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Github, ExternalLink, Star, GitFork, Clock, Users, Code, Lock } from "lucide-react"
-import { ProjectPreview } from "@/components/project-preview"
-import linksData from "@/lib/links.json"
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowLeft,
+  Github,
+  ExternalLink,
+  Star,
+  GitFork,
+  Clock,
+  Users,
+  Code,
+  Lock,
+} from "lucide-react";
+import { ProjectPreview } from "@/components/project-preview";
+import linksData from "@/lib/links.json";
 import {
   getReadme,
   getRepository,
@@ -13,35 +23,39 @@ import {
   getRepositoryLanguages,
   getRepositoryContributors,
   extractRepoInfo,
-} from "@/lib/github-service"
+} from "@/lib/github-service";
 
 // Define types based on our JSON structure
 interface ProjectData {
-  github: string
-  demo: string | null
-  category: string
-  featured: boolean
-  technologies: string[]
-  isPrivate?: boolean
-  projectType?: string
+  github: string;
+  demo: string | null;
+  category: string;
+  featured: boolean;
+  technologies: string[];
+  isPrivate?: boolean;
+  projectType?: string;
 }
 
 interface ProjectsData {
-  [key: string]: ProjectData
+  [key: string]: ProjectData;
 }
 
-export default async function ProjectDetailPage({ params }: { params: Promise<{ name: string }> }) {
-  const { name } = await params
-  const projects = linksData.projects as ProjectsData
-  const projectData = projects[name]
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<{ name: string }>;
+}) {
+  const { name } = await params;
+  const projects = linksData.projects as ProjectsData;
+  const projectData = projects[name];
 
   // If project doesn't exist in our data, return 404
   if (!projectData) {
-    notFound()
+    notFound();
   }
 
   // Extract owner and repo from GitHub URL
-  const { owner, repo } = extractRepoInfo(projectData.github)
+  const { owner, repo } = extractRepoInfo(projectData.github);
 
   // Initialize default values
   let repository: any = {
@@ -52,36 +66,41 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     stargazers_count: 0,
     forks_count: 0,
     open_issues_count: 0,
-  }
-  let readme = "No README available."
-  let commits: any[] = []
-  let languages: Record<string, number> = {}
-  let contributors: any[] = []
+  };
+  let readme = "No README available.";
+  let commits: any[] = [];
+  let languages: Record<string, number> = {};
+  let contributors: any[] = [];
 
   // Fetch repository data
   try {
-    ;[repository, readme, commits, languages, contributors] = await Promise.all([
+    [repository, readme, commits, languages, contributors] = await Promise.all([
       getRepository(owner, repo),
       getReadme(owner, repo),
       getCommits(owner, repo, 5),
       getRepositoryLanguages(owner, repo),
       getRepositoryContributors(owner, repo, 5),
-    ])
+    ]);
   } catch (error) {
-    console.error(`Error fetching repository data for ${name}:`, error)
+    console.error(`Error fetching repository data for ${name}:`, error);
     // Continue with default values
   }
 
   // Format dates
-  const createdAt = new Date(repository.created_at).toLocaleDateString()
-  const updatedAt = new Date(repository.updated_at).toLocaleDateString()
+  const createdAt = new Date(repository.created_at).toLocaleDateString();
+  const updatedAt = new Date(repository.updated_at).toLocaleDateString();
 
   // Calculate language percentages
-  const totalBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0)
-  const languagePercentages = Object.entries(languages).map(([name, bytes]) => ({
-    name,
-    percentage: Math.round((bytes / totalBytes) * 100),
-  }))
+  const totalBytes = Object.values(languages).reduce(
+    (sum, bytes) => sum + bytes,
+    0,
+  );
+  const languagePercentages = Object.entries(languages).map(
+    ([name, bytes]) => ({
+      name,
+      percentage: Math.round((bytes / totalBytes) * 100),
+    }),
+  );
 
   return (
     <div className="container py-12 space-y-8">
@@ -96,9 +115,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="lg:col-span-2 space-y-8">
           <div>
             <h1 className="text-4xl font-bold tracking-tight mb-4">{name}</h1>
-            <p className="text-xl text-muted-foreground">{repository.description}</p>
+            <p className="text-xl text-muted-foreground">
+              {repository.description}
+            </p>
             {projectData.isPrivate && (
-              <Badge variant="outline" className="bg-indigo-100 text-indigo-600 mt-4 flex items-center w-fit gap-1">
+              <Badge
+                variant="outline"
+                className="bg-indigo-100 text-indigo-600 mt-4 flex items-center w-fit gap-1"
+              >
                 <Lock className="h-3 w-3" />
                 Private Repository
               </Badge>
@@ -118,7 +142,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <div className="flex flex-wrap gap-3">
             {projectData.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="bg-indigo-100 text-indigo-600 text-sm">
+              <Badge
+                key={tech}
+                variant="secondary"
+                className="bg-indigo-100 text-indigo-600 text-sm"
+              >
                 {tech}
               </Badge>
             ))}
@@ -127,7 +155,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="flex flex-wrap gap-4">
             {projectData.demo && (
               <Button asChild>
-                <Link href={projectData.demo} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={projectData.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Live Demo
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </Link>
@@ -135,7 +167,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             )}
             {!projectData.isPrivate && (
               <Button asChild variant="outline">
-                <Link href={projectData.github} target="_blank" rel="noopener noreferrer">
+                <Link
+                  href={projectData.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Github className="mr-2 h-4 w-4" />
                   View on GitHub
                 </Link>
@@ -191,12 +227,22 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               )}
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Category</span>
-                <Badge variant="outline" className="bg-indigo-100 text-indigo-600">{projectData.category}</Badge>
+                <Badge
+                  variant="outline"
+                  className="bg-indigo-100 text-indigo-600"
+                >
+                  {projectData.category}
+                </Badge>
               </div>
               {projectData.projectType && (
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Type</span>
-                  <Badge variant="outline" className="bg-indigo-100 text-indigo-600">{projectData.projectType}</Badge>
+                  <Badge
+                    variant="outline"
+                    className="bg-indigo-100 text-indigo-600"
+                  >
+                    {projectData.projectType}
+                  </Badge>
                 </div>
               )}
             </CardContent>
@@ -218,7 +264,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                       <span>{percentage}%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
+                      <div
+                        className="bg-primary h-2 rounded-full"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
                     </div>
                   </div>
                 ))}
@@ -253,7 +302,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                       />
                       <div>
                         <p className="font-medium">{contributor.login}</p>
-                        <p className="text-xs text-muted-foreground">{contributor.contributions} commits</p>
+                        <p className="text-xs text-muted-foreground">
+                          {contributor.contributions} commits
+                        </p>
                       </div>
                     </Link>
                   ))}
@@ -272,7 +323,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               </CardHeader>
               <CardContent className="space-y-4">
                 {commits.map((commit) => (
-                  <div key={commit.sha} className="border-b pb-3 last:border-0 last:pb-0">
+                  <div
+                    key={commit.sha}
+                    className="border-b pb-3 last:border-0 last:pb-0"
+                  >
                     <Link
                       href={commit.html_url}
                       target="_blank"
@@ -284,7 +338,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     <div className="flex items-center text-sm text-muted-foreground mt-1">
                       <Clock className="h-3 w-3 mr-1" />
                       <time dateTime={commit.commit.author.date}>
-                        {new Date(commit.commit.author.date).toLocaleDateString()}
+                        {new Date(
+                          commit.commit.author.date,
+                        ).toLocaleDateString()}
                       </time>
                       <span className="mx-1">by</span>
                       <span>{commit.commit.author.name}</span>
@@ -297,5 +353,5 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </div>
     </div>
-  )
+  );
 }

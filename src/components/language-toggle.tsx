@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { useLanguage } from "@/lib/language-context"
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/language-context";
 
 export function LanguageToggle() {
-  const { language, setLanguage } = useLanguage()
+  const { language, setLanguage } = useLanguage();
 
   return (
     <Button
@@ -25,5 +25,5 @@ export function LanguageToggle() {
         </>
       )}
     </Button>
-  )
+  );
 }
