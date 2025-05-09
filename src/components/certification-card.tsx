@@ -61,8 +61,8 @@ export function CertificationCard({
 
   return (
     <Card className={`overflow-hidden ${style.accentBorder}`}>
-      <CardHeader className="flex flex-row items-center gap-4 pb-2">
-        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md">
+      <CardHeader className="flex flex-row items-center gap-4 pb-2 p-4 sm:p-6">
+        <div className="relative h-12 w-12 sm:h-16 sm:w-16 shrink-0 overflow-hidden rounded-md">
           <Image
             src={logoSrc || "/placeholder.svg"}
             alt={`${issuer} logo`}
@@ -71,13 +71,15 @@ export function CertificationCard({
           />
         </div>
         <div>
-          <CardTitle className="text-xl">{title}</CardTitle>
-          <CardDescription>{issuer}</CardDescription>
+          <CardTitle className="text-base sm:text-xl">{title}</CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
+            {issuer}
+          </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="pb-2">
-        <div className="flex items-center text-sm text-muted-foreground mb-4">
-          <Calendar className="mr-1 h-4 w-4" />
+      <CardContent className="pb-2 px-4 sm:px-6">
+        <div className="flex items-center text-xs sm:text-sm text-muted-foreground mb-4">
+          <Calendar className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
           <span>
             Issued: {date}
             {expiryDate && ` · Expires: ${expiryDate}`}
@@ -87,19 +89,19 @@ export function CertificationCard({
           {skills.map((skill) => (
             <Badge
               key={skill}
-              className={`${style.badgeBg} ${style.badgeText} ${style.badgeHover}`}
+              className={`${style.badgeBg} ${style.badgeText} ${style.badgeHover} text-xs`}
             >
               {skill}
             </Badge>
           ))}
         </div>
-        <div className="text-sm">
+        <div className="text-xs sm:text-sm">
           <span className="text-muted-foreground">Credential ID:</span>{" "}
           {credentialId}
         </div>
       </CardContent>
       {verificationUrl && (
-        <CardFooter>
+        <CardFooter className="px-4 sm:px-6 py-3 sm:py-4">
           <Button variant="outline" size="sm" asChild>
             <Link
               href={verificationUrl}

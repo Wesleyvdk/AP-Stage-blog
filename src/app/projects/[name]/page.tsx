@@ -103,19 +103,21 @@ export default async function ProjectDetailPage({
   );
 
   return (
-    <div className="container py-12 space-y-8">
-      <Button variant="ghost" asChild className="mb-8">
+    <div className="container py-8 md:py-12 space-y-6 md:space-y-8">
+      <Button variant="ghost" asChild className="mb-4 md:mb-8">
         <Link href="/projects">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to all projects
         </Link>
       </Button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="lg:col-span-2 space-y-6 md:space-y-8">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight mb-4">{name}</h1>
-            <p className="text-xl text-muted-foreground">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 md:mb-4">
+              {name}
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground">
               {repository.description}
             </p>
             {projectData.isPrivate && (
@@ -179,7 +181,7 @@ export default async function ProjectDetailPage({
             )}
           </div>
 
-          <div className="prose dark:prose-invert max-w-none">
+          <div className="prose dark:prose-invert max-w-none text-sm md:text-base">
             <h2>README</h2>
             <div dangerouslySetInnerHTML={{ __html: readme }} />
           </div>
@@ -190,7 +192,7 @@ export default async function ProjectDetailPage({
             <CardHeader>
               <CardTitle>Repository Info</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 text-sm md:text-base">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Created</span>
                 <span>{createdAt}</span>
@@ -301,7 +303,9 @@ export default async function ProjectDetailPage({
                         className="rounded-full"
                       />
                       <div>
-                        <p className="font-medium">{contributor.login}</p>
+                        <p className="font-medium text-sm">
+                          {contributor.login}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           {contributor.contributions} commits
                         </p>
@@ -321,7 +325,7 @@ export default async function ProjectDetailPage({
                   Recent Commits
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 text-sm">
                 {commits.map((commit) => (
                   <div
                     key={commit.sha}
@@ -331,11 +335,11 @@ export default async function ProjectDetailPage({
                       href={commit.html_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium hover:text-primary"
+                      className="font-medium hover:text-primary line-clamp-2"
                     >
                       {commit.commit.message.split("\n")[0]}
                     </Link>
-                    <div className="flex items-center text-sm text-muted-foreground mt-1">
+                    <div className="flex items-center text-xs text-muted-foreground mt-1">
                       <Clock className="h-3 w-3 mr-1" />
                       <time dateTime={commit.commit.author.date}>
                         {new Date(

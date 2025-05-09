@@ -27,18 +27,18 @@ export default async function Home() {
   }
 
   return (
-    <div className="container py-12 space-y-16">
+    <div className="container py-8 md:py-12 space-y-12 md:space-y-16">
       {/* Hero Section */}
       <section className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12">
-        <div className="flex-1 space-y-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+        <div className="flex-1 space-y-4 md:space-y-6 text-center md:text-left">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
             Hi, I'm Wesley van der Kraan
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl text-muted-foreground">
             A passionate developer documenting my journey through work and
             personal projects.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <Button
               className="bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
               asChild
@@ -56,7 +56,7 @@ export default async function Home() {
           </div>
         </div>
         <div className="flex-1 flex justify-center">
-          <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary">
+          <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary">
             <Image
               src="/confident-professional.png"
               alt="Wesley van der Kraan"
@@ -69,9 +69,11 @@ export default async function Home() {
       </section>
 
       {/* Internship Section */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">My Internship</h2>
+      <section className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            My Internship
+          </h2>
           <Link
             href="/about#internship"
             className="text-primary hover:underline flex items-center gap-1"
@@ -80,7 +82,7 @@ export default async function Home() {
           </Link>
         </div>
         <Card>
-          <CardContent className="p-6 md:p-8">
+          <CardContent className="p-4 sm:p-6 md:p-8">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-full md:w-1/3 aspect-video relative rounded-lg overflow-hidden">
                 <Image
@@ -91,8 +93,8 @@ export default async function Home() {
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
-                <h3 className="text-2xl font-semibold">Taglayer</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl md:text-2xl font-semibold">Taglayer</h3>
+                <p className="text-muted-foreground text-sm md:text-base">
                   Currently interning at Taglayer, where I'm working on
                   developing and improving web applications. My main focus is on
                   frontend development using Vue.js and learning about modern
@@ -119,9 +121,11 @@ export default async function Home() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">Recent Posts</h2>
+      <section className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Recent Posts
+          </h2>
           <Link
             href="/blog"
             className="text-primary hover:underline flex items-center gap-1"
@@ -129,7 +133,7 @@ export default async function Home() {
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Card key={post.id} className="flex flex-col h-full">
               <CardHeader>
@@ -137,7 +141,7 @@ export default async function Home() {
                 <CardTitle className="line-clamp-2">{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground line-clamp-3">
+                <p className="text-muted-foreground line-clamp-3 text-sm md:text-base">
                   {removeMarkdown(post.excerpt ?? "")}
                 </p>
               </CardContent>

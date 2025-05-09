@@ -26,19 +26,21 @@ export default async function BlogPostPage({
   await incrementViewCount(paramProps.id);
 
   return (
-    <div className="container py-12">
-      <Button variant="ghost" asChild className="mb-8">
+    <div className="container py-8 md:py-12">
+      <Button variant="ghost" asChild className="mb-4 md:mb-8">
         <Link href="/blog">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to all posts
         </Link>
       </Button>
 
-      <article className="prose prose-lg dark:prose-invert mx-auto">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">{post.title}</h1>
+      <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 md:mb-4">
+          {post.title}
+        </h1>
 
-        <div className="flex items-center gap-2 text-muted-foreground mb-8">
-          <Calendar className="h-4 w-4" />
+        <div className="flex flex-wrap items-center gap-2 text-muted-foreground mb-4 md:mb-8">
+          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
           <time dateTime={post.date}>{post.date}</time>
           {post.views !== undefined && (
             <span className="ml-4">
@@ -51,7 +53,7 @@ export default async function BlogPostPage({
           {post.tags.map((tag) => (
             <Badge
               key={tag}
-              className="bg-indigo-100 text-indigo-600"
+              className="bg-indigo-100 text-indigo-600 text-xs"
               variant="secondary"
             >
               {tag}

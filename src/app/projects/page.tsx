@@ -66,12 +66,12 @@ async function ProjectCard({
               projectType={data.projectType}
             />
           </div>
-          <div className="flex flex-col p-6">
+          <div className="flex flex-col p-4 sm:p-6">
             <CardHeader className="px-0 pt-0">
-              <CardTitle className="text-2xl">{name}</CardTitle>
+              <CardTitle className="text-xl sm:text-2xl">{name}</CardTitle>
             </CardHeader>
             <CardContent className="px-0 py-4 flex-grow">
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm md:text-base">
                 {repository.description || "No description available."}
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
@@ -81,7 +81,7 @@ async function ProjectCard({
                   </Badge>
                 ))}
               </div>
-              <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-muted-foreground">
                 {!data.isPrivate && (
                   <>
                     <div>⭐ {repository.stargazers_count || 0}</div>
@@ -98,7 +98,12 @@ async function ProjectCard({
             </CardContent>
             <CardFooter className="px-0 pb-0 flex flex-wrap gap-4">
               {!data.isPrivate && (
-                <Button asChild variant="outline">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="sm:size-md"
+                >
                   <Link
                     href={data.github}
                     target="_blank"
@@ -110,7 +115,7 @@ async function ProjectCard({
                 </Button>
               )}
               {data.demo && (
-                <Button asChild>
+                <Button asChild size="sm" className="sm:size-md">
                   <Link
                     href={data.demo}
                     target="_blank"
@@ -121,7 +126,10 @@ async function ProjectCard({
                   </Link>
                 </Button>
               )}
-              <Button asChild variant="secondary">
+              <Button
+                asChild
+                className="bg-indigo-600 text-white hover:bg-indigo-700 size-sm sm:size-md"
+              >
                 <Link href={`/projects/${name}`}>Details</Link>
               </Button>
             </CardFooter>
@@ -139,15 +147,18 @@ async function ProjectCard({
             />
           </div>
           <CardHeader>
-            <CardTitle>{name}</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">{name}</CardTitle>
           </CardHeader>
           <CardContent className="flex-grow">
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {repository.description || "No description available."}
             </p>
             <div className="flex flex-wrap gap-2 mt-4">
               {data.technologies.map((tech) => (
-                <Badge key={tech} className="bg-indigo-100 text-indigo-600">
+                <Badge
+                  key={tech}
+                  className="bg-indigo-100 text-indigo-600 hover:bg-indigo-200 text-xs"
+                >
                   {tech}
                 </Badge>
               ))}
@@ -246,21 +257,23 @@ export default function ProjectsPage() {
     .map(([name, data]) => ({ name, data }));
 
   return (
-    <div className="container py-12 space-y-16">
-      <section className="space-y-6">
-        <h1 className="text-4xl font-bold tracking-tight">My Projects</h1>
-        <p className="text-xl text-muted-foreground">
+    <div className="container py-8 md:py-12 space-y-10 md:space-y-16">
+      <section className="space-y-4 md:space-y-6">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+          My Projects
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground">
           A collection of projects I've built during my studies, internships,
           and personal time.
         </p>
       </section>
 
       {featuredProjects.length > 0 && (
-        <section className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight">
+        <section className="space-y-4 md:space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
             Featured Projects
           </h2>
-          <div className="grid grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 gap-6 md:gap-8">
             {featuredProjects.map(({ name, data }) => (
               <Suspense key={name} fallback={<ProjectCardSkeleton featured />}>
                 <ProjectCard name={name} data={data} />
@@ -271,9 +284,11 @@ export default function ProjectsPage() {
       )}
 
       {otherProjects.length > 0 && (
-        <section className="space-y-6">
-          <h2 className="text-3xl font-bold tracking-tight">Other Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="space-y-4 md:space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            Other Projects
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {otherProjects.map(({ name, data }) => (
               <Suspense key={name} fallback={<ProjectCardSkeleton />}>
                 <ProjectCard name={name} data={data} />

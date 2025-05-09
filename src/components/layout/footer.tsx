@@ -25,11 +25,13 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t bg-background">
-      <div className="container py-10 md:py-12 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="container py-8 md:py-12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
           <div>
             <h3 className="text-lg font-semibold mb-4">{t("footer.about")}</h3>
-            <p className="text-muted-foreground">{t("footer.aboutText")}</p>
+            <p className="text-muted-foreground text-sm md:text-base">
+              {t("footer.aboutText")}
+            </p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">
@@ -37,12 +39,12 @@ export default function Footer() {
             </h3>
             <div className="flex flex-row gap-8">
               {linkChunks.map((chunk, index) => (
-                <ul key={index} className="space-y-2">
+                <ul className="grid grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-2">
                   {chunk.map((link) => (
                     <li key={link.key}>
                       <Link
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors"
+                        href="/"
+                        className="text-muted-foreground hover:text-indigo-600 transition-colors text-sm md:text-base"
                       >
                         {t(link.key)}
                       </Link>
@@ -81,7 +83,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+        <div className="mt-8 pt-8 border-t text-center text-xs sm:text-sm text-muted-foreground">
           <p>
             &copy; {currentYear} Wesley van der Kraan. {t("footer.copyright")}
           </p>
