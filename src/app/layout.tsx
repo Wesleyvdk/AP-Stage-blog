@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/lib/auth-context";
 import { LanguageProvider } from "@/lib/language-context";
 import { SonnerProvider } from "@/components/sonner-provider";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,6 +38,7 @@ export default function RootLayout({
                 <Header />
                 <main className="flex-1 max-w-7xl mx-auto w-full px-4">
                   {children}
+                  <Analytics />
                 </main>
                 <Footer />
                 <SonnerProvider />
