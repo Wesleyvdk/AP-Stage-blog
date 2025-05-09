@@ -24,7 +24,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full border-t bg-background">
+    <footer className="w-full border-t bg-background px-4">
       <div className="container py-8 md:py-12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
           <div>
