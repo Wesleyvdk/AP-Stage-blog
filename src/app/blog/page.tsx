@@ -122,7 +122,7 @@ export default function BlogPage() {
                   }
                   className={`w-full justify-start ${selectedCategory === category ? "bg-indigo-600 text-white hover:bg-indigo-700" : ""}`}
                   onClick={() => {
-                    setSelectedCategory(category);
+                    setSelectedCategory(category ?? null);
                     if (window.innerWidth < 768) setIsFilterOpen(false);
                   }}
                 >
