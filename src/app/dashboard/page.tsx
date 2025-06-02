@@ -28,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PlusCircle, Edit, Trash2, Eye, ArrowUpRight } from "lucide-react";
+import { PlusCircle, Edit, Trash2, Eye, ArrowUpRight, FileDown } from "lucide-react";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -36,6 +36,7 @@ export default function DashboardPage() {
   const { posts, isLoading, error } = usePosts();
   const [isPublishing, setIsPublishing] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Redirect if not logged in
   if (!user) {
@@ -81,6 +82,66 @@ export default function DashboardPage() {
     }
   };
 
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      toast.info("Export Started", {
+        description: "Generating PDFs for all pages. This may take a moment...",
+      });
+
+      const response = await fetch('/api/export-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          baseUrl: window.location.origin
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to export PDFs');
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.files) {
+        // Download each PDF file
+        for (const fileInfo of data.files) {
+          const link = document.createElement('a');
+          link.href = `data:application/pdf;base64,${fileInfo.buffer}`;
+          link.download = fileInfo.filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          // Small delay between downloads
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        toast.success("Export Complete", {
+          description: `Successfully exported ${data.files.length} PDF(s)`,
+        });
+
+        if (data.errors && data.errors.length > 0) {
+          console.warn('Export warnings:', data.errors);
+          toast.warning("Export Warnings", {
+            description: `Some pages had issues: ${data.errors.length} warnings`,
+          });
+        }
+      } else {
+        throw new Error(data.message || 'Export failed');
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error("Export Failed", {
+        description: "Failed to export PDFs. Please try again.",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="container py-12 space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -88,14 +149,25 @@ export default function DashboardPage() {
           <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-2">Manage your blog posts</p>
         </div>
-        <Button
-          asChild
-          className="bg-indigo-600 text-white hover:bg-indigo-700"
-        >
-          <Link href="/new-blog">
-            <PlusCircle className="mr-2 h-4 w-4" /> New Post
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            onClick={handleExportPDF}
+            disabled={isExporting}
+            variant="outline"
+            className="border-green-600 text-green-600 hover:bg-green-50"
+          >
+            <FileDown className="mr-2 h-4 w-4" />
+            {isExporting ? "Exporting..." : "Export All to PDF"}
+          </Button>
+          <Button
+            asChild
+            className="bg-indigo-600 text-white hover:bg-indigo-700"
+          >
+            <Link href="/new-blog">
+              <PlusCircle className="mr-2 h-4 w-4" /> New Post
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (

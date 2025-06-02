@@ -31,6 +31,17 @@ const nextConfig: NextConfig = {
       // Add other allowed hostnames here if needed
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Handle puppeteer on server side
+      config.externals = config.externals || [];
+      config.externals.push({
+        puppeteer: 'puppeteer'
+      });
+    }
+    return config;
+  },
+  serverExternalPackages: ['puppeteer'],
 };
 
 export default nextConfig;
