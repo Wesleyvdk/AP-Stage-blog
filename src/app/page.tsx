@@ -14,11 +14,10 @@ import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/api-service";
 
 export default async function Home() {
-  const posts = await getAllPosts(3); // Get 3 most recent posts
+  const posts = await getAllPosts(3);
 
   function removeMarkdown(markdownText: string): string {
     // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)
-    // This is a basic implementation and might not cover all edge cases.
     return markdownText
       .replace(/([*_`#\[\]()~>+-])/g, "") // Remove common markdown symbols
       .replace(/(\n|\r)/g, " ") // Replace newlines with spaces
@@ -58,7 +57,7 @@ export default async function Home() {
         <div className="flex-1 flex justify-center">
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary">
             <Image
-              src="/confident-professional.png"
+              src="/wesleyvanderkraan.png"
               alt="Wesley van der Kraan"
               fill
               className="object-cover"

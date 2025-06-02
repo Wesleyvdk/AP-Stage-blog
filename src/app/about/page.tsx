@@ -44,7 +44,7 @@ export default function AboutPage() {
         <div className="w-full md:w-1/3 flex justify-center">
           <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary">
             <Image
-              src="/confident-professional.png"
+              src="/wesleyvanderkraan.png"
               alt="Wesley van der Kraan"
               fill
               className="object-cover"
