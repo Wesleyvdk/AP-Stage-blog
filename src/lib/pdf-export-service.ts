@@ -17,350 +17,256 @@ export interface ExportOptions {
   includeDrafts?: boolean;
 }
 
-interface PageToExport {
-  route: string;
-  title: string;
+export interface PDFExportResult {
+  filename: string;
+  data: string; // base64 encoded PDF
 }
 
-// Get the base URL for the site
-function getBaseUrl(): string {
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+// Helper function to convert route to filename
+function routeToFilename(route: string): string {
+  // Remove leading slash and replace remaining slashes with underscores
+  // Also remove the base domain if present
+  const cleanRoute = route
+    .replace(/^https?:\/\/[^\/]+/, '') // Remove domain
+    .replace(/^\//, '') // Remove leading slash
+    .replace(/\//g, '_') // Replace slashes with underscores
+    .replace(/[^a-zA-Z0-9_-]/g, '_') // Replace invalid filename chars
+    .replace(/_+/g, '_') // Collapse multiple underscores
+    .replace(/^_|_$/g, ''); // Remove leading/trailing underscores
+  
+  return cleanRoute || 'home';
 }
 
-// Convert route to filename
-function routeToFilename(route: string, baseUrl: string): string {
-  let filename = route;
-  
-  // Remove the base domain if present
-  if (filename.includes('.vercel.app')) {
-    const domain = new URL(baseUrl).hostname;
-    filename = filename.replace(domain, '');
-  }
-  
-  // Remove protocol and domain
-  filename = filename.replace(/https?:\/\/[^\/]+/, '');
-  
-  // Convert / to _ and remove leading/trailing underscores
-  filename = filename.replace(/\//g, '_');
-  filename = filename.replace(/^_+|_+$/g, '');
-  
-  // If empty, use 'home'
-  if (!filename) {
-    filename = 'home';
-  }
-  
-  return filename;
-}
-
-// Simplified route discovery - just use a predefined list of all routes
-async function discoverAllRoutes(baseUrl: string, options: ExportOptions = {}): Promise<Set<string>> {
-  console.log('Starting route discovery...');
-  const discoveredRoutes = new Set<string>();
-  
-  // Add all known static routes
-  const staticRoutes = [
-    '',           // Home
-    '/blog',      // Blog listing
-    '/projects',  // Projects
-    '/about',     // About
-    '/contact',   // Contact
-    '/resume'     // Resume
-  ];
-  
-  // Add all known blog post routes (published posts)
-  // UPDATE THIS LIST when new posts are published or when you want to add/remove published posts
-  const publishedBlogRoutes = [
-    '/blog/5',
-    '/blog/18', 
-    '/blog/22',
-    '/blog/23',
-    '/blog/24',
-    '/blog/1',
-    '/blog/2',
-    '/blog/3',
-    '/blog/4',
-    '/blog/6',
-    '/blog/7',
-    '/blog/8',
-    '/blog/9',
-    '/blog/10',
-    '/blog/11',
-    '/blog/12',
-    '/blog/13',
-    '/blog/14',
-    '/blog/15',
-    '/blog/16',
-    '/blog/17',
-    '/blog/19',
-    '/blog/20',
-    '/blog/21'
-  ];
-  
-  // Add all known blog post routes (draft posts) - only if includeDrafts is true
-  // UPDATE THIS LIST when you create new drafts or want to add/remove draft posts
-  // Note: These IDs are based on assumption - update with actual draft post IDs
-  const draftBlogRoutes = [
-    '/blog/1',
-    '/blog/2',
-    '/blog/3',
-    '/blog/4',
-    '/blog/6',
-    '/blog/7',
-    '/blog/8',
-    '/blog/9',
-    '/blog/10',
-    '/blog/11',
-    '/blog/12',
-    '/blog/13',
-    '/blog/14',
-    '/blog/15',
-    '/blog/16',
-    '/blog/17',
-    '/blog/19',
-    '/blog/20',
-    '/blog/21'
-    // Add more draft routes as needed - update this list as you create more posts
-  ];
-  
-  // Add static routes
-  staticRoutes.forEach(route => {
-    discoveredRoutes.add(route);
-    console.log(`Added static route: ${route}`);
-  });
-  
-  // Add published blog posts
-  publishedBlogRoutes.forEach(route => {
-    discoveredRoutes.add(route);
-    console.log(`Added published blog post route: ${route}`);
-  });
-  
-  // Add draft blog posts if includeDrafts is true
-  if (options.includeDrafts) {
-    draftBlogRoutes.forEach(route => {
-      discoveredRoutes.add(route);
-      console.log(`Added draft blog post route: ${route}`);
-    });
-  }
-
-  console.log(`Route discovery completed. Found ${discoveredRoutes.size} unique routes`);
-  const routeArray = Array.from(discoveredRoutes);
-  console.log('All discovered routes:', routeArray);
-  return discoveredRoutes;
-}
-
-// Generate PDF from a single page using a fresh browser instance
-async function generateSinglePDF(
-  url: string,
-  filename: string,
-  options: ExportOptions = {}
-): Promise<Buffer> {
-  console.log(`Generating PDF for: ${url}`);
-  
-  let browser = null;
-  let page = null;
-  
-  try {
-    // Launch a fresh browser instance for this PDF
-    browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--disable-gpu',
-        '--disable-web-security',
-        '--disable-features=VizDisplayCompositor',
-        '--disable-extensions',
-        '--disable-plugins',
-        '--disable-images'
-      ]
-    });
-
-    page = await browser.newPage();
-    
-    // Set viewport
-    await page.setViewport({ width: 1200, height: 800 });
-    
-    // Set a shorter timeout and simpler wait strategy
-    await page.goto(url, { 
-      waitUntil: 'domcontentloaded',
-      timeout: 15000 
-    });
-
-    // Wait for any specific selector if provided
-    if (options.waitForSelector) {
-      try {
-        await page.waitForSelector(options.waitForSelector, { timeout: 5000 });
-      } catch (error) {
-        console.warn(`Selector ${options.waitForSelector} not found for ${url}, continuing anyway...`);
-      }
-    }
-
-    // Additional delay if specified
-    if (options.delay && options.delay > 0) {
-      await new Promise(resolve => setTimeout(resolve, Math.min(options.delay as number, 3000)));
-    }
-
-    // Generate PDF
-    const pdf = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: {
-        top: '20px',
-        right: '20px',
-        bottom: '20px',
-        left: '20px'
-      }
-    });
-
-    console.log(`Successfully generated PDF: ${filename}.pdf`);
-    return Buffer.from(pdf);
-    
-  } catch (error) {
-    console.error(`Error generating PDF for ${url}:`, error);
-    throw error;
-  } finally {
-    // Always close browser instance
-    if (browser) {
-      try {
-        await browser.close();
-      } catch (closeError) {
-        console.warn('Error closing browser:', closeError);
-      }
-    }
-  }
-}
-
-// Get route title for a given route
-function getRouteTitle(route: string): string {
-  if (route === '') return 'Home';
-  if (route === '/blog') return 'Blog';
-  if (route === '/projects') return 'Projects';
-  if (route === '/about') return 'About';
-  if (route === '/contact') return 'Contact';
-  if (route === '/resume') return 'Resume';
-  if (route.startsWith('/blog/')) {
-    const id = route.split('/')[2];
-    return `Blog Post ${id}`;
-  }
-  return route.replace(/^\//, '').replace(/\//g, ' - ');
-}
-
-// Main export function - only works on server side
-export async function exportAllPagesToPDF(options: ExportOptions = {}): Promise<{
-  success: boolean;
-  files: { filename: string; buffer: Buffer; title: string }[];
-  errors: string[];
-}> {
+// Main export function
+export async function exportAllPagesToPDF(options: ExportOptions = {}): Promise<PDFExportResult[]> {
   if (!puppeteer) {
-    throw new Error('Puppeteer not available - this function only works on the server side');
+    throw new Error('Puppeteer not available on client side');
   }
 
-  const baseUrl = options.baseUrl || getBaseUrl();
+  const { baseUrl = 'http://localhost:3000', delay = 1000, includeDrafts = true } = options;
   
-  // Discover all routes using multiple methods
-  const allRoutes = await discoverAllRoutes(baseUrl, options);
+  console.log('Starting PDF export with options:', { baseUrl, delay, includeDrafts });
   
-  // Convert Set to Array and create queue
-  const routeQueue = Array.from(allRoutes).map(route => ({
-    route,
-    title: getRouteTitle(route)
-  }));
-
-  console.log(`Starting PDF export for ${routeQueue.length} pages...`);
-  console.log('Routes to process:', routeQueue.map(r => r.route));
-
-  const files: { filename: string; buffer: Buffer; title: string }[] = [];
-  const errors: string[] = [];
-  const processedRoutes = new Set<string>();
-
-  // Process each route in the queue
-  for (const pageInfo of routeQueue) {
-    // Skip if already processed (avoid duplicates)
-    if (processedRoutes.has(pageInfo.route)) {
-      console.log(`Skipping duplicate route: ${pageInfo.route}`);
-      continue;
-    }
-
+  // Discover all available routes
+  const routes = await discoverAllRoutes(baseUrl, includeDrafts);
+  console.log(`Discovered ${routes.length} routes:`, routes);
+  
+  const results: PDFExportResult[] = [];
+  let processedCount = 0;
+  
+  for (const route of routes) {
     try {
-      const fullUrl = `${baseUrl}${pageInfo.route}`;
-      const filename = routeToFilename(pageInfo.route, baseUrl);
+      console.log(`Processing route ${processedCount + 1}/${routes.length}: ${route}`);
       
-      console.log(`Processing page ${processedRoutes.size + 1}/${routeQueue.length}: ${pageInfo.title} (${fullUrl})`);
-      
-      const pdfBuffer = await generateSinglePDF(fullUrl, filename, options);
-      
-      files.push({
-        filename: `${filename}.pdf`,
-        buffer: pdfBuffer,
-        title: pageInfo.title
+      // Create a fresh browser instance for each PDF to avoid connection issues
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ]
       });
-      
-      // Mark as processed
-      processedRoutes.add(pageInfo.route);
-      
-      // Small delay between pages to avoid overwhelming the system
-      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      try {
+        const page = await browser.newPage();
+        
+        // Set viewport for consistent rendering
+        await page.setViewport({ width: 1200, height: 800 });
+        
+        // Navigate to the page
+        const fullUrl = route.startsWith('http') ? route : `${baseUrl}${route}`;
+        console.log(`Navigating to: ${fullUrl}`);
+        
+        await page.goto(fullUrl, { 
+          waitUntil: 'domcontentloaded',
+          timeout: 30000 
+        });
+        
+        // Wait for page to be fully loaded
+        await page.waitForTimeout(delay);
+        
+        // Generate PDF
+        const pdfBuffer = await page.pdf({
+          format: 'A4',
+          printBackground: true,
+          margin: {
+            top: '20mm',
+            right: '20mm',
+            bottom: '20mm',
+            left: '20mm'
+          }
+        });
+        
+        // Convert to base64
+        const base64Data = Buffer.from(pdfBuffer).toString('base64');
+        
+        // Generate filename
+        const filename = `${routeToFilename(route)}.pdf`;
+        
+        results.push({
+          filename,
+          data: base64Data
+        });
+        
+        console.log(`✓ Generated PDF for ${route} -> ${filename}`);
+        processedCount++;
+        
+      } finally {
+        // Always close the browser instance
+        await browser.close();
+      }
       
     } catch (error) {
-      const errorMsg = `Failed to generate PDF for ${pageInfo.route}: ${error}`;
-      console.error(errorMsg);
-      errors.push(errorMsg);
-      
-      // Still mark as processed to avoid retrying
-      processedRoutes.add(pageInfo.route);
+      console.error(`Failed to generate PDF for ${route}:`, error);
+      // Continue with other routes even if one fails
     }
   }
-
-  console.log(`PDF export completed. Success: ${files.length}, Errors: ${errors.length}`);
-  console.log('Successfully processed routes:', Array.from(processedRoutes));
-
-  return {
-    success: files.length > 0,
-    files,
-    errors
-  };
+  
+  console.log(`PDF export completed. Generated ${results.length} files.`);
+  return results;
 }
 
-// Client-side export function (downloads files directly)
-export async function exportAllPagesClient(includeDrafts: boolean = true): Promise<void> {
+// Discover all available routes by crawling and API calls
+async function discoverAllRoutes(baseUrl: string, includeDrafts: boolean = true): Promise<string[]> {
+  const routes = new Set<string>();
+  
+  // Add static routes
+  const staticRoutes = [
+    '/',
+    '/blog',
+    '/projects', 
+    '/about',
+    '/contact',
+    '/resume'
+  ];
+  
+  staticRoutes.forEach(route => routes.add(route));
+  console.log('Added static routes:', staticRoutes);
+  
   try {
-    const response = await fetch('/api/export-pdf', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        includeDrafts
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to export PDFs');
-    }
-
-    const data = await response.json();
+    // Method 1: Use the API service to get all posts for admin
+    console.log('Fetching posts via API service...');
+    const { getAllPostsForAdmin } = await import('./api-service');
+    const posts = await getAllPostsForAdmin();
     
-    if (data.success && data.files) {
-      // Download each PDF file
-      for (const fileInfo of data.files) {
-        const link = document.createElement('a');
-        link.href = `data:application/pdf;base64,${fileInfo.buffer}`;
-        link.download = fileInfo.filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    console.log(`Found ${posts.length} posts via API service`);
+    posts.forEach(post => {
+      if (includeDrafts || post.published) {
+        routes.add(`/blog/${post.id}`);
       }
-    } else {
-      throw new Error('Export failed');
+    });
+    
+  } catch (error) {
+    console.error('Error fetching posts via API service:', error);
+  }
+  
+  try {
+    // Method 2: Direct API call as fallback
+    console.log('Making direct API call as fallback...');
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const response = await fetch(`${apiUrl}/api/posts`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log(`Found ${data.posts?.length || 0} posts via direct API call`);
+      
+      if (data.posts) {
+        data.posts.forEach((post: any) => {
+          if (includeDrafts || post.published) {
+            routes.add(`/blog/${post.id}`);
+          }
+        });
+      }
     }
   } catch (error) {
-    console.error('Export error:', error);
-    throw error;
+    console.error('Error with direct API call:', error);
+  }
+
+  // Method 3: Web crawling as additional discovery (if puppeteer is available)
+  if (puppeteer) {
+    try {
+      console.log('Starting web crawling for additional route discovery...');
+      const crawledRoutes = await crawlForBlogRoutes(baseUrl);
+      console.log(`Found ${crawledRoutes.length} additional routes via crawling:`, crawledRoutes);
+      crawledRoutes.forEach(route => routes.add(route));
+    } catch (error) {
+      console.error('Error during web crawling:', error);
+    }
+  }
+  
+  const finalRoutes = Array.from(routes).sort();
+  console.log(`Total unique routes discovered: ${finalRoutes.length}`);
+  return finalRoutes;
+}
+
+// Web crawling function to discover blog routes
+async function crawlForBlogRoutes(baseUrl: string): Promise<string[]> {
+  if (!puppeteer) {
+    console.warn('Puppeteer not available for crawling');
+    return [];
+  }
+
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+  
+  try {
+    const page = await browser.newPage();
+    const routes = new Set<string>();
+    
+    // Crawl blog listing page
+    try {
+      await page.goto(`${baseUrl}/blog`, { waitUntil: 'domcontentloaded', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      
+      // Extract blog post links
+      const blogLinks = await page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a[href*="/blog/"]'));
+        return links.map((link: Element) => (link as HTMLAnchorElement).href);
+      });
+      
+      blogLinks.forEach((link: string) => {
+        const route = link.replace(baseUrl, '');
+        if (route.match(/^\/blog\/\d+$/)) {
+          routes.add(route);
+        }
+      });
+      
+      console.log(`Found ${blogLinks.length} blog post links on /blog page`);
+    } catch (error) {
+      console.error('Error crawling /blog page:', error);
+    }
+    
+    // Crawl home page for recent posts
+    try {
+      await page.goto(baseUrl, { waitUntil: 'domcontentloaded', timeout: 10000 });
+      await page.waitForTimeout(2000);
+      
+      const homeLinks = await page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a[href*="/blog/"]'));
+        return links.map((link: Element) => (link as HTMLAnchorElement).href);
+      });
+      
+      homeLinks.forEach((link: string) => {
+        const route = link.replace(baseUrl, '');
+        if (route.match(/^\/blog\/\d+$/)) {
+          routes.add(route);
+        }
+      });
+      
+      console.log(`Found ${homeLinks.length} blog post links on home page`);
+    } catch (error) {
+      console.error('Error crawling home page:', error);
+    }
+    
+    return Array.from(routes);
+  } finally {
+    await browser.close();
   }
 } 

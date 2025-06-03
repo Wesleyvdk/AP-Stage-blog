@@ -19,6 +19,18 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Helper function to set cookie
+function setCookie(name: string, value: string, days: number = 7) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
+}
+
+// Helper function to remove cookie
+function removeCookie(name: string) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;secure;samesite=strict`;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,9 +51,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await api.login({ email, password });
 
-      // Save token and user data
+      // Save token and user data in localStorage
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user));
+
+      // Also save token in cookies for server-side access
+      setCookie("token", response.token, 7);
 
       setUser(response.user);
       setIsLoading(false);
@@ -56,6 +71,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+
+    // Also remove token from cookies
+    removeCookie("token");
+
     setUser(null);
   };
 

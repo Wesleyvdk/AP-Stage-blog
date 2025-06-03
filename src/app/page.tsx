@@ -12,9 +12,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/api-service";
+import { getServerToken } from "@/lib/auth-server";
 
 export default async function Home() {
-  const posts = await getAllPosts(3);
+  // Get server token for authentication
+  const token = await getServerToken();
+
+  // Fetch recent posts with authentication context
+  const posts = await getAllPosts(3, token);
 
   function removeMarkdown(markdownText: string): string {
     // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)

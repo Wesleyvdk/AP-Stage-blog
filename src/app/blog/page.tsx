@@ -16,13 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlusCircle, Search, Filter } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
-import { usePosts } from "@/lib/use-posts";
+import { usePublicPosts } from "@/lib/use-posts";
 import removeMarkdown from "remove-markdown";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function BlogPage() {
   const { user } = useAuth();
-  const { posts, isLoading, error } = usePosts();
+  const { posts, isLoading, error } = usePublicPosts();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -87,11 +87,10 @@ export default function BlogPage() {
               {allTags.map((tag) => (
                 <Badge
                   key={tag}
-                  className={`cursor-pointer ${
-                    selectedTags.includes(tag)
-                      ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                      : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
-                  }`}
+                  className={`cursor-pointer ${selectedTags.includes(tag)
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                    : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                    }`}
                   onClick={() => {
                     toggleTag(tag);
                     if (window.innerWidth < 768) setIsFilterOpen(false);

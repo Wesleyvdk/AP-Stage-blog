@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { getPostById } from "@/lib/api-service";
+import { getServerToken } from "@/lib/auth-server";
 import { incrementViewCount } from "@/lib/actions";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -16,7 +17,12 @@ export default async function BlogPostPage({
   params: Promise<{ id: string }>;
 }) {
   const paramProps = await params;
-  const post = await getPostById(paramProps.id);
+
+  // Get server token for authentication
+  const token = await getServerToken();
+
+  // Fetch post with authentication context
+  const post = await getPostById(paramProps.id, token);
 
   if (!post) {
     notFound();
@@ -46,6 +52,11 @@ export default async function BlogPostPage({
             <span className="ml-4">
               {post.views} {post.views === 1 ? "view" : "views"}
             </span>
+          )}
+          {!post.published && (
+            <Badge variant="outline" className="ml-4 text-xs">
+              Draft
+            </Badge>
           )}
         </div>
 
