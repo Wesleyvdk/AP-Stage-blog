@@ -12,32 +12,33 @@ export async function POST(request: NextRequest) {
     // Use the request origin if no baseUrl provided
     const exportBaseUrl = baseUrl || request.nextUrl.origin;
     
-    const result = await exportAllPagesToPDF({
+    const results = await exportAllPagesToPDF({
       baseUrl: exportBaseUrl,
       waitForSelector: 'main', // Wait for main content to load
       delay: 1000, // 1 second delay to ensure everything is loaded
       includeDrafts // Pass the includeDrafts option
     });
 
-    if (result.success) {
-      // Convert buffers to base64 for JSON response
-      const files = result.files.map(file => ({
-        filename: file.filename,
-        buffer: file.buffer.toString('base64'),
-        title: file.title
+    // The function returns an array of PDFExportResult directly
+    if (results && results.length > 0) {
+      // Convert the results to the expected format
+      const files = results.map(result => ({
+        filename: result.filename,
+        buffer: result.data, // data is already base64 encoded
+        title: result.filename.replace('.pdf', '').replace(/_/g, ' ')
       }));
 
       return NextResponse.json({
         success: true,
         files,
-        errors: result.errors,
+        errors: [],
         message: `Successfully generated ${files.length} PDF(s)`
       });
     } else {
       return NextResponse.json({
         success: false,
         files: [],
-        errors: result.errors,
+        errors: ['No PDFs were generated'],
         message: 'Failed to generate PDFs'
       }, { status: 500 });
     }
