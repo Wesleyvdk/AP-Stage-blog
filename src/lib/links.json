@@ -9,7 +9,13 @@
       "demo": "https://dreamy.aylanibot.app/",
       "category": "personal",
       "featured": false,
-      "technologies": ["React", "Remix", "TailwindCSS", "Express.js", "S3"],
+      "technologies": [
+        "React",
+        "Remix",
+        "TailwindCSS",
+        "Express.js",
+        "S3"
+      ],
       "isPrivate": true,
       "projectType": "website"
     },
@@ -17,8 +23,13 @@
       "github": "https://github.com/Wesleyvdk/NatureBot",
       "demo": "",
       "category": "personal",
-      "featured": true,
-      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"],
+      "featured": false,
+      "technologies": [
+        "discord.js",
+        "node.js",
+        "typescript",
+        "PostgreSQL"
+      ],
       "isPrivate": true,
       "projectType": "bot"
     },
@@ -27,7 +38,12 @@
       "demo": "",
       "category": "personal",
       "featured": false,
-      "technologies": ["discord.js", "node.js", "typescript", "PostgreSQL"],
+      "technologies": [
+        "discord.js",
+        "node.js",
+        "typescript",
+        "PostgreSQL"
+      ],
       "isPrivate": false,
       "projectType": "bot"
     },
@@ -36,13 +52,18 @@
       "demo": "https://ap-gaming.org/",
       "category": "school",
       "featured": true,
-      "technologies": ["React", "TailwindCSS", "PostgreSQL", "Next.js"],
-      "isPrivate": false,
+      "technologies": [
+        "React",
+        "TailwindCSS",
+        "PostgreSQL",
+        "Next.js"
+      ],
+      "isPrivate": true,
       "projectType": "website"
     },
     "AP-Gaming-Dashboard": {
       "github": "https://github.com/Wesleyvdk/dashboard.APGaming",
-      "demo": "https://dashboard.ap-gaming.org/",
+      "demo": "",
       "category": "school",
       "featured": false,
       "technologies": [
@@ -57,10 +78,55 @@
     },
     "Esportique": {
       "github": "https://github.com/Wesleyvdk/Esportique",
-      "demo": "https://esportique.vercel.app/",
+      "demo": "",
       "category": "personal",
       "featured": false,
-      "technologies": ["Next.js", "TailwindCSS", "PostgreSQL", "Medusa.js"],
+      "technologies": [
+        "Next.js",
+        "TailwindCSS",
+        "PostgreSQL",
+        "Medusa.js"
+      ],
+      "isPrivate": false,
+      "projectType": "website"
+    },
+    "Treffortly": {
+      "github": "https://github.com/Wesleyvdk/Treffortly",
+      "demo": "https://treffortly.com/",
+      "category": "personal",
+      "featured": true,
+      "technologies": [
+        "Next.js",
+        "TailwindCSS",
+        "PostgreSQL",
+        "Prisma",
+        "Apollo server",
+        "GraphQL"
+      ],
+      "isPrivate": true,
+      "projectType": "website"
+    },
+    "AI-Sandbox": {
+      "github": "https://github.com/Wesleyvdk/AI_Sandbox",
+      "demo": "",
+      "category": "personal",
+      "featured": false,
+      "technologies": [
+        "React",
+        "React Router 7",
+        "TypeScript",
+        "TailwindCSS",
+        "Node.js",
+        "Apollo Server",
+        "GraphQL",
+        "PostgreSQL",
+        "Redis",
+        "Python",
+        "FastAPI",
+        "Docker",
+        "Ollama",
+        "LangChain"
+      ],
       "isPrivate": false,
       "projectType": "website"
     }
