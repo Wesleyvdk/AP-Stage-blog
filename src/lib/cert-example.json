@@ -6,8 +6,27 @@
     "expiryDate": "Month Year",
     "credentialId": "EXAMPLE-ID-12345",
     "verificationUrl": "https://example.com/verify",
-    "skills": ["Skill 1", "Skill 2", "Skill 3"],
+    "skills": [
+      "Skill 1",
+      "Skill 2",
+      "Skill 3"
+    ],
     "logoSrc": "/path/to/logo.png",
     "variant": "example-variant"
+  },
+  "graduate_mechanics": {
+    "title": "Graduate Mechanics",
+    "issuer": "PITO Stabroek",
+    "issueDate": "June 2020",
+    "credentialId": "PITO-MECH-2020",
+    "verificationUrl": "/Wesley_Graduate_Mechanics.pdf",
+    "skills": [
+      "Mechanics",
+      "Technical Skills",
+      "Problem Solving"
+    ],
+    "logoSrc": "/pito-logo.png",
+    "variant": "degree",
+    "type": "degree"
   }
 }

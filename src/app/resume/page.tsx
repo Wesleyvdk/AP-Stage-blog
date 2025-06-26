@@ -73,7 +73,7 @@ export default function ResumePage() {
           <div className="flex items-center gap-2">
             <Award className="h-6 w-6 text-indigo-600" />
             <h2 className="text-3xl font-bold tracking-tight">
-              Certifications
+              Certifications & Degrees
             </h2>
           </div>
 
@@ -118,15 +118,15 @@ export default function ResumePage() {
               icon: <GraduationCap className="h-4 w-4" />,
             },
             {
-              date: "2023 - Present",
+              date: "2023 - 2025",
               title:
                 "Associate Degree Programming, AP University of Applied Sciences",
               description:
-                "Currently pursuing a degree in programming with focus on web development.",
+                "Completed a degree in programming with focus on web development.",
               icon: <GraduationCap className="h-4 w-4" />,
             },
             {
-              date: "February 2025 - Present",
+              date: "February 2025 - June 2025",
               title: "Full Stack Developer Internship, TagLayer",
               description:
                 "Working on developing and improving web applications using Vue.js and other modern technologies.",
@@ -216,7 +216,7 @@ export default function ResumePage() {
                   Associate Degree Programming
                 </CardTitle>
                 <div className="text-muted-foreground text-sm md:text-base">
-                  September 2023 - Present
+                  September 2023 - June 2025
                 </div>
               </div>
               <div className="text-base md:text-lg">
@@ -225,7 +225,7 @@ export default function ResumePage() {
             </CardHeader>
             <CardContent className="text-sm md:text-base">
               <p>
-                Currently pursuing a degree in programming with focus on web
+                Completed a degree in programming with focus on web
                 development and software engineering.
               </p>
             </CardContent>

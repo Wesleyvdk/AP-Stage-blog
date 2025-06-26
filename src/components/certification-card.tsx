@@ -21,7 +21,7 @@ interface CertificationCardProps {
   verificationUrl?: string;
   skills: string[];
   logoSrc: string;
-  variant?: "aws" | "azure" | "default";
+  variant?: "aws" | "azure" | "degree" | "default";
 }
 
 export function CertificationCard({
@@ -48,6 +48,12 @@ export function CertificationCard({
       badgeText: "text-blue-800",
       badgeHover: "hover:bg-blue-200",
       accentBorder: "border-l-4 border-l-blue-500",
+    },
+    degree: {
+      badgeBg: "bg-green-100",
+      badgeText: "text-green-800",
+      badgeHover: "hover:bg-green-200",
+      accentBorder: "border-l-4 border-l-green-500",
     },
     default: {
       badgeBg: "bg-indigo-100",

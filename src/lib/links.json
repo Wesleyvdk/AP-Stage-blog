@@ -131,5 +131,26 @@
       "projectType": "website"
     }
   },
-  "certifications": {}
+  "certifications": {
+    "associate_degree_programming": {
+      "title": "Associate Degree Programming",
+      "issuer": "AP University of Applied Sciences",
+      "issueDate": "June 2025",
+      "credentialId": "AP-PROG-2025",
+      "verificationUrl": "/Wesley_Associate_Degree_Programming.pdf",
+      "skills": [
+        "Programming",
+        "Web Development",
+        "Software Engineering",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Vue.js",
+        ".NET"
+      ],
+      "logoSrc": "/ap.jpg",
+      "variant": "degree",
+      "type": "degree"
+    }
+  }
 }
