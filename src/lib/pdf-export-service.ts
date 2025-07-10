@@ -19,12 +19,12 @@ export interface PDFExportResult {
 }
 function routeToFilename(route: string): string {
   const cleanRoute = route
-    .replace(/^https?:\/\/[^\/]+/, '') 
-    .replace(/^\
-    .replace(/\
-    .replace(/[^a-zA-Z0-9_-]/g, '_') 
-    .replace(/_+/g, '_') 
-    .replace(/^_|_$/g, ''); 
+  .replace(/^https?:\/\/[^\/]+/, '')
+  .replace(/^\//, '')
+  .replace(/\//g, '_')
+  .replace(/[^a-zA-Z0-9_-]/g, '_')
+  .replace(/_+/g, '_')
+  .replace(/^_|_$/g, '');
   return cleanRoute || 'home';
 }
 export async function exportAllPagesToPDF(options: ExportOptions = {}): Promise<PDFExportResult[]> {
