@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { AlertCircle } from "lucide-react"
 import Link from "next/link"
+import { Suspense } from "react"
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
     const searchParams = useSearchParams()
     const error = searchParams.get("error")
 
@@ -25,33 +26,53 @@ export default function AuthErrorPage() {
     }
 
     return (
+        <Card>
+            <CardHeader className="space-y-1 text-center">
+                <div className="flex justify-center mb-4">
+                    <AlertCircle className="h-12 w-12 text-red-500" />
+                </div>
+                <CardTitle className="text-2xl">Authentication Error</CardTitle>
+                <CardDescription>
+                    {getErrorMessage(error)}
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                <div className="text-center space-y-2">
+                    <Button asChild className="w-full">
+                        <Link href="/auth/signin">
+                            Try Again
+                        </Link>
+                    </Button>
+                    <Button variant="outline" asChild className="w-full">
+                        <Link href="/">
+                            Go Home
+                        </Link>
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+export default function AuthErrorPage() {
+    return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                <Card>
-                    <CardHeader className="space-y-1 text-center">
-                        <div className="flex justify-center mb-4">
-                            <AlertCircle className="h-12 w-12 text-red-500" />
-                        </div>
-                        <CardTitle className="text-2xl">Authentication Error</CardTitle>
-                        <CardDescription>
-                            {getErrorMessage(error)}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="text-center space-y-2">
-                            <Button asChild className="w-full">
-                                <Link href="/auth/signin">
-                                    Try Again
-                                </Link>
-                            </Button>
-                            <Button variant="outline" asChild className="w-full">
-                                <Link href="/">
-                                    Go Home
-                                </Link>
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                <Suspense fallback={
+                    <Card>
+                        <CardHeader className="space-y-1 text-center">
+                            <div className="flex justify-center mb-4">
+                                <AlertCircle className="h-12 w-12 text-red-500" />
+                            </div>
+                            <CardTitle className="text-2xl">Authentication Error</CardTitle>
+                            <CardDescription>
+                                Loading error details...
+                            </CardDescription>
+                        </CardHeader>
+                    </Card>
+                }>
+                    <AuthErrorContent />
+                </Suspense>
             </div>
         </div>
     )
