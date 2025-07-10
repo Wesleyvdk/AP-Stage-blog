@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/lib/auth-context";
+import { useSession, signOut } from "next-auth/react";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -14,9 +14,13 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Header() {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { data: session, status } = useSession();
   const { t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
 
   const navItems = [
     { name: t("nav.home"), href: "/" },
@@ -55,13 +59,15 @@ export default function Header() {
         </div>
         <div className="flex items-center gap-2">
           <ModeToggle />
-          {user ? (
+          {session ? (
             <>
-              <Button variant="ghost" asChild className="hidden md:flex">
-                <Link href="/dashboard">{t("nav.dashboard")}</Link>
-              </Button>
+              {session.user.isAdmin && (
+                <Button variant="ghost" asChild className="hidden md:flex">
+                  <Link href="/dashboard">{t("nav.dashboard")}</Link>
+                </Button>
+              )}
               <Button
-                onClick={logout}
+                onClick={handleSignOut}
                 className="bg-indigo-600 text-white hover:bg-indigo-700 hidden md:flex"
               >
                 {t("nav.logout")}
@@ -72,7 +78,7 @@ export default function Header() {
               asChild
               className="bg-indigo-600 text-white hover:bg-indigo-700 hidden md:flex"
             >
-              <Link href="/auth/login">{t("nav.login")}</Link>
+              <Link href="/auth/signin">{t("nav.login")}</Link>
             </Button>
           )}
 
@@ -120,7 +126,7 @@ export default function Header() {
                         {item.name}
                       </Link>
                     ))}
-                    {user && (
+                    {session && session.user.isAdmin && (
                       <Link
                         href="/dashboard"
                         onClick={() => setIsMobileMenuOpen(false)}
@@ -132,9 +138,9 @@ export default function Header() {
                   </nav>
                 </div>
                 <div className="border-t py-4">
-                  {user ? (
+                  {session ? (
                     <Button
-                      onClick={logout}
+                      onClick={handleSignOut}
                       className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
                     >
                       {t("nav.logout")}
@@ -145,7 +151,7 @@ export default function Header() {
                       className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Link href="/auth/login">{t("nav.login")}</Link>
+                      <Link href="/auth/signin">{t("nav.login")}</Link>
                     </Button>
                   )}
                 </div>

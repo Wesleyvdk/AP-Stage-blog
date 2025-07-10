@@ -12,14 +12,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/api-service";
-import { getServerToken } from "@/lib/auth-server";
 
 export default async function Home() {
-  // Get server token for authentication
-  const token = await getServerToken();
-
-  // Fetch recent posts with authentication context
-  const posts = await getAllPosts(3, token);
+  // Fetch recent published posts only (no token passed to ensure only public posts)
+  const posts = await getAllPosts(3);
 
   function removeMarkdown(markdownText: string): string {
     // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)
@@ -96,7 +92,7 @@ export default async function Home() {
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
-                <h3 className="text-xl md:text-2xl font-semibold">Full Stack Developer</h3>
+                <h3 className="text-xl md:text-2xl font-semibold">Full Stack Developer Intern</h3>
                 <p className="text-muted-foreground text-sm">Taglayer • Feb 2025 - Jun 2025</p>
                 <p className="text-muted-foreground text-sm md:text-base">
                   Developed and improved web applications using modern technologies. Focused on frontend development with Vue.js while gaining valuable experience in full-stack development and modern web development practices.

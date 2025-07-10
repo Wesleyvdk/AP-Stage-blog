@@ -10,6 +10,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import { Comments } from "@/components/comments";
 
 export default async function BlogPostPage({
   params,
@@ -40,7 +41,7 @@ export default async function BlogPostPage({
         </Link>
       </Button>
 
-      <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto">
+      <article className="prose prose-sm sm:prose-base lg:prose-lg dark:prose-invert mx-auto mb-12">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2 md:mb-4">
           {post.title}
         </h1>
@@ -74,6 +75,11 @@ export default async function BlogPostPage({
 
         <MarkdownRenderer content={post.content} />
       </article>
+
+      {/* Comments Section */}
+      <div className="max-w-4xl mx-auto">
+        <Comments postId={paramProps.id} />
+      </div>
     </div>
   );
 }

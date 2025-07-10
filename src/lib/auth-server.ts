@@ -1,42 +1,99 @@
-import { cookies } from 'next/headers';
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { cookies } from "next/headers";
 
-// Extract token from server-side context (cookies or headers)
-export async function getServerToken(): Promise<string | undefined> {
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string | null;
+  isAdmin: boolean;
+}
+
+// Get the current user session server-side using NextAuth
+export async function getCurrentUser(): Promise<AuthUser | null> {
   try {
-    const cookieStore = await cookies();
+    const session = await getServerSession(authOptions);
     
-    // Check for token in cookies first
-    const tokenFromCookie = cookieStore.get('token')?.value;
-    if (tokenFromCookie) {
-      return tokenFromCookie;
+    if (!session?.user?.email) {
+      return null;
     }
 
-    return undefined;
+    // If we have session but no isAdmin info, fetch it from backend
+    if (session.user && typeof session.user.isAdmin === 'undefined') {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/by-email/${encodeURIComponent(session.user.email)}`);
+        if (response.ok) {
+          const backendUser = await response.json();
+          return {
+            id: session.user.id || backendUser.id.toString(),
+            email: session.user.email,
+            name: session.user.name || backendUser.name,
+            isAdmin: backendUser.isAdmin || false,
+          };
+        } else {
+          console.warn(`Failed to fetch user from backend: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Error fetching user from backend:", error);
+      }
+    }
+
+    return {
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.name || null,
+      isAdmin: session.user.isAdmin || false,
+    };
   } catch (error) {
-    console.error('Error getting server token:', error);
-    return undefined;
+    console.error("Error getting current user:", error);
+    return null;
   }
 }
 
-// Extract token from request headers
-export function getTokenFromRequest(request: NextRequest): string | undefined {
-  const authorization = request.headers.get('authorization');
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.slice(7);
+// Require admin access
+export async function requireAdmin(): Promise<AuthUser | Response> {
+  const user = await getCurrentUser();
+  
+  if (!user) {
+    return Response.json(
+      { error: "Authentication required. Please log in." }, 
+      { status: 401 }
+    );
   }
   
-  // Also check cookies
-  const tokenFromCookie = request.cookies.get('token')?.value;
-  if (tokenFromCookie) {
-    return tokenFromCookie;
+  if (!user.isAdmin) {
+    return Response.json(
+      { error: "Admin access required. You don't have permission to perform this action." }, 
+      { status: 403 }
+    );
   }
-
-  return undefined;
+  
+  return user;
 }
 
-// Check if user is authenticated on server side
+// Require any authenticated user
+export async function requireAuth(): Promise<AuthUser | Response> {
+  const user = await getCurrentUser();
+  
+  if (!user) {
+    return Response.json(
+      { error: "Authentication required. Please log in." }, 
+      { status: 401 }
+    );
+  }
+  
+  return user;
+}
+
+// Legacy function for backward compatibility
+export async function getServerToken(): Promise<string | undefined> {
+  const cookieStore = await cookies();
+  return cookieStore.get("token")?.value;
+}
+
+// Check if user is authenticated on server side (legacy)
 export async function isServerAuthenticated(): Promise<boolean> {
-  const token = await getServerToken();
-  return !!token;
+  const user = await getCurrentUser();
+  return !!user;
 } 

@@ -1,4 +1,6 @@
 // API service for interacting with the backend
+import { getSession } from "next-auth/react";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 // Types
@@ -12,6 +14,16 @@ export interface Post {
   published?: boolean;
   views?: number;
   category?: string;
+}
+
+export interface Comment {
+  id: string;
+  postId: string;
+  author: string;
+  email: string;
+  content: string;
+  date: string;
+  createdAt: string;
 }
 
 export interface LoginCredentials {
@@ -47,9 +59,27 @@ async function fetchAPI<T>(
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
+  // Get NextAuth session for user info
+  let authHeaders: Record<string, string> = {};
+  
+  if (typeof window !== "undefined") {
+    try {
+      const session = await getSession();
+      if (session?.user?.email) {
+        authHeaders["x-user-email"] = session.user.email;
+      }
+      if (session?.user?.id) {
+        authHeaders["x-user-id"] = session.user.id;
+      }
+    } catch (error) {
+      console.error("Error getting session for API call:", error);
+    }
+  }
+
   const headers = {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
+    ...authHeaders,
     ...options.headers,
   };
 
@@ -71,10 +101,22 @@ async function fetchServerAPI<T>(
   endpoint: string,
   token?: string,
   options: RequestInit = {},
+  userEmail?: string,
+  userId?: string,
 ): Promise<T> {
+  const authHeaders: Record<string, string> = {};
+  
+  if (userEmail) {
+    authHeaders["x-user-email"] = userEmail;
+  }
+  if (userId) {
+    authHeaders["x-user-id"] = userId;
+  }
+
   const headers = {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),
+    ...authHeaders,
     ...options.headers,
   };
 
@@ -204,6 +246,59 @@ export const api = {
   publishPost: async (id: string): Promise<Post> => {
     return fetchAPI<Post>(`/api/publish/${id}`, {
       method: "PUT",
+    });
+  },
+
+  // Comments
+  getComments: async (postId: string): Promise<Comment[]> => {
+    const response = await fetchAPI<{ comments: any[] }>(`/api/post/${postId}/comments`);
+    return response.comments.map((comment) => ({
+      id: comment.id.toString(),
+      postId: comment.postId.toString(),
+      author: comment.author,
+      email: comment.email,
+      content: comment.content,
+      date: new Date(comment.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      createdAt: comment.createdAt,
+    }));
+  },
+
+  createComment: async (comment: {
+    postId: string;
+    author: string;
+    email: string;
+    content: string;
+  }): Promise<Comment> => {
+    const newComment = await fetchAPI<any>(`/api/post/${comment.postId}/comments`, {
+      method: "POST",
+      body: JSON.stringify(comment),
+    });
+    return {
+      id: newComment.id.toString(),
+      postId: newComment.postId.toString(),
+      author: newComment.author,
+      email: newComment.email,
+      content: newComment.content,
+      date: new Date(newComment.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      createdAt: newComment.createdAt,
+    };
+  },
+
+  deleteComment: async (commentId: string): Promise<void> => {
+    return fetchAPI<void>(`/api/comment/${commentId}`, {
+      method: "DELETE",
     });
   },
 };

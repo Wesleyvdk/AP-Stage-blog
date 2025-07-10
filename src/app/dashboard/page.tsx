@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,10 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Trash2, Edit, Eye, Plus, Calendar, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { api, getAllPostsForAdmin, type Post } from "@/lib/api-service";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/auth-context";
-import { usePosts } from "@/lib/use-posts";
-import { api } from "@/lib/api-service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,146 +28,103 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PlusCircle, Edit, Trash2, Eye, ArrowUpRight, FileDown } from "lucide-react";
 
-export default function DashboardPage() {
-  const { user } = useAuth();
+export default function Dashboard() {
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const { posts, isLoading, error } = usePosts();
-  const [isPublishing, setIsPublishing] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState<string | null>(null);
-  const [isExporting, setIsExporting] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
+  const [publishingPostId, setPublishingPostId] = useState<string | null>(null);
 
-  // Redirect if not logged in
-  if (!user) {
-    router.push("/auth/login");
-    return null;
-  }
+  // Redirect if not authenticated or not admin
+  useEffect(() => {
+    if (status === "loading") return; // Still loading
 
-  const handlePublish = async (id: string) => {
-    setIsPublishing(id);
-    try {
-      await api.publishPost(id);
-      toast.success("Success", {
-        description: "Post published successfully",
-      });
-      // Refresh the posts
-      router.refresh();
-    } catch (error) {
-      console.error("Error publishing post:", error);
-      toast.error("Error", {
-        description: "Failed to publish post",
-      });
-    } finally {
-      setIsPublishing(null);
+    if (!session) {
+      router.push("/auth/signin?callbackUrl=/dashboard");
+      return;
     }
-  };
 
-  const handleDelete = async (id: string) => {
-    setIsDeleting(id);
+    if (!session.user.isAdmin) {
+      toast.error("Access Denied", {
+        description: "You don't have admin privileges to access this page."
+      });
+      router.push("/");
+      return;
+    }
+  }, [session, status, router]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (!session) return;
+
+      try {
+        const fetchedPosts = await getAllPostsForAdmin();
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        toast.error("Failed to load posts");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [session]);
+
+  const handleDeletePost = async (id: string, title: string) => {
+    setDeletingPostId(id);
     try {
       await api.deletePost(id);
-      toast.success("Success", {
-        description: "Post deleted successfully",
-      });
-      // Refresh the posts
-      router.refresh();
+      setPosts(posts.filter((post) => post.id !== id));
+      toast.success("Post deleted successfully");
     } catch (error) {
       console.error("Error deleting post:", error);
-      toast.error("Error", {
-        description: "Failed to delete post",
-      });
+      toast.error("Failed to delete post");
     } finally {
-      setIsDeleting(null);
+      setDeletingPostId(null);
     }
   };
 
-  const handleExportPDF = async () => {
-    setIsExporting(true);
+  const handlePublishPost = async (id: string) => {
+    setPublishingPostId(id);
     try {
-      toast.info("Export Started", {
-        description: "Generating PDFs for all pages. This may take a moment...",
-      });
-
-      const response = await fetch('/api/export-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          baseUrl: window.location.origin
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to export PDFs');
-      }
-
-      const data = await response.json();
-
-      if (data.success && data.files) {
-        // Download each PDF file
-        for (const fileInfo of data.files) {
-          const link = document.createElement('a');
-          link.href = `data:application/pdf;base64,${fileInfo.buffer}`;
-          link.download = fileInfo.filename;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          // Small delay between downloads
-          await new Promise(resolve => setTimeout(resolve, 500));
-        }
-
-        toast.success("Export Complete", {
-          description: `Successfully exported ${data.files.length} PDF(s)`,
-        });
-
-        if (data.errors && data.errors.length > 0) {
-          console.warn('Export warnings:', data.errors);
-          toast.warning("Export Warnings", {
-            description: `Some pages had issues: ${data.errors.length} warnings`,
-          });
-        }
-      } else {
-        throw new Error(data.message || 'Export failed');
-      }
+      const updatedPost = await api.publishPost(id);
+      setPosts(posts.map((post) =>
+        post.id === id ? { ...post, published: updatedPost.published } : post
+      ));
+      toast.success(updatedPost.published ? "Post published!" : "Post unpublished");
     } catch (error) {
-      console.error('Export error:', error);
-      toast.error("Export Failed", {
-        description: "Failed to export PDFs. Please try again.",
-      });
+      console.error("Error updating post:", error);
+      toast.error("Failed to update post status");
     } finally {
-      setIsExporting(false);
+      setPublishingPostId(null);
     }
   };
+
+  // Show loading while checking authentication
+  if (status === "loading" || !session || !session.user.isAdmin) {
+    return null;
+  }
 
   return (
     <div className="container py-12 space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground mt-2">Manage your blog posts</p>
+          <p className="text-muted-foreground mt-2">
+            Welcome back, {session.user?.name || session.user?.email}! Manage your blog posts below.
+          </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={handleExportPDF}
-            disabled={isExporting}
-            variant="outline"
-            className="border-green-600 text-green-600 hover:bg-green-50"
-          >
-            <FileDown className="mr-2 h-4 w-4" />
-            {isExporting ? "Exporting..." : "Export All to PDF"}
-          </Button>
-          <Button
-            asChild
-            className="bg-indigo-600 text-white hover:bg-indigo-700"
-          >
-            <Link href="/new-blog">
-              <PlusCircle className="mr-2 h-4 w-4" /> New Post
-            </Link>
-          </Button>
-        </div>
+        <Button
+          asChild
+          className="bg-indigo-600 text-white hover:bg-indigo-700"
+        >
+          <Link href="/new-blog">
+            <Plus className="mr-2 h-4 w-4" /> New Post
+          </Link>
+        </Button>
       </div>
 
       {isLoading ? (
@@ -188,35 +145,37 @@ export default function DashboardPage() {
             </Card>
           ))}
         </div>
-      ) : error ? (
-        <Card>
-          <CardContent className="py-8">
-            <p className="text-center text-muted-foreground">{error}</p>
-          </CardContent>
-        </Card>
       ) : posts.length > 0 ? (
         <div className="grid grid-cols-1 gap-6">
           {posts.map((post) => (
             <Card key={post.id}>
               <CardHeader>
-                <CardDescription>{post.date}</CardDescription>
-                <CardTitle>{post.title}</CardTitle>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4" />
+                  {post.date}
+                  {post.views !== undefined && (
+                    <span className="ml-4">
+                      {post.views} {post.views === 1 ? "view" : "views"}
+                    </span>
+                  )}
+                </div>
+                <CardTitle className="line-clamp-2">{post.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground line-clamp-2">
+                <p className="text-muted-foreground line-clamp-2 mb-4">
                   {post.excerpt}
                 </p>
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
+                    <Badge key={tag} variant="secondary" className="text-xs">
                       {tag}
                     </Badge>
                   ))}
                 </div>
-                <div className="flex gap-2 mt-4">
+                <div className="flex gap-2">
                   <Badge
                     variant={post.published ? "default" : "outline"}
-                    className="mr-2"
+                    className="bg-green-100 text-green-700"
                   >
                     {post.published ? "Published" : "Draft"}
                   </Badge>
@@ -241,35 +200,41 @@ export default function DashboardPage() {
                 {!post.published && (
                   <Button
                     size="sm"
-                    onClick={() => handlePublish(post.id)}
-                    disabled={isPublishing === post.id}
+                    onClick={() => handlePublishPost(post.id)}
+                    disabled={publishingPostId === post.id}
                     className="bg-indigo-600 text-white hover:bg-indigo-700"
                   >
                     <ArrowUpRight className="mr-2 h-4 w-4" />
-                    {isPublishing === post.id ? "Publishing..." : "Publish"}
+                    {publishingPostId === post.id ? "Publishing..." : "Publish"}
                   </Button>
                 )}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
-                      <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      disabled={deletingPostId === post.id}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {deletingPostId === post.id ? "Deleting..." : "Delete"}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete the post.
+                        This action cannot be undone. This will permanently delete
+                        the post "{post.title}" and remove it from our servers.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => handleDelete(post.id)}
-                        disabled={isDeleting === post.id}
+                        onClick={() => handleDeletePost(post.id, post.title)}
+                        disabled={deletingPostId === post.id}
+                        className="bg-red-600 hover:bg-red-700"
                       >
-                        {isDeleting === post.id ? "Deleting..." : "Delete"}
+                        {deletingPostId === post.id ? "Deleting..." : "Delete"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -281,15 +246,19 @@ export default function DashboardPage() {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">
-              You haven't created any posts yet
-            </p>
+            <div className="mb-4">
+              <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
+              <p className="text-muted-foreground mb-4">
+                Get started by creating your first blog post
+              </p>
+            </div>
             <Button
               asChild
               className="bg-indigo-600 text-white hover:bg-indigo-700"
             >
               <Link href="/new-blog">
-                <PlusCircle className="mr-2 h-4 w-4" /> Create Your First Post
+                <Plus className="mr-2 h-4 w-4" /> Create Your First Post
               </Link>
             </Button>
           </CardContent>
