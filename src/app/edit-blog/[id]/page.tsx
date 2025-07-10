@@ -246,7 +246,8 @@ export default function EditBlogPage() {
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="internship">Internship</SelectItem>
+                  <SelectItem value="professional">Professional Work</SelectItem>
+                  <SelectItem value="career">Career</SelectItem>
                   {projectOptions.map((project) => (
                     <SelectItem key={project} value={project}>
                       {project}

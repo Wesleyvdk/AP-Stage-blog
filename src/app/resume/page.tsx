@@ -53,15 +53,7 @@ export default function ResumePage() {
         <Card>
           <CardContent className="p-4 sm:p-6">
             <p className="text-muted-foreground text-sm md:text-base">
-              Motivated and eager to learn full-stack developer with experience
-              in both frontend and backend web development. Proficient in HTML,
-              CSS, JavaScript and frameworks such as React and Vue 3, with
-              knowledge of user-friendly and scalable UIs. Experience with
-              backend technologies such as Node.js, Express.js, C#, and
-              databases such as MySQL and PostgreSQL (PSQL). Worked on REST
-              APIs, unit testing, and full web projects in team and
-              independently. Strong in self-learning, and motivated to
-              continuously grow within a professional development team.
+              Recent programming graduate with experience in both frontend and backend web development. Proficient in HTML, CSS, JavaScript and frameworks such as React and Vue 3, with knowledge of user-friendly and scalable UIs. Experience with backend technologies such as Node.js, Express.js, C#, and databases such as MySQL and PostgreSQL (PSQL). Worked on REST APIs, unit testing, and full web projects in team and independently. Strong in self-learning, problem-solving, and motivated to continuously grow within a professional development team.
             </p>
           </CardContent>
         </Card>
@@ -122,14 +114,14 @@ export default function ResumePage() {
               title:
                 "Associate Degree Programming, AP University of Applied Sciences",
               description:
-                "Completed a degree in programming with focus on web development.",
+                "Completed a degree in programming with focus on web development and modern programming practices.",
               icon: <GraduationCap className="h-4 w-4" />,
             },
             {
               date: "February 2025 - June 2025",
-              title: "Full Stack Developer Internship, TagLayer",
+              title: "Full Stack Developer, TagLayer",
               description:
-                "Working on developing and improving web applications using Vue.js and other modern technologies.",
+                "Completed a full-stack development role working on web applications using Vue.js and other modern technologies. Gained valuable professional experience in a collaborative development environment.",
               icon: <Briefcase className="h-4 w-4" />,
             },
           ]}
@@ -146,41 +138,33 @@ export default function ResumePage() {
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
                 <CardTitle className="text-xl md:text-2xl">
-                  Full Stack Developer Intern
+                  Full Stack Developer
                 </CardTitle>
                 <div className="text-muted-foreground text-sm md:text-base">
-                  February 2025 - Present
+                  February 2025 - June 2025
                 </div>
               </div>
               <div className="text-base md:text-lg">TagLayer, Antwerp</div>
             </CardHeader>
             <CardContent className="space-y-4 text-sm md:text-base">
+              <p>
+                Completed a full-stack development role at TagLayer, working on developing and improving web applications using Vue.js and modern technologies.
+              </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  Contributed to a large-scale Vue.js and TailwindCSS web
-                  application focusing on component development, UI consistency
-                  and implementing new features.
+                  Developed new features for company web applications using Vue.js
                 </li>
                 <li>
-                  Built a dynamic and reusable onboarding system and
-                  participated in a full-stack project to centralize templates
-                  using Express.js and a shared database.
+                  Fixed bugs and improved user interface components
                 </li>
                 <li>
-                  Written extensive unit tests for both Vue components and core
-                  JavaScript services to ensure application stability and
-                  maintainability.
+                  Collaborated with development team on project planning and implementation
                 </li>
                 <li>
-                  Participated in code reviews, incorporated feedback and
-                  improved legacy code through refactoring and modernization.
+                  Applied modern web development practices and best coding standards
                 </li>
                 <li>
-                  Maintained a technical blog where I documented my progress and
-                  learning experiences on a weekly basis:{" "}
-                  <Link href="/" className="text-primary hover:underline">
-                    https://wesleyvanderkraan.vercel.app/home
-                  </Link>
+                  Worked with backend technologies including Express.js and databases
                 </li>
               </ul>
               <div className="flex flex-wrap gap-2 pt-2">

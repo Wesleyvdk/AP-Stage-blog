@@ -56,8 +56,7 @@ export default function AboutPage() {
             About Me
           </h1>
           <p className="text-xl">
-            I'm Wesley van der Kraan, a passionate developer currently pursuing
-            my education and gaining practical experience through internships.
+            I'm Wesley van der Kraan, a passionate full-stack developer with a fresh perspective and a dedication to creating innovative solutions.
           </p>
           <div className="flex gap-4">
             <Button asChild variant="outline" size="icon">
@@ -102,12 +101,11 @@ export default function AboutPage() {
               <div>
                 <h3 className="font-semibold">Programming</h3>
                 <p className="text-muted-foreground">
-                  AP Hogeschool, 2023-Present
+                  AP Hogeschool, 2023-2025 (Completed)
                 </p>
               </div>
               <p>
-                Currently pursuing an associate's degree in Programming with a
-                focus on web development and software engineering.
+                Completed an associate's degree in Programming with a focus on web development and software engineering, graduating with hands-on experience in modern development practices.
               </p>
             </CardContent>
           </Card>
@@ -155,14 +153,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Internship Section */}
-      <section className="space-y-6" id="internship">
-        <h2 className="text-3xl font-bold tracking-tight">My Internship</h2>
+      {/* Professional Experience Section */}
+      <section className="space-y-6" id="experience">
+        <h2 className="text-3xl font-bold tracking-tight">Professional Experience</h2>
         <Card>
           <CardHeader>
-            <CardTitle>Taglayer</CardTitle>
+            <CardTitle>Full Stack Developer</CardTitle>
             <CardDescription>
-              Full Stack Developer Intern, 2025-Present
+              Taglayer, Feb 2025 - Jun 2025
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -176,25 +174,20 @@ export default function AboutPage() {
             </div>
             <div className="space-y-4">
               <p>
-                At Taglayer, I'm working on developing and improving web
-                applications using Vue.js and other modern technologies. My
-                responsibilities include:
+                Completed a full-stack development role at Taglayer, working on developing and improving web applications using Vue.js and other modern technologies. Key accomplishments included:
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  Developing new features for the company's web applications
+                  Developed new features for the company's web applications
                 </li>
-                <li>Fixing bugs and improving UI components</li>
+                <li>Fixed bugs and improved UI components</li>
                 <li>
-                  Collaborating with the team on project planning and
-                  implementation
+                  Collaborated with the team on project planning and implementation
                 </li>
-                <li>Learning and applying best practices in web development</li>
+                <li>Applied modern web development best practices</li>
               </ul>
               <p>
-                This internship has been an invaluable opportunity to apply my
-                theoretical knowledge in a real-world setting and learn from
-                experienced professionals in the field.
+                This experience provided invaluable hands-on learning in a professional development environment, working alongside experienced developers and contributing to real-world applications.
               </p>
               <div className="flex flex-wrap gap-2 pt-2">
                 <Badge>Vue.js</Badge>

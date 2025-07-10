@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Wesley van der Kraan | Portfolio & Blog",
   description:
-    "Portfolio and blog showcasing internship experiences and personal projects",
+    "Portfolio and blog showcasing professional development experiences and personal projects",
 };
 
 export default function RootLayout({

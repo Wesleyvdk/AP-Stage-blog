@@ -263,7 +263,7 @@ export default function ProjectsPage() {
           My Projects
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground">
-          A collection of projects I've built during my studies, internships,
+          A collection of projects I've built during my studies, professional work,
           and personal time.
         </p>
       </section>

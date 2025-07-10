@@ -39,8 +39,7 @@ export default async function Home() {
             Hi, I'm Wesley van der Kraan
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground">
-            A passionate developer documenting my journey through work and
-            personal projects.
+            A passionate developer creating innovative solutions and sharing my journey through professional work and personal projects.
           </p>
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <Button
@@ -72,14 +71,14 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Internship Section */}
+      {/* Professional Experience Section */}
       <section className="space-y-4 md:space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            My Internship
+            Professional Experience
           </h2>
           <Link
-            href="/about#internship"
+            href="/about#experience"
             className="text-primary hover:underline flex items-center gap-1"
           >
             Learn more <ArrowRight className="h-4 w-4" />
@@ -97,12 +96,10 @@ export default async function Home() {
                 />
               </div>
               <div className="w-full md:w-2/3 space-y-4">
-                <h3 className="text-xl md:text-2xl font-semibold">Taglayer</h3>
+                <h3 className="text-xl md:text-2xl font-semibold">Full Stack Developer</h3>
+                <p className="text-muted-foreground text-sm">Taglayer • Feb 2025 - Jun 2025</p>
                 <p className="text-muted-foreground text-sm md:text-base">
-                  Currently interning at Taglayer, where I'm working on
-                  developing and improving web applications. My main focus is on
-                  frontend development using Vue.js and learning about modern
-                  web development practices.
+                  Developed and improved web applications using modern technologies. Focused on frontend development with Vue.js while gaining valuable experience in full-stack development and modern web development practices.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Badge className="bg-indigo-100 text-indigo-600">
