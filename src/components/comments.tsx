@@ -1,5 +1,4 @@
-"use client";
-
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,32 +10,24 @@ import { toast } from "sonner";
 import { MessageCircle, Trash2, User, Mail, Clock } from "lucide-react";
 import { api, type Comment } from "@/lib/api-service";
 import { useSession } from "next-auth/react";
-
 interface CommentsProps {
     postId: string;
 }
-
 export function Comments({ postId }: CommentsProps) {
     const { data: session } = useSession();
     const [comments, setComments] = useState<Comment[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDeletingComment, setIsDeletingComment] = useState<string | null>(null);
-
-    // Form state
     const [author, setAuthor] = useState("");
     const [email, setEmail] = useState("");
     const [content, setContent] = useState("");
-
-    // Pre-populate form with session data if available
     useEffect(() => {
         if (session?.user) {
             setAuthor(session.user.name || "");
             setEmail(session.user.email || "");
         }
     }, [session]);
-
-    // Load comments on mount
     useEffect(() => {
         const loadComments = async () => {
             try {
@@ -45,34 +36,33 @@ export function Comments({ postId }: CommentsProps) {
                 setComments(fetchedComments);
             } catch (error) {
                 console.error("Error loading comments:", error);
-                // Silently fail for now - maybe the backend doesn't support comments yet
             } finally {
                 setIsLoading(false);
             }
         };
-
         loadComments();
     }, [postId]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        if (!session?.user) {
+            toast.error("Authentication required", {
+                description: "Please log in to post comments",
+            });
+            return;
+        }
         if (!author.trim() || !email.trim() || !content.trim()) {
             toast.error("Missing fields", {
                 description: "Please fill in all required fields",
             });
             return;
         }
-
         if (!email.includes("@")) {
             toast.error("Invalid email", {
                 description: "Please enter a valid email address",
             });
             return;
         }
-
         setIsSubmitting(true);
-
         try {
             const newComment = await api.createComment({
                 postId,
@@ -80,14 +70,12 @@ export function Comments({ postId }: CommentsProps) {
                 email: email.trim(),
                 content: content.trim(),
             });
-
             setComments([...comments, newComment]);
-
-            // Clear form
-            setAuthor("");
-            setEmail("");
+            if (!session?.user) {
+                setAuthor("");
+                setEmail("");
+            }
             setContent("");
-
             toast.success("Comment added!", {
                 description: "Your comment has been posted successfully",
             });
@@ -100,7 +88,6 @@ export function Comments({ postId }: CommentsProps) {
             setIsSubmitting(false);
         }
     };
-
     const handleDeleteComment = async (commentId: string) => {
         if (!session?.user) {
             toast.error("Unauthorized", {
@@ -108,13 +95,10 @@ export function Comments({ postId }: CommentsProps) {
             });
             return;
         }
-
         setIsDeletingComment(commentId);
-
         try {
             await api.deleteComment(commentId);
             setComments(comments.filter(comment => comment.id !== commentId));
-
             toast.success("Comment deleted", {
                 description: "The comment has been removed",
             });
@@ -127,7 +111,6 @@ export function Comments({ postId }: CommentsProps) {
             setIsDeletingComment(null);
         }
     };
-
     if (isLoading) {
         return (
             <div className="space-y-6">
@@ -153,7 +136,6 @@ export function Comments({ postId }: CommentsProps) {
             </div>
         );
     }
-
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-2">
@@ -162,69 +144,86 @@ export function Comments({ postId }: CommentsProps) {
                     Comments {comments.length > 0 && `(${comments.length})`}
                 </h2>
             </div>
-
-            {/* Add Comment Form */}
             <Card>
                 <CardHeader>
                     <CardTitle className="text-lg">Leave a Comment</CardTitle>
+                    {!session?.user && (
+                        <p className="text-sm text-muted-foreground">
+                            Please <Button variant="link" className="p-0 h-auto text-indigo-600" onClick={() => window.location.href = '/auth/signin'}>sign in</Button> to post a comment.
+                        </p>
+                    )}
                 </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="author">Name *</Label>
-                                <div className="relative">
-                                    <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        id="author"
-                                        type="text"
-                                        value={author}
-                                        onChange={(e) => setAuthor(e.target.value)}
-                                        placeholder="Your name"
-                                        className="pl-10"
-                                        required
-                                    />
+                {session?.user && (
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="author">Name *</Label>
+                                    <div className="relative">
+                                        <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="author"
+                                            type="text"
+                                            value={author}
+                                            onChange={(e) => setAuthor(e.target.value)}
+                                            placeholder="Your name"
+                                            className="pl-10"
+                                            required
+                                            readOnly={!!session?.user}
+                                            disabled={!!session?.user}
+                                        />
+                                    </div>
+                                    {session?.user && (
+                                        <p className="text-xs text-muted-foreground">
+                                            Using your account name
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email *</Label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="email"
+                                            type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="your.email@example.com"
+                                            className="pl-10"
+                                            required
+                                            readOnly={!!session?.user}
+                                            disabled={!!session?.user}
+                                        />
+                                    </div>
+                                    {session?.user && (
+                                        <p className="text-xs text-muted-foreground">
+                                            Using your account email
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email *</Label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="your.email@example.com"
-                                        className="pl-10"
-                                        required
-                                    />
-                                </div>
+                                <Label htmlFor="content">Comment *</Label>
+                                <Textarea
+                                    id="content"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    placeholder="Share your thoughts..."
+                                    rows={4}
+                                    required
+                                />
                             </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="content">Comment *</Label>
-                            <Textarea
-                                id="content"
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="Share your thoughts..."
-                                rows={4}
-                                required
-                            />
-                        </div>
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="bg-indigo-600 text-white hover:bg-indigo-700"
-                        >
-                            {isSubmitting ? "Posting..." : "Post Comment"}
-                        </Button>
-                    </form>
-                </CardContent>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="bg-indigo-600 text-white hover:bg-indigo-700"
+                            >
+                                {isSubmitting ? "Posting..." : "Post Comment"}
+                            </Button>
+                        </form>
+                    </CardContent>
+                )}
             </Card>
-
-            {/* Comments List */}
             {comments.length === 0 ? (
                 <Card>
                     <CardContent className="p-8 text-center">
@@ -246,6 +245,11 @@ export function Comments({ postId }: CommentsProps) {
                                             <div className="flex items-center gap-2">
                                                 <User className="h-4 w-4 text-muted-foreground" />
                                                 <span className="font-semibold">{comment.author}</span>
+                                                {session?.user?.email === comment.email && (
+                                                    <Badge variant="secondary" className="text-xs bg-indigo-100 text-indigo-600">
+                                                        You
+                                                    </Badge>
+                                                )}
                                             </div>
                                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                                 <Clock className="h-3 w-3" />
@@ -257,15 +261,17 @@ export function Comments({ postId }: CommentsProps) {
                                         </p>
                                     </div>
                                     {session?.user && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => handleDeleteComment(comment.id)}
-                                            disabled={isDeletingComment === comment.id}
-                                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+                                        (session.user.isAdmin || comment.email === session.user.email) && (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => handleDeleteComment(comment.id)}
+                                                disabled={isDeletingComment === comment.id}
+                                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        )
                                     )}
                                 </div>
                             </CardContent>
@@ -275,4 +281,4 @@ export function Comments({ postId }: CommentsProps) {
             )}
         </div>
     );
-} 
+}

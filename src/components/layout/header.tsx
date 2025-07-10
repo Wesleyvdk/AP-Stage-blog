@@ -1,5 +1,4 @@
-"use client";
-
+﻿"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -11,17 +10,14 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
 export default function Header() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const { t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const handleSignOut = async () => {
     await signOut({ callbackUrl: "/" });
   };
-
   const navItems = [
     { name: t("nav.home"), href: "/" },
     { name: t("nav.blog"), href: "/blog" },
@@ -29,7 +25,6 @@ export default function Header() {
     { name: t("nav.about"), href: "/about" },
     { name: t("nav.resume"), href: "/resume" },
   ];
-
   return (
     <header className="sticky top-0 px-4 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between max-w-7xl mx-auto w-full">
@@ -81,8 +76,7 @@ export default function Header() {
               <Link href="/auth/signin">{t("nav.login")}</Link>
             </Button>
           )}
-
-          {/* Mobile menu */}
+          {}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">

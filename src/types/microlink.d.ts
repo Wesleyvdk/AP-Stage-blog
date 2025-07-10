@@ -1,1 +1,1 @@
-declare module "@microlink/react";
+﻿declare module "@microlink/react";

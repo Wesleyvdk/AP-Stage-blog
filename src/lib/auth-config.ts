@@ -1,9 +1,7 @@
-import GoogleProvider from "next-auth/providers/google"
+﻿import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { NextAuthOptions } from "next-auth"
-
-// Helper function to get user with admin status from your backend
 async function getUserWithAdmin(email: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/by-email/${encodeURIComponent(email)}`)
@@ -16,7 +14,6 @@ async function getUserWithAdmin(email: string) {
   }
   return null
 }
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -37,9 +34,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
-
         try {
-          // Call your existing API endpoint for credentials login
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
             method: "POST",
             headers: {
@@ -50,13 +45,10 @@ export const authOptions: NextAuthOptions = {
               password: credentials.password,
             }),
           })
-
           if (!response.ok) {
             return null
           }
-
           const result = await response.json()
-          
           if (result && result.user) {
             return {
               id: result.user.id.toString(),
@@ -65,7 +57,6 @@ export const authOptions: NextAuthOptions = {
               isAdmin: result.user.isAdmin || false,
             }
           }
-
           return null
         } catch (error) {
           console.error("Authentication error:", error)
@@ -76,13 +67,10 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      // When user signs in, add their info to the token
       if (user) {
         token.userId = user.id
         token.isAdmin = user.isAdmin || false
       }
-      
-      // For OAuth sign-ins, fetch admin status from backend
       if (account && (account.provider === "google" || account.provider === "github") && token.email) {
         const backendUser = await getUserWithAdmin(token.email)
         if (backendUser) {
@@ -90,11 +78,9 @@ export const authOptions: NextAuthOptions = {
           token.isAdmin = backendUser.isAdmin || false
         }
       }
-      
       return token
     },
     async session({ session, token }) {
-      // Send properties to the client
       if (token && session.user) {
         session.user.id = token.userId as string
         session.user.isAdmin = token.isAdmin as boolean
@@ -103,10 +89,8 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account, profile }) {
-      // For OAuth providers, create/update user in your database
       if (account?.provider === "google" || account?.provider === "github") {
         try {
-          // Call your backend to create/update OAuth user
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/oauth-signin`, {
             method: "POST",
             headers: {
@@ -118,12 +102,10 @@ export const authOptions: NextAuthOptions = {
               provider: account.provider,
             }),
           })
-          
           if (!response.ok) {
             console.error("Failed to create/update OAuth user")
             return false
           }
-          
           return true
         } catch (error) {
           console.error("Error during OAuth sign-in:", error)
@@ -141,4 +123,4 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-} 
+}

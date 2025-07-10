@@ -1,15 +1,13 @@
-import React from "react";
+﻿import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import MermaidDiagram from './MermaidDiagram';
-
 interface MarkdownRendererProps {
   content: string;
 }
-
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
     <div className="prose prose-invert max-w-none">
@@ -22,13 +20,9 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             const codeContent = String(children).replace(/\n$/, '');
-
-            // Handle Mermaid diagrams
             if (language === 'mermaid') {
               return <MermaidDiagram chart={codeContent} />;
             }
-
-            // Handle other code blocks with syntax highlighting
             if (!inline && language) {
               return (
                 <SyntaxHighlighter
@@ -42,15 +36,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
                 </SyntaxHighlighter>
               );
             }
-
-            // Handle inline code
             return (
               <code className={className} {...rest}>
                 {children}
               </code>
             );
           },
-          // Custom styling for other elements
           h1: ({ children }) => (
             <h1 className="text-3xl font-bold mt-8 mb-4 text-foreground">{children}</h1>
           ),
@@ -111,5 +102,4 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
     </div>
   );
 };
-
 export default MarkdownRenderer;

@@ -1,11 +1,9 @@
-"use client";
-
+﻿"use client";
 import mql from "@microlink/mql";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
-
 interface ProjectPreviewProps {
   url?: string | null;
   title: string;
@@ -14,7 +12,6 @@ interface ProjectPreviewProps {
   className?: string;
   projectType?: string;
 }
-
 export function ProjectPreview({
   url,
   title,
@@ -26,15 +23,12 @@ export function ProjectPreview({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [data, setData] = useState<any>(null);
-
-  // Calculate aspect ratio class
   const aspectRatioClass =
     aspectRatio === "video"
       ? "aspect-video"
       : aspectRatio === "square"
         ? "aspect-square"
         : "";
-
   if (!url) {
     return (
       <div
@@ -44,7 +38,7 @@ export function ProjectPreview({
           <CardContent className="flex h-full flex-col items-center justify-center p-6 text-center">
             {projectType === "bot" ? (
               <>
-                <div className="mb-4 text-4xl">🤖</div>
+                <div className="mb-4 text-4xl">ðŸ¤–</div>
                 <p className="text-lg font-medium">{title}</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   Chat Bot / No Live Demo
@@ -52,7 +46,7 @@ export function ProjectPreview({
               </>
             ) : (
               <>
-                <div className="mb-4 text-4xl">🚧</div>
+                <div className="mb-4 text-4xl">ðŸš§</div>
                 <p className="text-lg font-medium">{title}</p>
                 <p className="text-sm text-muted-foreground mt-2">
                   No Live Demo Available
@@ -64,7 +58,6 @@ export function ProjectPreview({
       </div>
     );
   }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,10 +75,8 @@ export function ProjectPreview({
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [url]);
-
   if (isLoading) {
     return (
       <div className="absolute inset-0 z-10">
@@ -93,7 +84,6 @@ export function ProjectPreview({
       </div>
     );
   }
-
   if (hasError) {
     return (
       <Card className="h-full w-full">
@@ -105,11 +95,9 @@ export function ProjectPreview({
       </Card>
     );
   }
-
   if (!data || !data.screenshot) {
     return <div>No preview available.</div>;
   }
-
   return (
     <div
       className={`relative overflow-hidden rounded-lg ${aspectRatioClass} ${className}`}
@@ -119,7 +107,6 @@ export function ProjectPreview({
           <Skeleton className="h-full w-full" />
         </div>
       )}
-
       {hasError ? (
         <Card className="h-full w-full">
           <CardContent className="flex h-full items-center justify-center p-6">

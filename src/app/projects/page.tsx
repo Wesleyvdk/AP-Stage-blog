@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+﻿import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +13,6 @@ import { Github, ExternalLink } from "lucide-react";
 import { ProjectPreview } from "@/components/project-preview";
 import linksData from "@/lib/links.json";
 import { getRepository, extractRepoInfo } from "@/lib/github-service";
-
-// Define types based on our JSON structure
 interface ProjectData {
   github: string;
   demo: string | null;
@@ -24,12 +22,9 @@ interface ProjectData {
   isPrivate?: boolean;
   projectType?: string;
 }
-
 interface ProjectsData {
   [key: string]: ProjectData;
 }
-
-// Component to load and display a project with GitHub data
 async function ProjectCard({
   name,
   data,
@@ -37,19 +32,13 @@ async function ProjectCard({
   name: string;
   data: ProjectData;
 }) {
-  // Extract owner and repo from GitHub URL
   const { owner, repo } = extractRepoInfo(data.github);
-
-  // Fetch repository data from GitHub
   let repository: any = { description: "No description available." };
-
   try {
     repository = await getRepository(owner, repo);
   } catch (error) {
     console.error(`Error fetching repository for ${name}:`, error);
-    // Continue with default repository data
   }
-
   return (
     <Card
       key={name}
@@ -84,8 +73,8 @@ async function ProjectCard({
               <div className="mt-4 flex flex-wrap items-center gap-4 text-xs sm:text-sm text-muted-foreground">
                 {!data.isPrivate && (
                   <>
-                    <div>⭐ {repository.stargazers_count || 0}</div>
-                    <div>🍴 {repository.forks_count || 0}</div>
+                    <div>â­ {repository.stargazers_count || 0}</div>
+                    <div>ðŸ´ {repository.forks_count || 0}</div>
                   </>
                 )}
                 <div>
@@ -198,8 +187,6 @@ async function ProjectCard({
     </Card>
   );
 }
-
-// Loading fallback for project cards
 function ProjectCardSkeleton({ featured = false }: { featured?: boolean }) {
   return (
     <Card className={featured ? "overflow-hidden" : "flex flex-col h-full"}>
@@ -243,19 +230,14 @@ function ProjectCardSkeleton({ featured = false }: { featured?: boolean }) {
     </Card>
   );
 }
-
 export default function ProjectsPage() {
   const projects = linksData.projects as ProjectsData;
-
-  // Get featured and non-featured projects
   const featuredProjects = Object.entries(projects)
     .filter(([_, data]) => data.featured)
     .map(([name, data]) => ({ name, data }));
-
   const otherProjects = Object.entries(projects)
     .filter(([_, data]) => !data.featured)
     .map(([name, data]) => ({ name, data }));
-
   return (
     <div className="container py-8 md:py-12 space-y-10 md:space-y-16">
       <section className="space-y-4 md:space-y-6">
@@ -267,7 +249,6 @@ export default function ProjectsPage() {
           and personal time.
         </p>
       </section>
-
       {featuredProjects.length > 0 && (
         <section className="space-y-4 md:space-y-6">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
@@ -282,7 +263,6 @@ export default function ProjectsPage() {
           </div>
         </section>
       )}
-
       {otherProjects.length > 0 && (
         <section className="space-y-4 md:space-y-6">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">

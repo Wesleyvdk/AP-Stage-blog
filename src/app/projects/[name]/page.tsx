@@ -25,7 +25,6 @@ import {
   extractRepoInfo,
 } from "@/lib/github-service";
 
-// Define types based on our JSON structure
 interface ProjectData {
   github: string;
   demo: string | null;
@@ -49,15 +48,12 @@ export default async function ProjectDetailPage({
   const projects = linksData.projects as ProjectsData;
   const projectData = projects[name];
 
-  // If project doesn't exist in our data, return 404
   if (!projectData) {
     notFound();
   }
 
-  // Extract owner and repo from GitHub URL
   const { owner, repo } = extractRepoInfo(projectData.github);
 
-  // Initialize default values
   let repository: any = {
     description: "No description available.",
     created_at: new Date().toISOString(),
@@ -72,7 +68,6 @@ export default async function ProjectDetailPage({
   let languages: Record<string, number> = {};
   let contributors: any[] = [];
 
-  // Fetch repository data
   try {
     [repository, readme, commits, languages, contributors] = await Promise.all([
       getRepository(owner, repo),
@@ -83,14 +78,11 @@ export default async function ProjectDetailPage({
     ]);
   } catch (error) {
     console.error(`Error fetching repository data for ${name}:`, error);
-    // Continue with default values
   }
 
-  // Format dates
   const createdAt = new Date(repository.created_at).toLocaleDateString();
   const updatedAt = new Date(repository.updated_at).toLocaleDateString();
 
-  // Calculate language percentages
   const totalBytes = Object.values(languages).reduce(
     (sum, bytes) => sum + bytes,
     0,

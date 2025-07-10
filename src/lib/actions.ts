@@ -1,7 +1,5 @@
-"use server";
-
+﻿"use server";
 import { api } from "./api-service";
-
 export async function incrementViewCount(postId: string) {
   try {
     await api.incrementViews(postId);

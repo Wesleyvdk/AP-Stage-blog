@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,6 @@ import {
 import { Timeline } from "@/components/timeline";
 import { CertificationCard } from "@/components/certification-card";
 import linksData from "@/lib/links.json";
-
 export default function ResumePage() {
   return (
     <div className="container py-8 md:py-12 space-y-6 md:space-y-8">
@@ -44,8 +43,7 @@ export default function ResumePage() {
           </Button>
         </div>
       </div>
-
-      {/* Profile Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Profile
@@ -58,8 +56,7 @@ export default function ResumePage() {
           </CardContent>
         </Card>
       </section>
-
-      {/* Certifications Section */}
+      {}
       {Object.keys(linksData.certifications || {}).length > 0 && (
         <section className="space-y-4 md:space-y-6">
           <div className="flex items-center gap-2">
@@ -68,7 +65,6 @@ export default function ResumePage() {
               Certifications & Degrees
             </h2>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {Object.values(linksData.certifications).map((cert: any, index) => (
               <CertificationCard
@@ -87,8 +83,7 @@ export default function ResumePage() {
           </div>
         </section>
       )}
-
-      {/* Timeline Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           My Journey
@@ -127,8 +122,7 @@ export default function ResumePage() {
           ]}
         />
       </section>
-
-      {/* Work Experience Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Work Experience
@@ -186,8 +180,7 @@ export default function ResumePage() {
           </Card>
         </div>
       </section>
-
-      {/* Education Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Education
@@ -214,7 +207,6 @@ export default function ResumePage() {
               </p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
@@ -234,7 +226,6 @@ export default function ResumePage() {
               </p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
@@ -255,7 +246,6 @@ export default function ResumePage() {
               </p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
@@ -272,7 +262,6 @@ export default function ResumePage() {
               <p>Studied game development and design. (Didn't finish)</p>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row justify-between">
@@ -289,8 +278,7 @@ export default function ResumePage() {
           </Card>
         </div>
       </section>
-
-      {/* Skills Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Skills
@@ -318,7 +306,6 @@ export default function ResumePage() {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Backend</CardTitle>
@@ -339,7 +326,6 @@ export default function ResumePage() {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Databases</CardTitle>
@@ -355,7 +341,6 @@ export default function ResumePage() {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Tools & Practices</CardTitle>
@@ -374,7 +359,6 @@ export default function ResumePage() {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Languages</CardTitle>
@@ -392,8 +376,7 @@ export default function ResumePage() {
           </Card>
         </div>
       </section>
-
-      {/* Projects Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
           Featured Projects
@@ -421,7 +404,6 @@ export default function ResumePage() {
               </Button>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>AP Gaming Dashboard</CardTitle>
@@ -444,7 +426,6 @@ export default function ResumePage() {
               </Button>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Poke3</CardTitle>
@@ -463,7 +444,6 @@ export default function ResumePage() {
               </Button>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Dreamy Stories</CardTitle>

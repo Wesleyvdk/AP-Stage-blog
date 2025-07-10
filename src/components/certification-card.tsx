@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import {
   Card,
@@ -11,7 +11,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, ExternalLink } from "lucide-react";
-
 interface CertificationCardProps {
   title: string;
   issuer: string;
@@ -23,7 +22,6 @@ interface CertificationCardProps {
   logoSrc: string;
   variant?: "aws" | "azure" | "degree" | "default";
 }
-
 export function CertificationCard({
   title,
   issuer,
@@ -35,7 +33,6 @@ export function CertificationCard({
   logoSrc,
   variant = "default",
 }: CertificationCardProps) {
-  // Define variant-specific styles
   const variantStyles = {
     aws: {
       badgeBg: "bg-yellow-100",
@@ -62,9 +59,7 @@ export function CertificationCard({
       accentBorder: "border-l-4 border-l-indigo-500",
     },
   };
-
   const style = variantStyles[variant];
-
   return (
     <Card className={`overflow-hidden ${style.accentBorder}`}>
       <CardHeader className="flex flex-row items-center gap-4 pb-2 p-4 sm:p-6">
@@ -88,7 +83,7 @@ export function CertificationCard({
           <Calendar className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
           <span>
             Issued: {date}
-            {expiryDate && ` · Expires: ${expiryDate}`}
+            {expiryDate && ` Â· Expires: ${expiryDate}`}
           </span>
         </div>
         <div className="flex flex-wrap gap-2 mb-4">

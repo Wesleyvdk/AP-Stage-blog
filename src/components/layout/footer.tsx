@@ -1,13 +1,10 @@
-"use client";
-
+﻿"use client";
 import Link from "next/link";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
-
 export default function Footer() {
   const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
-
   const quickLinks = [
     { href: "/", key: "nav.home" },
     { href: "/blog", key: "nav.blog" },
@@ -16,13 +13,11 @@ export default function Footer() {
     { href: "/resume", key: "nav.resume" },
     { href: "/contact", key: "nav.contact" },
   ];
-
   const chunkSize = 4;
   const linkChunks = [];
   for (let i = 0; i < quickLinks.length; i += chunkSize) {
     linkChunks.push(quickLinks.slice(i, i + chunkSize));
   }
-
   return (
     <footer className="w-full border-t bg-background px-4">
       <div className="container py-8 md:py-12">

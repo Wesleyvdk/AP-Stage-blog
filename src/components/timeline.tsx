@@ -1,7 +1,6 @@
-import type React from "react";
+﻿import type React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
 interface TimelineItem {
   date: string;
   title: string;
@@ -9,11 +8,9 @@ interface TimelineItem {
   tags?: string[];
   icon?: React.ReactNode;
 }
-
 interface TimelineProps {
   items: TimelineItem[];
 }
-
 export function Timeline({ items }: TimelineProps) {
   return (
     <div className="relative space-y-6 md:space-y-8 before:absolute before:inset-0 before:left-4 before:h-full before:w-0.5 before:bg-border before:ml-0.5">

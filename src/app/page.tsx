@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,23 +12,18 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/api-service";
-
 export default async function Home() {
-  // Fetch recent published posts only (no token passed to ensure only public posts)
   const posts = await getAllPosts(3);
-
   function removeMarkdown(markdownText: string): string {
-    // Basic regex to remove common markdown characters (*, _, `, #, [, ], (, ), etc.)
     return markdownText
-      .replace(/([*_`#\[\]()~>+-])/g, "") // Remove common markdown symbols
-      .replace(/(\n|\r)/g, " ") // Replace newlines with spaces
-      .replace(/\s+/g, " ") // Collapse multiple spaces
+      .replace(/([*_`#\[\]()~>+-])/g, "")
+      .replace(/(\n|\r)/g, " ")
+      .replace(/\s+/g, " ")
       .trim();
   }
-
   return (
     <div className="container py-8 md:py-12 space-y-12 md:space-y-16">
-      {/* Hero Section */}
+      {}
       <section className="flex flex-col-reverse md:flex-row items-center gap-8 md:gap-12">
         <div className="flex-1 space-y-4 md:space-y-6 text-center md:text-left">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -66,8 +61,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Professional Experience Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
@@ -93,7 +87,7 @@ export default async function Home() {
               </div>
               <div className="w-full md:w-2/3 space-y-4">
                 <h3 className="text-xl md:text-2xl font-semibold">Full Stack Developer Intern</h3>
-                <p className="text-muted-foreground text-sm">Taglayer • Feb 2025 - Jun 2025</p>
+                <p className="text-muted-foreground text-sm">Taglayer â€¢ Feb 2025 - Jun 2025</p>
                 <p className="text-muted-foreground text-sm md:text-base">
                   Developed and improved web applications using modern technologies. Focused on frontend development with Vue.js while gaining valuable experience in full-stack development and modern web development practices.
                 </p>
@@ -116,8 +110,7 @@ export default async function Home() {
           </CardContent>
         </Card>
       </section>
-
-      {/* Recent Posts Section */}
+      {}
       <section className="space-y-4 md:space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">

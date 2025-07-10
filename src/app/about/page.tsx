@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Github, Linkedin, ExternalLink } from "lucide-react";
-
 export default function AboutPage() {
   const skills = [
     {
@@ -36,10 +35,9 @@ export default function AboutPage() {
       items: ["React Native", "Flutter", "GraphQL", "AWS", "Unreal Engine"],
     },
   ];
-
   return (
     <div className="container py-12 space-y-16">
-      {/* Hero Section */}
+      {}
       <section className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
         <div className="w-full md:w-1/3 flex justify-center">
           <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary">
@@ -88,8 +86,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Bio Section */}
+      {}
       <section className="space-y-6">
         <h2 className="text-3xl font-bold tracking-tight">Who I Am</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -129,8 +126,7 @@ export default function AboutPage() {
           </Card>
         </div>
       </section>
-
-      {/* Skills Section */}
+      {}
       <section className="space-y-6" id="skills">
         <h2 className="text-3xl font-bold tracking-tight">My Skills</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -152,8 +148,7 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
-
-      {/* Professional Experience Section */}
+      {}
       <section className="space-y-6" id="experience">
         <h2 className="text-3xl font-bold tracking-tight">Professional Experience</h2>
         <Card>

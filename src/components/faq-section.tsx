@@ -1,12 +1,10 @@
-"use client";
-
+﻿"use client";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
 const faqs = [
   {
-    question: "Welke technologieën gebruik je het liefst?",
+    question: "Welke technologieÃ«n gebruik je het liefst?",
     answer:
       "Ik werk graag met Vue.js en React voor frontend ontwikkeling, gecombineerd met TailwindCSS voor styling. Voor backend projecten gebruik ik Node.js met Express.",
   },
@@ -21,9 +19,9 @@ const faqs = [
       "Mijn proces begint met het grondig begrijpen van de vereisten, gevolgd door ontwerp, implementatie, testen en iteratie. Ik hecht veel waarde aan communicatie en feedback gedurende het hele proces.",
   },
   {
-    question: "Hoe blijf je op de hoogte van nieuwe technologieën?",
+    question: "Hoe blijf je op de hoogte van nieuwe technologieÃ«n?",
     answer:
-      "Ik volg regelmatig online cursussen, lees technische blogs, neem deel aan webinars en experimenteer met nieuwe technologieën in persoonlijke projecten.",
+      "Ik volg regelmatig online cursussen, lees technische blogs, neem deel aan webinars en experimenteer met nieuwe technologieÃ«n in persoonlijke projecten.",
   },
   {
     question: "Kun je samenwerken in een team?",
@@ -31,14 +29,11 @@ const faqs = [
       "Absoluut! Ik heb ervaring met teamwerk tijdens mijn stage en studieprojecten. Ik gebruik tools zoals Git voor versiebeheer en ben gewend aan agile werkwijzen.",
   },
 ];
-
 export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-
   return (
     <section className="py-12 bg-muted/30">
       <div className="container space-y-8">
@@ -51,7 +46,6 @@ export function FAQSection() {
             ervaring
           </p>
         </div>
-
         <div className="max-w-3xl mx-auto space-y-4">
           {faqs.map((faq, index) => (
             <Card

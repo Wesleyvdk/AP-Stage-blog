@@ -1,16 +1,13 @@
-"use client"
-
+﻿"use client"
 import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
-
 function AuthErrorContent() {
     const searchParams = useSearchParams()
     const error = searchParams.get("error")
-
     const getErrorMessage = (error: string | null) => {
         switch (error) {
             case "Configuration":
@@ -24,7 +21,6 @@ function AuthErrorContent() {
                 return "An error occurred during authentication."
         }
     }
-
     return (
         <Card>
             <CardHeader className="space-y-1 text-center">
@@ -53,7 +49,6 @@ function AuthErrorContent() {
         </Card>
     )
 }
-
 export default function AuthErrorPage() {
     return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">
@@ -76,4 +71,4 @@ export default function AuthErrorPage() {
             </div>
         </div>
     )
-} 
+}

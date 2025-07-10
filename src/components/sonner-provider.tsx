@@ -1,11 +1,8 @@
-"use client";
-
+﻿"use client";
 import { Toaster } from "sonner";
 import { useTheme } from "next-themes";
-
 export function SonnerProvider() {
   const { theme } = useTheme();
-
   return (
     <Toaster
       position="top-right"

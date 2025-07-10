@@ -1,20 +1,15 @@
-"use client";
-
+﻿"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import mermaid from 'mermaid';
-
 interface MermaidDiagramProps {
     chart: string;
     id?: string;
 }
-
 const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
     const elementRef = useRef<HTMLDivElement>(null);
     const [isInitialized, setIsInitialized] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     useEffect(() => {
-        // Initialize Mermaid only once
         if (!isInitialized) {
             mermaid.initialize({
                 startOnLoad: false,
@@ -60,37 +55,26 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
             setIsInitialized(true);
         }
     }, [isInitialized]);
-
     useEffect(() => {
         if (!isInitialized || !elementRef.current || !chart.trim()) return;
-
         const renderDiagram = async () => {
             try {
                 setError(null);
-
-                // Generate a unique ID for this diagram
                 const diagramId = id || `mermaid-${Math.random().toString(36).substr(2, 9)}`;
-
-                // Clear the element
                 if (elementRef.current) {
                     elementRef.current.innerHTML = '';
                 }
-
-                // Validate and render the diagram
                 const isValid = await mermaid.parse(chart);
                 if (!isValid) {
                     throw new Error('Invalid Mermaid syntax');
                 }
-
                 const { svg } = await mermaid.render(diagramId, chart);
-
                 if (elementRef.current) {
                     elementRef.current.innerHTML = svg;
                 }
             } catch (err) {
                 console.error('Mermaid rendering error:', err);
                 setError(err instanceof Error ? err.message : 'Failed to render diagram');
-
                 if (elementRef.current) {
                     elementRef.current.innerHTML = `
             <div class="p-4 border border-red-200 rounded-md bg-red-50 text-red-700">
@@ -105,10 +89,8 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
                 }
             }
         };
-
         renderDiagram();
     }, [chart, id, isInitialized, error]);
-
     if (!chart.trim()) {
         return (
             <div className="p-4 border border-yellow-200 rounded-md bg-yellow-50 text-yellow-700">
@@ -116,7 +98,6 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
             </div>
         );
     }
-
     return (
         <div className="my-6">
             <div
@@ -131,5 +112,4 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, id }) => {
         </div>
     );
 };
-
-export default MermaidDiagram; 
+export default MermaidDiagram;

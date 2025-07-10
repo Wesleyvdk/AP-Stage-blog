@@ -1,4 +1,4 @@
-import {
+﻿import {
   Card,
   CardContent,
   CardDescription,
@@ -13,7 +13,6 @@ import {
   Palette,
   Database,
 } from "lucide-react";
-
 const services = [
   {
     icon: <Layout className="h-10 w-10 text-primary" />,
@@ -43,15 +42,14 @@ const services = [
     icon: <Palette className="h-10 w-10 text-primary" />,
     title: "UI/UX Design",
     description:
-      "Ontwerp van intuïtieve gebruikersinterfaces met focus op gebruikerservaring.",
+      "Ontwerp van intuÃ¯tieve gebruikersinterfaces met focus op gebruikerservaring.",
   },
   {
     icon: <Database className="h-10 w-10 text-primary" />,
     title: "Database Design",
-    description: "Ontwerp en implementatie van efficiënte databasestructuren.",
+    description: "Ontwerp en implementatie van efficiÃ«nte databasestructuren.",
   },
 ];
-
 export function ServicesSection() {
   return (
     <section className="py-12">
@@ -62,7 +60,6 @@ export function ServicesSection() {
             Specialisaties en vaardigheden die ik kan inzetten voor jouw project
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (
             <Card key={index} className="border border-border">

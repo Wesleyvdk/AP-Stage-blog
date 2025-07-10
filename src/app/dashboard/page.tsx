@@ -1,5 +1,4 @@
-"use client";
-
+﻿"use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +27,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -36,16 +34,12 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [deletingPostId, setDeletingPostId] = useState<string | null>(null);
   const [publishingPostId, setPublishingPostId] = useState<string | null>(null);
-
-  // Redirect if not authenticated or not admin
   useEffect(() => {
-    if (status === "loading") return; // Still loading
-
+    if (status === "loading") return;
     if (!session) {
       router.push("/auth/signin?callbackUrl=/dashboard");
       return;
     }
-
     if (!session.user.isAdmin) {
       toast.error("Access Denied", {
         description: "You don't have admin privileges to access this page."
@@ -54,11 +48,9 @@ export default function Dashboard() {
       return;
     }
   }, [session, status, router]);
-
   useEffect(() => {
     const fetchPosts = async () => {
       if (!session) return;
-
       try {
         const fetchedPosts = await getAllPostsForAdmin();
         setPosts(fetchedPosts);
@@ -69,10 +61,8 @@ export default function Dashboard() {
         setIsLoading(false);
       }
     };
-
     fetchPosts();
   }, [session]);
-
   const handleDeletePost = async (id: string, title: string) => {
     setDeletingPostId(id);
     try {
@@ -86,7 +76,6 @@ export default function Dashboard() {
       setDeletingPostId(null);
     }
   };
-
   const handlePublishPost = async (id: string) => {
     setPublishingPostId(id);
     try {
@@ -102,12 +91,9 @@ export default function Dashboard() {
       setPublishingPostId(null);
     }
   };
-
-  // Show loading while checking authentication
   if (status === "loading" || !session || !session.user.isAdmin) {
     return null;
   }
-
   return (
     <div className="container py-12 space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -126,7 +112,6 @@ export default function Dashboard() {
           </Link>
         </Button>
       </div>
-
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6">
           {[1, 2, 3].map((i) => (

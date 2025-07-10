@@ -1,5 +1,4 @@
-"use client";
-
+﻿"use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,32 +13,24 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
-
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simuleer een API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     toast.success("Message sent!", {
       description:
         "Thank you for your message. I will get back to you as soon as possible.",
     });
-
-    // Reset form
     setName("");
     setEmail("");
     setMessage("");
     setIsSubmitting(false);
   };
-
   return (
     <div className="container py-12">
       <div className="max-w-5xl mx-auto">
@@ -49,7 +40,6 @@ export default function ContactPage() {
             Have a question or want to collaborate? Send me a message!
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1 space-y-6">
             <Card>
@@ -63,7 +53,6 @@ export default function ContactPage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-4">
                   <Phone className="h-6 w-6 text-primary" />
                   <div>
@@ -71,7 +60,6 @@ export default function ContactPage() {
                     <p className="text-muted-foreground">+31 6 30244341</p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-4">
                   <MapPin className="h-6 w-6 text-primary" />
                   <div>
@@ -84,7 +72,6 @@ export default function ContactPage() {
               </CardContent>
             </Card>
           </div>
-
           <Card className="md:col-span-2">
             <CardHeader>
               <CardTitle>Send a mesage</CardTitle>
@@ -103,7 +90,6 @@ export default function ContactPage() {
                     required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -114,7 +100,6 @@ export default function ContactPage() {
                     required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
                   <Textarea
@@ -125,7 +110,6 @@ export default function ContactPage() {
                     required
                   />
                 </div>
-
                 <Button
                   type="submit"
                   className="w-full"

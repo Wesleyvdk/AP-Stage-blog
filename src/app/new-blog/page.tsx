@@ -1,7 +1,5 @@
-"use client";
-
+﻿"use client";
 import type React from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -28,50 +26,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import linksData from "@/lib/links.json";
-
 export default function NewBlogPage() {
   const { user } = useAuth();
   const router = useRouter();
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const projectOptions = Object.keys(linksData.projects || {});
   const [category, setCategory] = useState<string>("");
-
-  // Redirect if not logged in
   if (!user) {
     router.push("/auth/login");
     return null;
   }
-
   const addTag = () => {
     if (tag.trim() && !tags.includes(tag.trim())) {
       setTags([...tags, tag.trim()]);
       setTag("");
     }
   };
-
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((t) => t !== tagToRemove));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!title || !content) {
       toast.error("Missing fields", {
         description: "Please fill in all required fields",
       });
       return;
     }
-
     setIsSubmitting(true);
-
     try {
       const newPost = await api.createPost({
         title,
@@ -80,11 +67,9 @@ export default function NewBlogPage() {
         tags,
         category,
       });
-
       toast.success("Success!", {
         description: "Your blog post has been created",
       });
-
       router.push(`/blog/${newPost.id}`);
     } catch (error) {
       console.error("Error creating post:", error);
@@ -95,7 +80,6 @@ export default function NewBlogPage() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="container py-12">
       <Card className="max-w-3xl mx-auto">
@@ -114,7 +98,6 @@ export default function NewBlogPage() {
                 required
               />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="excerpt">Excerpt (optional)</Label>
               <Textarea
@@ -128,7 +111,6 @@ export default function NewBlogPage() {
                 If left empty, an excerpt will be generated from your content
               </p>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="content">Content</Label>
               <Textarea
@@ -140,7 +122,6 @@ export default function NewBlogPage() {
                 required
               />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Select value={category} onValueChange={setCategory}>
@@ -162,7 +143,6 @@ export default function NewBlogPage() {
                 Select a project or category this blog post belongs to
               </p>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="tags">Tags</Label>
               <div className="flex gap-2">
@@ -182,7 +162,6 @@ export default function NewBlogPage() {
                   Add
                 </Button>
               </div>
-
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {tags.map((t) => (
@@ -202,7 +181,6 @@ export default function NewBlogPage() {
               )}
             </div>
           </CardContent>
-
           <CardFooter className="flex justify-between">
             <Button
               type="button"

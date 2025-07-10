@@ -1,5 +1,4 @@
-"use client"
-
+﻿"use client"
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -11,10 +10,8 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import { Github, Mail, Eye, EyeOff, User } from "lucide-react"
 import Link from "next/link"
-
 export default function SignUpPage() {
     const router = useRouter()
-
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -22,29 +19,22 @@ export default function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault()
-
         if (!name || !email || !password || !confirmPassword) {
             toast.error("Please fill in all fields")
             return
         }
-
         if (password !== confirmPassword) {
             toast.error("Passwords don't match")
             return
         }
-
         if (password.length < 6) {
             toast.error("Password must be at least 6 characters")
             return
         }
-
         setIsLoading(true)
-
         try {
-            // First, create the account via your API
             const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
@@ -56,23 +46,18 @@ export default function SignUpPage() {
                     password,
                 }),
             })
-
             if (!response.ok) {
                 const error = await response.json()
                 throw new Error(error.message || "Failed to create account")
             }
-
             toast.success("Account created!", {
                 description: "Signing you in...",
             })
-
-            // Then sign them in automatically
             const result = await signIn("credentials", {
                 email,
                 password,
                 redirect: false,
             })
-
             if (result?.error) {
                 toast.error("Sign in failed", {
                     description: "Please try signing in manually",
@@ -89,7 +74,6 @@ export default function SignUpPage() {
             setIsLoading(false)
         }
     }
-
     const handleOAuthSignIn = async (provider: "google" | "github") => {
         setIsLoading(true)
         try {
@@ -101,7 +85,6 @@ export default function SignUpPage() {
             setIsLoading(false)
         }
     }
-
     return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -113,7 +96,7 @@ export default function SignUpPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        {/* OAuth Providers */}
+                        {}
                         <div className="grid grid-cols-2 gap-4">
                             <Button
                                 variant="outline"
@@ -149,7 +132,6 @@ export default function SignUpPage() {
                                 GitHub
                             </Button>
                         </div>
-
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
                                 <Separator className="w-full" />
@@ -160,8 +142,7 @@ export default function SignUpPage() {
                                 </span>
                             </div>
                         </div>
-
-                        {/* Sign Up Form */}
+                        {}
                         <form onSubmit={handleSignUp} className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Full Name</Label>
@@ -258,7 +239,6 @@ export default function SignUpPage() {
                                 {isLoading ? "Creating account..." : "Create account"}
                             </Button>
                         </form>
-
                         <div className="text-center text-sm">
                             <span className="text-muted-foreground">Already have an account? </span>
                             <Link
@@ -273,4 +253,4 @@ export default function SignUpPage() {
             </div>
         </div>
     )
-} 
+}

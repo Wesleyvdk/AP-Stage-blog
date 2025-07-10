@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
@@ -9,15 +9,12 @@ import { LanguageProvider } from "@/lib/language-context";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SonnerProvider } from "@/components/sonner-provider";
 import { Analytics } from "@vercel/analytics/next"
-
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Wesley van der Kraan | Portfolio & Blog",
   description:
     "Portfolio and blog showcasing professional development experiences and personal projects",
 };
-
 export default function RootLayout({
   children,
 }: {

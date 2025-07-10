@@ -1,5 +1,4 @@
-"use client"
-
+﻿"use client"
 import { useState, Suspense } from "react"
 import { signIn, getSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -11,34 +10,27 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import { Github, Mail, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-
 function SignInContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl") || "/"
-
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-
     const handleCredentialsSignIn = async (e: React.FormEvent) => {
         e.preventDefault()
-
         if (!email || !password) {
             toast.error("Please fill in all fields")
             return
         }
-
         setIsLoading(true)
-
         try {
             const result = await signIn("credentials", {
                 email,
                 password,
                 redirect: false,
             })
-
             if (result?.error) {
                 toast.error("Invalid credentials", {
                     description: "Please check your email and password",
@@ -57,7 +49,6 @@ function SignInContent() {
             setIsLoading(false)
         }
     }
-
     const handleOAuthSignIn = async (provider: "google" | "github") => {
         setIsLoading(true)
         try {
@@ -69,7 +60,6 @@ function SignInContent() {
             setIsLoading(false)
         }
     }
-
     return (
         <Card>
             <CardHeader className="space-y-1">
@@ -79,7 +69,7 @@ function SignInContent() {
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                {/* OAuth Providers */}
+                {}
                 <div className="grid grid-cols-2 gap-4">
                     <Button
                         variant="outline"
@@ -115,7 +105,6 @@ function SignInContent() {
                         GitHub
                     </Button>
                 </div>
-
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <Separator className="w-full" />
@@ -126,8 +115,7 @@ function SignInContent() {
                         </span>
                     </div>
                 </div>
-
-                {/* Credentials Form */}
+                {}
                 <form onSubmit={handleCredentialsSignIn} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
@@ -178,7 +166,6 @@ function SignInContent() {
                         {isLoading ? "Signing in..." : "Sign in with Email"}
                     </Button>
                 </form>
-
                 <div className="text-center text-sm">
                     <span className="text-muted-foreground">Don't have an account? </span>
                     <Link
@@ -192,7 +179,6 @@ function SignInContent() {
         </Card>
     )
 }
-
 export default function SignInPage() {
     return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">
@@ -212,4 +198,4 @@ export default function SignInPage() {
             </div>
         </div>
     )
-} 
+}

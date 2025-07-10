@@ -1,5 +1,4 @@
-"use client";
-
+﻿"use client";
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ import { useAuth } from "@/lib/auth-context";
 import { usePublicPosts } from "@/lib/use-posts";
 import removeMarkdown from "remove-markdown";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
 export default function BlogPage() {
   const { user } = useAuth();
   const { posts, isLoading, error } = usePublicPosts();
@@ -27,38 +25,26 @@ export default function BlogPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  // Extract all unique tags from posts
   const allTags = [...new Set(posts.flatMap((post) => post.tags))];
-
-  // Extract all unique categories from posts
   const allCategories = [
     ...new Set(posts.map((post) => post.category).filter(Boolean)),
   ];
-
-  // Filter posts based on search term and selected tags
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
-
     const matchesTags =
       selectedTags.length === 0 ||
       selectedTags.some((tag) => post.tags.includes(tag));
-
     const matchesCategory =
       !selectedCategory || post.category === selectedCategory;
-
     return matchesSearch && matchesTags && matchesCategory;
   });
-
-  // Toggle tag selection
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
-
   const FilterComponent = () => (
     <>
       <div className="space-y-4">
@@ -134,7 +120,6 @@ export default function BlogPage() {
       </div>
     </>
   );
-
   return (
     <div className="container py-8 md:py-12 space-y-6 md:space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -157,7 +142,6 @@ export default function BlogPage() {
           </Button>
         )}
       </div>
-
       <div className="flex flex-col md:flex-row gap-6">
         <div className="w-full md:w-3/4 space-y-6">
           <div className="flex gap-2">
@@ -170,8 +154,7 @@ export default function BlogPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-
-            {/* Mobile filter button */}
+            { }
             <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline" className="md:hidden">
@@ -187,7 +170,6 @@ export default function BlogPage() {
               </SheetContent>
             </Sheet>
           </div>
-
           {isLoading ? (
             <div className="grid grid-cols-1 gap-6">
               {[1, 2, 3].map((i) => (
@@ -266,8 +248,7 @@ export default function BlogPage() {
             </div>
           )}
         </div>
-
-        {/* Desktop filter sidebar */}
+        { }
         <div className="hidden md:block w-1/4">
           <Card>
             <CardHeader>

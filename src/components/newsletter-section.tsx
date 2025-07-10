@@ -1,30 +1,22 @@
-"use client";
-
+﻿"use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Mail } from "lucide-react";
-
 export function NewsletterSection() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simuleer een API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     toast.success("Inschrijving succesvol!", {
       description: "Bedankt voor je inschrijving op mijn nieuwsbrief.",
     });
-
     setEmail("");
     setIsSubmitting(false);
   };
-
   return (
     <section className="py-12 bg-muted">
       <div className="container max-w-4xl">
@@ -38,7 +30,6 @@ export function NewsletterSection() {
             nieuwe projecten, blogposts en meer.
           </p>
         </div>
-
         <form
           onSubmit={handleSubmit}
           className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
